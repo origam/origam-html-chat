@@ -53,7 +53,7 @@ export function MessageBarRaw(props: { messages: React.ReactNode }, ref: any) {
         })}
       >
         <button className="scrollToEndButton" onClick={handleScrollToEndClick}>
-          Go to end
+          <i className="fas fa-arrow-down" />
         </button>
       </div>
     </div>

@@ -1,13 +1,12 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Sidebar } from "../components/Sidebar";
-import { ChatParticipantsUI } from "./ChatParticipantsUI";
-import { MessageBar } from "../components/MessageBar";
-import { ChatFeedUI } from "./ChatFeedUI";
-import { SendMessageBarUI } from "./SendMessageBarUI";
-import { SidebarRow } from "../components/SidebarRow";
-
-import { AutoSizer, List } from "react-virtualized";
+import React, { useEffect, useRef, useState } from "react";
 import { InviteUserModal } from "../components/InviteUserModal";
+import { MessageBar } from "../components/MessageBar";
+import { Sidebar } from "../components/Sidebar";
+import { SidebarRow } from "../components/SidebarRow";
+import { ChatFeedUI } from "./ChatFeedUI";
+import { ChatParticipantsUI } from "./ChatParticipantsUI";
+import { SendMessageBarUI } from "./SendMessageBarUI";
+import { SampleMessages } from "../components/SampleMessages";
 
 export function ChatroomScreenUI() {
   const refMessageBar = useRef<any>();
@@ -36,7 +35,20 @@ export function ChatroomScreenUI() {
         </Sidebar>
       </div>
       <div className="messageArea">
-        <MessageBar ref={refMessageBar} messages={<ChatFeedUI />} />
+        <div className="messageThreadHeader">
+          <div className="messageThreadHeader__info">
+            <div className="messageThreadHeader__title">
+              <h1>MESSAGE THREAD</h1>
+            </div>
+            <div className="messageThreadHeader__body">2 participants</div>
+          </div>
+          <div className="messageThreadHeader__actions">
+            <div className="messageThreadHeader__actionButton" onClick={() => setIsInviteUserModalShown(true)}>
+              <i className="fas fa-user-plus" />
+            </div>
+          </div>
+        </div>
+        <MessageBar ref={refMessageBar} messages={<SampleMessages />} />
         <SendMessageBarUI />
       </div>
 
