@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { InviteUserModal } from "../components/InviteUserModal";
 import { MessageBar } from "../components/MessageBar";
 import { Sidebar } from "../components/Sidebar";
@@ -7,9 +7,12 @@ import { ChatFeedUI } from "./ChatFeedUI";
 import { ChatParticipantsUI } from "./ChatParticipantsUI";
 import { SendMessageBarUI } from "./SendMessageBarUI";
 import { SampleMessages } from "../components/SampleMessages";
+import { CtxServices } from "../Contexts";
 
 export function ChatroomScreenUI() {
   const refMessageBar = useRef<any>();
+
+  const { chatParticipants, chatroomSettings } = useContext(CtxServices);
 
   useEffect(() => {
     if (refMessageBar.current) {
@@ -18,6 +21,11 @@ export function ChatroomScreenUI() {
   }, []);
 
   const [isInviteUserModalShown, setIsInviteUserModalShown] = useState(false);
+
+  const participantsCountText = (function () {
+    if (chatParticipants.participantsCount > 1) return <>{chatParticipants.participantsCount} participants</>;
+    return <>{chatParticipants.participantsCount} participant</>;
+  })();
 
   return (
     <div className="App">
@@ -38,9 +46,9 @@ export function ChatroomScreenUI() {
         <div className="messageThreadHeader">
           <div className="messageThreadHeader__info">
             <div className="messageThreadHeader__title">
-              <h1>MESSAGE THREAD</h1>
+              <h1>{chatroomSettings.getLocalChatroomName()}</h1>
             </div>
-            <div className="messageThreadHeader__body">2 participants</div>
+            <div className="messageThreadHeader__body">{participantsCountText}</div>
           </div>
           <div className="messageThreadHeader__actions">
             <div className="messageThreadHeader__actionButton" onClick={() => setIsInviteUserModalShown(true)}>
@@ -48,7 +56,7 @@ export function ChatroomScreenUI() {
             </div>
           </div>
         </div>
-        <MessageBar ref={refMessageBar} messages={<SampleMessages />} />
+        <MessageBar ref={refMessageBar} messages={/*<SampleMessages />*/ <ChatFeedUI />} />
         <SendMessageBarUI />
       </div>
 

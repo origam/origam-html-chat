@@ -14,8 +14,12 @@ export interface IChatParticipant {
   avatarUrl: string;
 }
 
-export class ParticipantStore {
+export class ChatParticipants {
   @observable items: IChatParticipant[] = [];
+
+  get participantsCount() {
+    return this.items.length;
+  }
 
   @action.bound setItems(items: IChatParticipant[]) {
     this.items = items;

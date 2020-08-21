@@ -1,20 +1,33 @@
 import React, { useContext } from "react";
-import { IChatLogItem, IMessageDirection, IMessageGroup } from "../../ChatLog";
 import { Observer } from "mobx-react";
 import { MessageCluster, MessageClusterDirection } from "../components/MessageCluster";
 import { Message } from "../components/Message";
 import { MessageHeader } from "../components/MessageHeader";
 import moment from "moment";
+import { CtxServices } from "../Contexts";
+import { IMessageDirection, IMessageGroup } from "../ChatLog/ChatLog";
 
 function feedDirection2messageDirection(dir: IMessageDirection) {
   if (dir === IMessageDirection.Inbound) return MessageClusterDirection.Inbound;
   return MessageClusterDirection.Outbound;
 }
 
-let gernGroupId = 0;
-
 export function ChatFeedMessageGroup(props: { group: IMessageGroup }) {
-  const participant = { id: "id01", name: "Judith", avatarUrl: "https://i.pravatar.cc/35?img=25" };
+  const { chatParticipants, chatroomSettings } = useContext(CtxServices);
+  //const participant = { id: "id01", name: "Judith", avatarUrl: "https://i.pravatar.cc/35?img=25" };
+
+  const participant = (function () {
+    if (props.group.sender === chatroomSettings.getLocalUserId()) {
+      return {
+        id: props.group.sender,
+        name: chatroomSettings.getLocalUserName(),
+        avatarUrl: chatroomSettings.getLocalAvatarUrl(),
+      };
+    } else {
+      return chatParticipants.getById(props.group.sender);
+    }
+  })();
+
   return (
     <Observer>
       {() => {
@@ -44,18 +57,7 @@ export function ChatFeedMessageGroup(props: { group: IMessageGroup }) {
 }
 
 export function ChatFeedUI() {
-  const chatLog: { processedMessages: IMessageGroup[] } = {
-    processedMessages: [
-      {
-        type: "message_group",
-        $id: 1,
-        direction: IMessageDirection.Inbound,
-        items: [],
-        sender: "001",
-        timeSent: "2011-11-03",
-      },
-    ],
-  };
+  const { chatLog } = useContext(CtxServices);
   return (
     <Observer>
       {() => {

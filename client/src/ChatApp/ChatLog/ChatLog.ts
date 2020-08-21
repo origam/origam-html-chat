@@ -2,14 +2,15 @@ import { action, observable, computed, flow } from "mobx";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import axios from "axios";
-import { wrapNullObject } from "./util/objects";
-import { IChatTransport, NullChatTransport } from "./ChatTransport";
+import { wrapNullObject } from "../../util/objects";
+import { IChatTransport, NullChatTransport } from "../../ChatTransport";
+import { ChatroomSettings, ChatroomSettingsNull } from "../ChatroomSettings/ChatroomSettings";
 
-const userName = sessionStorage.getItem("userName") || prompt("User name");
-const avatarUrl = sessionStorage.getItem("avatarUrl") || prompt("Avatar url");
+/*const userName = sessionStorage.getItem("userName") || prompt("User name");
+/*const avatarUrl = sessionStorage.getItem("avatarUrl") || prompt("Avatar url");*/
 
-sessionStorage.setItem("userName", userName || "");
-sessionStorage.setItem("avatarUrl", avatarUrl || "");
+/*sessionStorage.setItem("userName", userName || "");
+sessionStorage.setItem("avatarUrl", avatarUrl || "");*/
 
 export enum IMessageDirection {
   Inbound,
@@ -37,6 +38,16 @@ export interface IMessageGroup {
 }
 
 export type IChatLogItem = IMessage | IMessageGroup;
+
+export interface IRemoteMessage {
+  type: "message";
+  id: string;
+  sender: string;
+  text: string;
+  timeSent: string;
+}
+
+export type IRemoteItem = IRemoteMessage;
 
 let genGroupId = 0;
 
@@ -72,7 +83,10 @@ export function processChatLogForUI(items: IChatLogItem[]): IChatLogItem[] {
 }
 
 export class ChatLog {
-  constructor(public transport: IChatTransport = wrapNullObject(new NullChatTransport())) {}
+  constructor(
+    public transport: IChatTransport = wrapNullObject(new NullChatTransport()),
+    public chatroomSettings: ChatroomSettings = wrapNullObject(new ChatroomSettingsNull())
+  ) {}
 
   @observable rawMessages: IChatLogItem[] = [];
 
@@ -97,12 +111,12 @@ export class ChatLog {
       sender: message.sender,
       text: message.text,
       timeSent: message.timeSent,
-      avatarUrl: avatarUrl || "about:blank",
+      avatarUrl: this.chatroomSettings.getLocalAvatarUrl() || "about:blank",
     });
   }
 
   // TODO: Argument type
-  @action realtimeUpdateLog(remoteItems: any[]) {
+  @action realtimeUpdateLog(remoteItems: IRemoteItem[]) {
     const localItemsById = new Map(remoteItems.map((item) => [item.id, item]));
     const localMessageCount = this.rawMessages.length;
     const processedRemoteItems = new Set<any>();
@@ -114,7 +128,6 @@ export class ChatLog {
             const remoteItem = localItemsById.get(localItem.id)!;
             localItem.isInsertedByClient = false;
             localItem.sender = remoteItem.sender;
-            localItem.serverOrder = remoteItem.serverOrder;
             localItem.text = remoteItem.text;
             localItem.timeSent = remoteItem.timeSent;
             processedRemoteItems.add(remoteItem);
@@ -130,10 +143,12 @@ export class ChatLog {
             type: "message",
             isInsertedByClient: false,
             sender: remoteItem.sender,
-            serverOrder: remoteItem.serverOrder,
             text: remoteItem.text,
             timeSent: remoteItem.timeSent,
-            direction: remoteItem.sender === userName ? IMessageDirection.Outbound : IMessageDirection.Inbound,
+            direction:
+              remoteItem.sender === this.chatroomSettings.getLocalUserId()
+                ? IMessageDirection.Outbound
+                : IMessageDirection.Inbound,
             id: remoteItem.id,
           };
           this.rawMessages.push(newItem);
@@ -142,4 +157,3 @@ export class ChatLog {
     }
   }
 }
-

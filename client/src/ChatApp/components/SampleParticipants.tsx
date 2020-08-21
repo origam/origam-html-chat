@@ -1,6 +1,7 @@
 import React from "react";
 import { SidebarRow } from "./SidebarRow";
-import { ChatParticipant, IChatParticipantStatus } from "./ChatParticipant";
+import { ChatParticipant } from "./ChatParticipant";
+import { IChatParticipantStatus } from "../ChatParticipants/ChatParticipants";
 
 export function SampleParticipants() {
   return (

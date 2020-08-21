@@ -1,11 +1,8 @@
 import React from "react";
 import cx from "classnames";
+import { IChatParticipantStatus } from "../ChatParticipants/ChatParticipants";
 
-export enum IChatParticipantStatus {
-  Online,
-  Away,
-  Offline,
-}
+
 
 export function ChatParticipant(props: {
   avatar: React.ReactNode;
