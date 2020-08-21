@@ -156,4 +156,14 @@ export class ChatLog {
       }
     }
   }
+
+  @action.bound clear() {
+    this.rawMessages.length = 0;
+  }
+
+  getLastServerMessage() {
+    const messages = [...this.rawMessages].reverse();
+    const lastMessage = messages.find((msg) => msg.type === "message" && !msg.isInsertedByClient) as IMessage | undefined;
+    return lastMessage;
+  }
 }

@@ -24,11 +24,20 @@ export interface IChatMessage {
   timeSent: string;
 }
 
+export interface IChatroomInfo {
+  topic: string;
+}
+
 export interface IChatApi {
   /*
     Get a list of users associated with the chatroom.
   */
   getChatroomParticipants(chatroomId: string): Generator<any, IChatParticipant[]>;
+
+  /*
+
+  */
+  getChatroomInfo(chatroomId: string): Generator<any, IChatroomInfo>;
 
   /*
   Let the backend know that user is active in the channel.

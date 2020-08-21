@@ -1,8 +1,15 @@
-import { IChatApi, IOutgoingMessage, IChatParticipant, IParticipantStatus, IChatMessage } from "./ChatApi";
+import {
+  IChatApi,
+  IOutgoingMessage,
+  IChatParticipant,
+  IParticipantStatus,
+  IChatMessage,
+  IChatroomInfo,
+} from "./ChatApi";
 
 export class ChatApiTesting01 implements IChatApi {
   *getChatroomParticipants(chatroomId: string): Generator<any, IChatParticipant[]> {
-    return [
+    const list = [
       {
         id: "001",
         name: "Petr",
@@ -28,6 +35,14 @@ export class ChatApiTesting01 implements IChatApi {
         status: IParticipantStatus.Invited,
       },
     ];
+    return list.filter((item) => Math.random() > 0.6);
+  }
+
+  cht = 0;
+  *getChatroomInfo(chatroomId: string): Generator<any, IChatroomInfo> {
+    return {
+      topic: `Chatroom topic ${this.cht++}`,
+    };
   }
 
   *notifyStatus(chatroomId: string, userId: string, status: string) {
@@ -38,15 +53,18 @@ export class ChatApiTesting01 implements IChatApi {
     return;
   }
 
+
+  msgId = 0;
   *getMessages(
     chatroomId: string,
     limit: number,
     afterIncludingId?: string,
     beforeIncludingId?: string
   ): Generator<any, IChatMessage[]> {
+    console.log("getMessages", chatroomId, limit, afterIncludingId, beforeIncludingId);
     return [
-      { id: "m001", userId: "001", text: "Hello there!", timeSent: "2020-08-20T13:16:41+0000" },
-      { id: "m002", userId: "001", text: "How are you?", timeSent: "2020-08-20T13:19:21+0000" },
+      { id: `m001-${this.msgId++}`, userId: "001", text: `Hello there! ${this.msgId}`, timeSent: "2020-08-20T13:16:41+0000" },
+      { id: `m002-${this.msgId++}`, userId: "001", text: `How are you? ${this.msgId}`, timeSent: "2020-08-20T13:19:21+0000" },
     ];
   }
 

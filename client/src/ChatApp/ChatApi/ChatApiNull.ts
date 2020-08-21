@@ -1,4 +1,4 @@
-import { IOutgoingMessage, IChatParticipant, IChatApi, IChatMessage } from "./ChatApi";
+import { IOutgoingMessage, IChatParticipant, IChatApi, IChatMessage, IChatroomInfo } from "./ChatApi";
 
 export class ChatApiNull implements IChatApi {
   /*
@@ -6,6 +6,10 @@ export class ChatApiNull implements IChatApi {
   */
   *getChatroomParticipants(chatroomId: string) {
     return [] as IChatParticipant[];
+  }
+
+  *getChatroomInfo(chatroomId: string): Generator<any, IChatroomInfo> {
+    return { topic: "" };
   }
 
   /*
@@ -29,7 +33,7 @@ export class ChatApiNull implements IChatApi {
     afterIncludingId?: string,
     beforeIncludingId?: string
   ): Generator<any, IChatMessage[]> {
-    return []
+    return [];
   }
 
   /*
