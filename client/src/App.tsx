@@ -24,6 +24,12 @@ function App() {
         avatarUrl: "https://i.pravatar.cc/35?img=20",
         status: IChatParticipantStatus.Offline,
       },
+      {
+        id: "u004",
+        name: "Ludwig",
+        avatarUrl: "https://i.pravatar.cc/35?img=13",
+        status: IChatParticipantStatus.Unknown,
+      },
     ]);
     const chatroomSettings = new ChatroomSettings();
     chatroomSettings.userId = "u001";

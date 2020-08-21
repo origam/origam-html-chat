@@ -17,11 +17,11 @@ export function ChatFeedMessageGroup(props: { group: IMessageGroup }) {
   //const participant = { id: "id01", name: "Judith", avatarUrl: "https://i.pravatar.cc/35?img=25" };
 
   const participant = (function () {
-    if (props.group.sender === chatroomSettings.getLocalUserId()) {
+    if (props.group.sender === chatroomSettings.userId) {
       return {
         id: props.group.sender,
-        name: chatroomSettings.getLocalUserName(),
-        avatarUrl: chatroomSettings.getLocalAvatarUrl(),
+        name: chatroomSettings.userName,
+        avatarUrl: chatroomSettings.avatarUrl,
       };
     } else {
       return chatParticipants.getById(props.group.sender);

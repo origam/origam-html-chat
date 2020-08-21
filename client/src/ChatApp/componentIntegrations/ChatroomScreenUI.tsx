@@ -8,6 +8,7 @@ import { ChatParticipantsUI } from "./ChatParticipantsUI";
 import { SendMessageBarUI } from "./SendMessageBarUI";
 import { SampleMessages } from "../components/SampleMessages";
 import { CtxServices } from "../Contexts";
+import { Observer } from "mobx-react";
 
 export function ChatroomScreenUI() {
   const refMessageBar = useRef<any>();
@@ -27,40 +28,52 @@ export function ChatroomScreenUI() {
     return <>{chatParticipants.participantsCount} participant</>;
   })();
 
-  return (
-    <div className="App">
-      <div className="sidebarArea">
-        <Sidebar>
-          <SidebarRow>
-            <div className="addUserSidebarItem" onClick={() => setIsInviteUserModalShown(true)}>
-              <div className="addUserSidebarItemIcon">
-                <i className="fas fa-plus-circle" />
-              </div>
-              <div className="addUserSidebarItemContent">Invite user...</div>
-            </div>
-          </SidebarRow>
-          <ChatParticipantsUI />
-        </Sidebar>
-      </div>
-      <div className="messageArea">
-        <div className="messageThreadHeader">
-          <div className="messageThreadHeader__info">
-            <div className="messageThreadHeader__title">
-              <h1>{chatroomSettings.getLocalChatroomName()}</h1>
-            </div>
-            <div className="messageThreadHeader__body">{participantsCountText}</div>
-          </div>
-          <div className="messageThreadHeader__actions">
-            <div className="messageThreadHeader__actionButton" onClick={() => setIsInviteUserModalShown(true)}>
-              <i className="fas fa-user-plus" />
-            </div>
-          </div>
-        </div>
-        <MessageBar ref={refMessageBar} messages={/*<SampleMessages />*/ <ChatFeedUI />} />
-        <SendMessageBarUI />
-      </div>
+  function handleScrolledToTail(isTailed: boolean) {
+    chatroomSettings.isScrollingToLatestMessages = isTailed;
+  }
 
-      {isInviteUserModalShown && <InviteUserModal onCloseClick={() => setIsInviteUserModalShown(false)} />}
-    </div>
+  return (
+    <Observer>
+      {() => (
+        <div className="App">
+          <div className="sidebarArea">
+            <Sidebar>
+              <SidebarRow>
+                <div className="addUserSidebarItem" onClick={() => setIsInviteUserModalShown(true)}>
+                  <div className="addUserSidebarItemIcon">
+                    <i className="fas fa-plus-circle" />
+                  </div>
+                  <div className="addUserSidebarItemContent">Invite user...</div>
+                </div>
+              </SidebarRow>
+              <ChatParticipantsUI />
+            </Sidebar>
+          </div>
+          <div className="messageArea">
+            <div className="messageThreadHeader">
+              <div className="messageThreadHeader__info">
+                <div className="messageThreadHeader__title">
+                  <h1>{chatroomSettings.chatroomName}</h1>
+                </div>
+                <div className="messageThreadHeader__body">{participantsCountText}</div>
+              </div>
+              <div className="messageThreadHeader__actions">
+                <div className="messageThreadHeader__actionButton" onClick={() => setIsInviteUserModalShown(true)}>
+                  <i className="fas fa-user-plus" />
+                </div>
+              </div>
+            </div>
+            <MessageBar
+              ref={refMessageBar}
+              messages={/*<SampleMessages />*/ <ChatFeedUI />}
+              onScrolledToTail={handleScrolledToTail}
+            />
+            <SendMessageBarUI />
+          </div>
+
+          {isInviteUserModalShown && <InviteUserModal onCloseClick={() => setIsInviteUserModalShown(false)} />}
+        </div>
+      )}
+    </Observer>
   );
 }

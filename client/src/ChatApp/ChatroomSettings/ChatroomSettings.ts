@@ -1,33 +1,21 @@
 import { observable } from "mobx";
 
 export interface IChatroomSettings {
-  getLocalChatroomId(): string | undefined;
-  getLocalChatroomName(): string | undefined;
-  getLocalUserId(): string | undefined;
-  getLocalAvatarUrl(): string | undefined;
-  getLocalUserName(): string | undefined;
+  chatroomId: string | undefined;
+  chatroomName: string | undefined;
+  userId: string | undefined;
+  userName: string | undefined;
+  avatarUrl: string | undefined;
+  isScrollingToLatestMessages: boolean;
 }
 
 export class ChatroomSettingsNull implements IChatroomSettings {
-  getLocalChatroomId(): string | undefined {
-    return "";
-  }
-
-  getLocalChatroomName() {
-    return "";
-  }
-
-  getLocalUserId(): string | undefined {
-    return "";
-  }
-
-  getLocalAvatarUrl() {
-    return "";
-  }
-
-  getLocalUserName() {
-    return "";
-  }
+  chatroomId = "";
+  chatroomName = "";
+  userId = "";
+  userName = "";
+  avatarUrl = "";
+  isScrollingToLatestMessages = true;
 }
 
 export class ChatroomSettings implements IChatroomSettings {
@@ -36,24 +24,5 @@ export class ChatroomSettings implements IChatroomSettings {
   @observable userId: string | undefined;
   @observable userName: string | undefined;
   @observable avatarUrl: string | undefined;
-
-  getLocalChatroomId(): string | undefined {
-    return this.chatroomId;
-  }
-
-  getLocalUserId(): string | undefined {
-    return this.userId;
-  }
-
-  getLocalAvatarUrl() {
-    return this.avatarUrl;
-  }
-
-  getLocalUserName() {
-    return this.userName;
-  }
-
-  getLocalChatroomName() {
-    return this.chatroomName;
-  }
+  @observable isScrollingToLatestMessages: boolean = false;
 }

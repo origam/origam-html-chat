@@ -111,7 +111,7 @@ export class ChatLog {
       sender: message.sender,
       text: message.text,
       timeSent: message.timeSent,
-      avatarUrl: this.chatroomSettings.getLocalAvatarUrl() || "about:blank",
+      avatarUrl: this.chatroomSettings.avatarUrl || "about:blank",
     });
   }
 
@@ -146,7 +146,7 @@ export class ChatLog {
             text: remoteItem.text,
             timeSent: remoteItem.timeSent,
             direction:
-              remoteItem.sender === this.chatroomSettings.getLocalUserId()
+              remoteItem.sender === this.chatroomSettings.userId
                 ? IMessageDirection.Outbound
                 : IMessageDirection.Inbound,
             id: remoteItem.id,

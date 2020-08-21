@@ -1,7 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState } from "react";
 import cx from "classnames";
 
-export function MessageBarRaw(props: { messages: React.ReactNode }, ref: any) {
+export function MessageBarRaw(
+  props: { messages: React.ReactNode; onScrolledToTail?(isTailed: boolean): void },
+  ref: any
+) {
   const [isScrollToEnd, setIsScrollToEnd] = useState(false);
 
   useImperativeHandle(ref, () => ({
@@ -34,8 +37,10 @@ export function MessageBarRaw(props: { messages: React.ReactNode }, ref: any) {
         console.log(elm.scrollHeight - elm.clientHeight - elm.scrollTop);
         if (elm.scrollHeight - elm.clientHeight - elm.scrollTop > 30) {
           setIsScrollToEnd(true);
+          props.onScrolledToTail?.(false);
         } else {
           setIsScrollToEnd(false);
+          props.onScrolledToTail?.(true);
         }
       }
     },

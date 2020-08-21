@@ -2,7 +2,7 @@ import React, { useEffect, createContext, useContext, useState, PropsWithChildre
 import { HashRouter as Router, Switch, Route, Link, NavLink, Redirect, useHistory, useParams } from "react-router-dom";
 import { flow } from "mobx";
 import axios from "axios";
-import { Chatroom } from "./Chatroom";
+
 
 export function AppRoot() {
   const [appOverlayRender, setAppOverlayRender] = useState<(() => React.ReactNode) | undefined>(undefined);
@@ -30,7 +30,7 @@ export function AppRoot() {
               <Chatrooms />
             </Route>
             <Route path="/chatroom">
-              <Chatroom />
+              {/*<Chatroom />*/}
             </Route>
           </Switch>
         </div>
