@@ -23,14 +23,15 @@ class User extends Model {
 
   static get relationMappings() {
     return {
-      chatRooms: {
+      chatrooms: {
         relation: Model.ManyToManyRelation,
         modelClass: Chatroom,
         join: {
           from: "users.id",
           through: {
-            from: "chatrooms_users.userId",
-            to: "chatrooms_users.chatroomId",
+            from: "users_chatroom.userId",
+            to: "users_chatroom.chatroomId",
+            extra: ["isInvited", "isOnline", "lastSeen"],
           },
           to: "chatrooms.id",
         },
@@ -54,8 +55,43 @@ class Chatroom extends Model {
           through: {
             from: "users_chatroom.chatroomId",
             to: "users_chatroom.userId",
+            extra: ["isInvited", "isOnline", "lastSeen"],
           },
           to: "users.id",
+        },
+      },
+      messages: {
+        relation: Model.HasManyRelation,
+        join: {
+          from: "chatrooms.id",
+          to: "messages.chatroomId",
+        },
+      },
+    };
+  }
+}
+
+class Message extends Model {
+  static get tableName() {
+    return "messages";
+  }
+
+  static get relationMappings() {
+    return {
+      author: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: "messages.authorId",
+          to: "users.id",
+        },
+      },
+      chatroom: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Chatroom,
+        join: {
+          from: "messages.chatroomId",
+          to: "chatrooms.id",
         },
       },
     };
@@ -73,8 +109,8 @@ async function createSchema() {
 
   await knex.schema.createTable("users", (t) => {
     t.specificType("id", "UUID").primary();
-    t.string("firstName");
-    t.string("lastName");
+    t.string("name");
+    t.string("avatarUrl");
   });
 
   await knex.schema.createTable("chatrooms", (t) => {
@@ -84,18 +120,21 @@ async function createSchema() {
 
   await knex.schema.createTable("messages", (t) => {
     t.specificType("id", "UUID").primary();
-    t.specificType("userId", "UUID");
+    t.specificType("authorId", "UUID");
     t.specificType("chatroomId", "UUID");
     t.dateTime("timeSent");
     t.string("text");
 
-    t.foreign("userId").references("users.id");
+    t.foreign("authorId").references("users.id");
     t.foreign("chatroomId").references("chatrooms.id");
   });
 
   await knex.schema.createTable("users_chatroom", (t) => {
     t.specificType("userId", "UUID");
     t.specificType("chatroomId", "UUID");
+    t.boolean("isInvited").defaultTo(false);
+    t.boolean("isOnline").defaultTo(false);
+    t.dateTime("lastSeen");
 
     t.primary(["userId", "chatroomId"]);
     t.foreign("userId").references("id").inTable("users");
@@ -104,16 +143,37 @@ async function createSchema() {
 }
 
 async function fillInitialData() {
-  await User.query().insert({ firstName: "Pavel", lastName: "Tomasko", id: uuid.v4() });
-  await User.query().insert({ firstName: "Kathy", lastName: "Red", id: uuid.v4() });
-  await User.query().insert({ firstName: "Elena", lastName: "Wallace", id: uuid.v4() });
-  await User.query().insert({ firstName: "Don", lastName: "Smith", id: uuid.v4() });
+  const users = [
+    await User.query().insertAndFetch({ name: "TomaskoPavel", avatarUrl: "avatar-001.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "RedKathy", avatarUrl: "avatar-002.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "WallaceElena", avatarUrl: "avatar-003.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "SmithDon", avatarUrl: "avatar-004.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "TheDevil", avatarUrl: "avatar-005.jpg", id: uuid.v4() }),
+  ];
 
-  await Chatroom.query().insert({ name: "General", id: uuid.v4() });
-  await Chatroom.query().insert({ name: "Gossip", id: uuid.v4() });
-  await Chatroom.query().insert({ name: "Future features", id: uuid.v4() });
-  await Chatroom.query().insert({ name: "Bugs", id: uuid.v4() });
-  await Chatroom.query().insert({ name: "Hot chicks", id: uuid.v4() });
+  const chatrooms = [
+    await Chatroom.query().insertAndFetch({ name: "General", id: uuid.v4() }),
+    await Chatroom.query().insertAndFetch({ name: "Gossip", id: uuid.v4() }),
+    await Chatroom.query().insertAndFetch({ name: "Future features", id: uuid.v4() }),
+    await Chatroom.query().insertAndFetch({ name: "Bugs", id: uuid.v4() }),
+    await Chatroom.query().insertAndFetch({ name: "Hot chicks", id: uuid.v4() }),
+  ];
+
+  await chatrooms[0].$relatedQuery("users").relate({ id: users[0].id, isInvited: true });
+  await chatrooms[0].$relatedQuery("users").relate({ id: users[1].id, isInvited: true });
+  await chatrooms[0].$relatedQuery("users").relate({ id: users[2].id, isInvited: true });
+
+  await chatrooms[1].$relatedQuery("users").relate({ id: users[0].id, isInvited: true });
+  await chatrooms[1].$relatedQuery("users").relate({ id: users[1].id, isInvited: true });
+  await chatrooms[1].$relatedQuery("users").relate({ id: users[2].id, isInvited: true });
+  await chatrooms[1].$relatedQuery("users").relate({ id: users[3].id, isInvited: true });
+
+  await chatrooms[2].$relatedQuery("users").relate({ id: users[2].id, isInvited: true });
+  await chatrooms[2].$relatedQuery("users").relate({ id: users[3].id, isInvited: true });
+  await chatrooms[2].$relatedQuery("users").relate({ id: users[4].id, isInvited: true });
+
+  const check = await chatrooms[0].$loadRelated("users");
+  console.log(JSON.stringify(check, null, 2));
 }
 
 async function start() {
@@ -122,6 +182,7 @@ async function start() {
   return {
     User,
     Chatroom,
+    Message,
   };
 }
 

@@ -8,6 +8,9 @@ import { ChatParticipants, IChatParticipantStatus } from "./ChatApp/ChatParticip
 import { runInAction, flow } from "mobx";
 import { ChatApiTesting01 } from "./ChatApp/ChatApi/ChatApiTesting01";
 import { IParticipantStatus } from "./ChatApp/ChatTransport/ChatTransportPolled";
+import { ChatApiHTTP01 } from "./ChatApp/ChatApi/ChatApiHTTP01";
+import qs from "querystring";
+import { useLocation } from "react-router";
 
 function convertParticipantStatus(statusIn: IParticipantStatus): IChatParticipantStatus {
   switch (statusIn) {
@@ -23,8 +26,14 @@ function convertParticipantStatus(statusIn: IParticipantStatus): IChatParticipan
 }
 
 function App() {
+  console.log(useLocation());
+  const { userId, chatroomId } = qs.parse(useLocation().search.slice(1));
+  console.log(userId, chatroomId);
+
   const [stores] = useState(() => {
-    const api = new ChatApiTesting01();
+    //const api = new ChatApiTesting01();
+
+    const api = new ChatApiHTTP01();
 
     const chatLog = new ChatLog();
     const chatParticipants = new ChatParticipants();
