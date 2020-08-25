@@ -1,14 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.scss";
+import {
+  HashRouter as Router,
+
+  Route, Switch
+} from "react-router-dom";
 import "./admin.scss";
-
 import App from "./App";
-
-import * as serviceWorker from "./serviceWorker";
-import { AdminApp } from "./AdminApp/integrations/AdminApp";
-import { HashRouter as Router, Switch, Route, Link, NavLink, Redirect, useHistory, useParams } from "react-router-dom";
+import { App as App3 } from "./ChatApp03/componentIntegrations/App";
 import { ChatAppSetup } from "./ChatAppSetup";
+import "./index.scss";
+import * as serviceWorker from "./serviceWorker";
+
 
 function Routed() {
   return (
@@ -27,7 +30,8 @@ function Routed() {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Routed />
+    {/*<Routed />*/}
+    <App3 />
   </React.StrictMode>,
   document.getElementById("root")
 );
@@ -36,3 +40,4 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
