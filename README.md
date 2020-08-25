@@ -21,6 +21,7 @@ Return value: JSON array:
    - `authorId` - GUID identifier of message sender.
    - `authorName` - string human readable text to display as a message sender's name.
    - `authorAvatarUrl` - string url of a picture used as a user's avatar in the chat log.
+   - `timeSent` - string ISO time when the message was received by the server.
    - `text` - string textual content of the message.
    - `mentions`- array of users mentioned in the message [
       - `id` - GUID user identifier.
