@@ -1,4 +1,4 @@
-import { action, observable, computed, flow } from "mobx";
+import { action, observable, computed, flow, toJS } from "mobx";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import axios from "axios";
@@ -95,12 +95,12 @@ export class ChatLog {
   }
 
   @action.bound
-  appendLocalMessage(text: string) {
+  appendLocalMessage(text: string, id: string) {
     const message: IMessage = {
-      id: uuidv4(),
+      id: id,
       direction: IMessageDirection.Outbound,
       isInsertedByClient: true,
-      sender: "id01",
+      sender: this.chatroomSettings.userId ?? "",
       text,
       timeSent: moment().toISOString(),
       type: "message",
@@ -117,6 +117,7 @@ export class ChatLog {
 
   // TODO: Argument type
   @action realtimeUpdateLog(remoteItems: IRemoteItem[]) {
+    console.log(remoteItems, toJS(this.rawMessages))
     const localItemsById = new Map(remoteItems.map((item) => [item.id, item]));
     const localMessageCount = this.rawMessages.length;
     const processedRemoteItems = new Set<any>();

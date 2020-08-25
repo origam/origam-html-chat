@@ -20,7 +20,7 @@ export function ChatParticipantsUI() {
           {chatParticipants.items.map((item) => (
             <SidebarRow key={item.id}>
               <ChatParticipant
-                avatar={<img alt="" className="avatar__picture" src={item.avatarUrl} />}
+                avatar={<img alt="" className="avatar__picture" src={`img/avatar-35/${item.avatarUrl}`} />}
                 content={<>{item.name}</>}
                 status={item.status}
               />

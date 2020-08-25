@@ -1,4 +1,11 @@
-import { IChatApi, IChatMessage, IChatParticipant, IChatroomInfo, IOutgoingMessage } from "./ChatApi";
+import {
+  IChatApi,
+  IChatMessage,
+  IChatParticipant,
+  IChatroomInfo,
+  IOutgoingMessage,
+  IParticipantStatus,
+} from "./ChatApi";
 import axios from "axios";
 
 export class ChatApiHTTP01 implements IChatApi {
@@ -14,12 +21,22 @@ export class ChatApiHTTP01 implements IChatApi {
     Get a list of users associated with the chatroom.
   */
   *getChatroomParticipants(chatroomId: string) {
-    const participants = yield axios.get(`${this.urlBase}/chatrooms/${this.chatroomId}/participants`);
-    return participants.data as IChatParticipant[];
+    const participants = yield axios.get(`${this.urlBase}/chatrooms/${this.chatroomId}/participants`, {
+      headers: this.headers,
+    });
+    console.log(participants.data);
+    return participants.data.map((rawParticipant: any) => ({
+      ...rawParticipant,
+      status: (function () {
+        if (rawParticipant.isOnline) return IParticipantStatus.Online;
+        if (rawParticipant.isInvited) return IParticipantStatus.Invited;
+      })(),
+    })) as IChatParticipant[];
   }
 
   *getChatroomInfo(chatroomId: string): Generator<any, IChatroomInfo> {
-    return { topic: "" };
+    const info = yield axios.get(`${this.urlBase}/chatrooms/${this.chatroomId}/info`, { headers: this.headers });
+    return { topic: (info as any).data.name };
   }
 
   /*
@@ -31,7 +48,16 @@ export class ChatApiHTTP01 implements IChatApi {
   /*
   Send a message to the given chatroom
 */
-  *sendMessage(chatroomId: string, userId: string, message: IOutgoingMessage) {}
+  *sendMessage(chatroomId: string, userId: string, message: IOutgoingMessage) {
+    yield axios.post(
+      `${this.urlBase}/chatrooms/${this.chatroomId}/messages`,
+      {
+        text: message.text,
+        id: message.id,
+      },
+      { headers: this.headers }
+    );
+  }
 
   /*
   Get messages of the chatroom, limiting their count to limit and possibly 
@@ -40,10 +66,21 @@ export class ChatApiHTTP01 implements IChatApi {
   *getMessages(
     chatroomId: string,
     limit: number,
-    afterIncludingId?: string,
-    beforeIncludingId?: string
+    afterIdIncluding?: string,
+    beforeIdIncluding?: string
   ): Generator<any, IChatMessage[]> {
-    return [];
+    const messages = yield axios.get(`${this.urlBase}/chatrooms/${this.chatroomId}/messages`, {
+      params: {
+        limit,
+        afterIdIncluding,
+        beforeIdIncluding,
+      },
+      headers: this.headers,
+    });
+    return (messages as any).data.map((msg: any) => ({
+      ...msg,
+      userId: msg.authorId
+    })) as IChatMessage[];
   }
 
   /*

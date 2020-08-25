@@ -17,15 +17,7 @@ export function ChatFeedMessageGroup(props: { group: IMessageGroup }) {
   //const participant = { id: "id01", name: "Judith", avatarUrl: "https://i.pravatar.cc/35?img=25" };
 
   const participant = (function () {
-    if (props.group.sender === chatroomSettings.userId) {
-      return {
-        id: props.group.sender,
-        name: chatroomSettings.userName,
-        avatarUrl: chatroomSettings.avatarUrl,
-      };
-    } else {
-      return chatParticipants.getById(props.group.sender);
-    }
+    return chatParticipants.getById(props.group.sender);
   })();
 
   return (
@@ -35,7 +27,7 @@ export function ChatFeedMessageGroup(props: { group: IMessageGroup }) {
         return (
           <MessageCluster
             key={group.$id}
-            avatar={<img className="avatar__picture" src={participant?.avatarUrl} />}
+            avatar={<img className="avatar__picture" src={`img/avatar-35/${participant?.avatarUrl}`} />}
             direction={feedDirection2messageDirection(group.direction)}
             header={
               <MessageHeader personName={participant?.name} messageDateTime={moment(group.timeSent).format("HH:mm")} />

@@ -29,7 +29,7 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     res.send(await Chatroom.query());
   });
 
-  app.get("/api/chatroom/:chatroomId/messages", async (req, res) => {
+  app.get("/api/chatrooms/:chatroomId/messages", async (req, res) => {
     /* Parameters:
       limit?
       beforeIdIncluding?
@@ -62,14 +62,15 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     res.send(messages);
   });
 
-  app.post("/api/chatroom/:chatroomId/messages", async (req, res) => {
+  app.post("/api/chatrooms/:chatroomId/messages", async (req, res) => {
     const userId = req.headers["x-fake-user-id"];
     const chatroomId = req.params.chatroomId;
     const text = req.body.text;
+    const id = req.body.id;
 
     await anounceUserSeen(userId, chatroomId, { User });
     await Message.query().insert({
-      id: uuid.v4(),
+      id,
       timeSent: Date.now(),
       authorId: userId,
       chatroomId: chatroomId,
@@ -78,38 +79,38 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     res.send();
   });
 
-  app.get("/api/chatroom/:chatroomId/info", async (req, res) => {
+  app.get("/api/chatrooms/:chatroomId/info", async (req, res) => {
     const chatroom = await Chatroom.query().findById(req.params.chatroomId);
     res.send(chatroom);
   });
 
-  app.post("/api/chatroom/:chatroomId/info", async (req, res) => {
+  app.post("/api/chatrooms/:chatroomId/info", async (req, res) => {
     await Chatroom.query().findById(req.params.chatroomId).patch({ name: req.body.name });
     res.send();
   });
 
-  app.get("/api/chatroom/:chatroomId/participants", async (req, res) => {
+  app.get("/api/chatrooms/:chatroomId/participants", async (req, res) => {
     const participants = await Chatroom.relatedQuery("users")
       .for(req.params.chatroomId)
       .where((b) => b.where("isOnline", true).orWhere("isInvited", true));
     res.send(participants);
   });
 
-  app.post("/api/chatroom/:chatroomId/participants/invite", async (req, res) => {
+  app.post("/api/chatrooms/:chatroomId/participants/invite", async (req, res) => {
     const chatroomId = req.params.chatroomId;
     const inviteUserId = req.query.inviteUserId;
     await Users.relatedQuery("chatrooms").for(inviteUserId).relate({ id: chatroomId, isInvited: true });
     res.send();
   });
 
-  app.post("/api/chatroom/:chatroomId/leave", async (req, res) => {
+  app.post("/api/chatrooms/:chatroomId/leave", async (req, res) => {
     const userId = req.headers["x-fake-user-id"];
     const chatroomId = req.params.chatroomId;
     await Users.relatedQuery("chatrooms").for(userId).unrelate({ id: chatroomId });
     res.send();
   });
 
-  app.get("/api/chatroom/:chatroomId/usersToInvite", async (req, res) => {
+  app.get("/api/chatrooms/:chatroomId/usersToInvite", async (req, res) => {
     /*
       limit?
       offset?
@@ -130,8 +131,8 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     const users = await query;
     res.send(users);
   });
- 
-  app.get("/api/chatroom/:chatroomId/usersToMention", async (req, res) => {
+
+  app.get("/api/chatrooms/:chatroomId/usersToMention", async (req, res) => {
     const users = await User.query().select().orderBy([]);
     res.send();
   });
@@ -139,6 +140,11 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
   app.get("/api/users", async (req, res) => {
     const users = await User.query().select().orderBy("name");
     res.send(users);
+  });
+
+  app.get("/api/chatrooms", async (req, res) => {
+    const chatrooms = await Chatroom.query().select().orderBy("name");
+    res.send(chatrooms);
   });
 
   app.get("/api/messages", async (req, res) => {

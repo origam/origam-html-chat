@@ -23,11 +23,6 @@ export function ChatroomScreenUI() {
 
   const [isInviteUserModalShown, setIsInviteUserModalShown] = useState(false);
 
-  const participantsCountText = (function () {
-    if (chatParticipants.participantsCount > 1) return <>{chatParticipants.participantsCount} participants</>;
-    return <>{chatParticipants.participantsCount} participant</>;
-  })();
-
   function handleScrolledToTail(isTailed: boolean) {
     //console.log("hstt", isTailed);
     chatroomSettings.isScrollingToLatestMessages = isTailed;
@@ -36,7 +31,10 @@ export function ChatroomScreenUI() {
   return (
     <Observer>
       {() => {
-        console.log("CSUI render");
+        const participantsCountText = (function () {
+          if (chatParticipants.participantsCount > 1) return <>{chatParticipants.participantsCount} participants</>;
+          return <>{chatParticipants.participantsCount} participant</>;
+        })();
         return (
           <div className="App">
             <div className="sidebarArea">
