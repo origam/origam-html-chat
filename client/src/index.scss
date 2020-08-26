@@ -447,10 +447,10 @@ body,
 .appModal {
   min-width: 20vw;
   max-width: 70vw;
-  min-height: 150px;
+  min-height: 120px;
   max-height: 60vh;
   background-color: white;
-  padding: 30px;
+  padding: 15px;
   box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.425);
   border-radius: 0;
   position: relative;
@@ -463,9 +463,10 @@ body,
   }
 
   &__footer {
-    flex: 0 0 40px;
+    flex: 0 0 0px;
     display: flex;
     flex-direction: row;
+    padding-top: 10px;
   }
 
   &__footer--rightAligned {
@@ -504,12 +505,17 @@ body,
 }
 
 .chooseUserToInviteModalContent {
-  min-height: 50vh;
+  min-height: 300px;
+  min-width: 600px;
   display: flex;
   flex-direction: column;
 
   &__header {
-    flex: 0 0 40px;
+    flex: 0 0 0;
+    padding-bottom: 10px;
+    p {
+      margin-top: 0;
+    }
   }
 
   &__body {

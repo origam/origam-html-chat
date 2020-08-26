@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import cx from "classnames";
 import { Button } from "../Buttons";
+import { IModalHandle } from "./WindowsSvc";
 
 export function Overlay(props: PropsWithChildren<{}>) {
   return <div className="appOverlay">{props.children}</div>;
@@ -101,4 +102,16 @@ export function SimpleQuestion(props: {
       {props.message}
     </DefaultModal>
   );
+}
+
+export function renderSimpleQuestion(message: React.ReactNode) {
+  return (modal: IModalHandle<{ isOk?: boolean; isCancel?: boolean }>) => {
+    return (
+      <SimpleQuestion
+        message={message}
+        onOk={() => modal.resolveInteract({ isOk: true })}
+        onCancel={() => modal.resolveInteract({ isCancel: true })}
+      />
+    );
+  };
 }

@@ -19,6 +19,7 @@ import {
   CtxLocalUser,
   CtxChatroom,
   CtxParticipants,
+  CtxInviteUserWorkflow,
 } from "./Contexts";
 import { Chatroom } from "../model/Chatroom";
 import {
@@ -29,6 +30,7 @@ import {
 import moment from "moment";
 import { TransportSvc } from "../services/TransportSvc";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
+import { InviteUserWorkflow } from "../workflows/InviteUserWorkflow";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -52,6 +54,8 @@ export function App() {
       localUser,
       api
     );
+
+    const inviteuserWorkflow = new InviteUserWorkflow(windowsSvc);
 
     //----------------------------------------
 
@@ -96,6 +100,7 @@ export function App() {
       participants,
       messages,
       transportSvc,
+      inviteuserWorkflow,
     };
   });
 
@@ -115,6 +120,11 @@ export function App() {
   uiTree = ctxProvide(uiTree, CtxLocalUser, services.localUser);
   uiTree = ctxProvide(uiTree, CtxParticipants, services.participants);
   uiTree = ctxProvide(uiTree, CtxChatroom, services.chatroom);
+  uiTree = ctxProvide(
+    uiTree,
+    CtxInviteUserWorkflow,
+    services.inviteuserWorkflow
+  );
 
   return (
     <>
