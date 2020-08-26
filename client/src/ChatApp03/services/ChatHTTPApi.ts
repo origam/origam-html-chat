@@ -47,6 +47,14 @@ export interface IInviteUsersArg {
   users: { userId: string }[];
 }
 
+export interface ISendMessageArg {
+  id: string;
+  text: string;
+  mentions: {
+    id: string;
+  }[];
+}
+
 export class ChatHTTPApi {
   constructor(public chatroomId = "") {}
 
@@ -139,5 +147,14 @@ export class ChatHTTPApi {
     );
 
     return response.data;
+  }
+
+  async sendMessage(arg: ISendMessageArg) {
+    await axios.post(
+      `${this.urlPrefix}/chatrooms/${this.chatroomId}/messages`,
+      {
+        ...arg,
+      }
+    );
   }
 }

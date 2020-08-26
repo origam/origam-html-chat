@@ -73,8 +73,15 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     const chatroomId = req.params.chatroomId;
     const text = req.body.text;
     const id = req.body.id;
-
+    console.log({
+      id,
+      timeSent: Date.now(),
+      authorId: userId,
+      chatroomId: chatroomId,
+      text: text,
+    });
     await anounceUserSeen(userId, chatroomId, { User });
+
     await Message.query().insert({
       id,
       timeSent: Date.now(),

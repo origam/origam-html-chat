@@ -49,9 +49,9 @@ URL parameters:
 
  - `chatroomId` - GUID chatroom id to which the message should be inserted.
 
-Request body: JSON array:
+Request body: JSON object:
 
-[
+
   
   - `id` - GUID identifier of the message
   - `text` - Textual context of the message 
@@ -61,7 +61,7 @@ Request body: JSON array:
 
   - ] 
 
-]
+
 
  ***
 

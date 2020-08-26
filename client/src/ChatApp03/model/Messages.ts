@@ -45,6 +45,20 @@ export interface IMergeMessagesInput {
   }[];
 }
 
+export interface IPushLocalMessageArg {
+  id: string;
+  authorId: string;
+  authorAvatarUrl: string;
+  authorName: string;
+  timeSent: string;
+  text: string;
+  mentions: {
+    id: string;
+    name: string;
+    avatarUrl: string;
+  }[];
+}
+
 export class Messages {
   @observable items: Message[] = [];
 
@@ -81,6 +95,22 @@ export class Messages {
         )
       );
     }
+  }
+
+  @action.bound
+  pushLocalMessage(arg: IPushLocalMessageArg) {
+    this.items.push(
+      new Message(
+        arg.id,
+        arg.authorId,
+        arg.authorName,
+        arg.authorAvatarUrl,
+        arg.timeSent,
+        arg.text,
+        [],
+        true
+      )
+    );
   }
 
   @action.bound clear() {
