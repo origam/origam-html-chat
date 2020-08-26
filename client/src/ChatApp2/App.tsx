@@ -4,11 +4,12 @@ import {
   ModalCloseButton,
   ModalFooter,
   SimpleQuestion,
-} from "./components/Windows";
+} from "../ChatApp03/components/Windows/Windows";
 import React, { useState, createContext, useEffect } from "react";
-import { Button } from "./components/Buttons";
-import { WindowsSvc } from "./components/WindowsSvc";
+import { Button } from "../ChatApp03/components/Buttons";
+
 import { flow } from "mobx";
+import { WindowsSvc } from "../ChatApp03/components/Windows/WindowsSvc";
 
 const CtxServices = createContext<{ windowsSvc: WindowsSvc }>(null!);
 

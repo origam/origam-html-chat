@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import cx from "classnames";
-import { Button } from "./Buttons";
+import { Button } from "../Buttons";
 
 export function Overlay(props: PropsWithChildren<{}>) {
   return <div className="appOverlay">{props.children}</div>;

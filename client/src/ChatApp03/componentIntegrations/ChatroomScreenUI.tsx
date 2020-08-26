@@ -12,6 +12,9 @@ import {
   ChatParticipantMini,
   IChatParticipantStatus,
 } from "../components/ChatParticipant";
+import { CtxChatroom, CtxParticipants } from "./Contexts";
+import { IParticipantStatus } from "../model/Participants";
+import { getAvatarUrl } from "../helpers/avatar";
 
 export function ChatroomScreenUI() {
   const refMessageBar = useRef<any>();
@@ -22,18 +25,40 @@ export function ChatroomScreenUI() {
     }
   }, []);
 
-  const [isInviteUserModalShown, setIsInviteUserModalShown] = useState(false);
-
   function handleScrolledToTail(isTailed: boolean) {
     //console.log("hstt", isTailed);
     //chatroomSettings.isScrollingToLatestMessages = isTailed;
   }
 
+  const chatroom = useContext(CtxChatroom);
+  const participants = useContext(CtxParticipants);
+
+  function makeParticipantCountText(cnt: number) {
+    return <>Participants: {cnt}</>;
+  }
+
+  function makeParticipantStatus(statusIn: IParticipantStatus) {
+    switch (statusIn) {
+      case IParticipantStatus.Online:
+        return IChatParticipantStatus.Online;
+      case IParticipantStatus.Away:
+        return IChatParticipantStatus.Away;
+      case IParticipantStatus.Offline:
+        return IChatParticipantStatus.Offline;
+      default:
+        return IChatParticipantStatus.Unknown;
+    }
+  }
+
   return (
     <Observer>
       {() => {
-        const participantsCountText = "0 participants";
-        const chatroomName = "UNNAMED CHANNEL";
+        const participantsCountText = makeParticipantCountText(
+          participants.itemCount
+        );
+        const participantItems = participants.items;
+        const chatroomName = chatroom.topic;
+
         return (
           <div className="App">
             {/*<div className="sidebarArea">
@@ -53,54 +78,36 @@ export function ChatroomScreenUI() {
                 </SidebarRow>
                 <ChatParticipantsUI />
               </Sidebar>
-        </div>*/}
+            </div>*/}
             <div className="messageArea">
               <div className="messageThreadHeader">
                 <div className="messageThreadHeader__info">
                   <div className="messageThreadHeader__title">
-                    <h1>{chatroomName}</h1>
+                    <h1>{chatroomName || <>&nbsp;</>}</h1>
                   </div>
                   <div className="messageThreadHeader__body">
                     {participantsCountText}
                   </div>
                 </div>
                 <div className="messageThreadHeader__actions">
-                  <ChatParticipantMini
-                    avatar={
-                      <img
-                        alt=""
-                        className="avatar__picture"
-                        src={`https://i.pravatar.cc/35?img=25`}
-                      />
-                    }
-                    name="SusanZ"
-                    status={IChatParticipantStatus.Online}
-                  />
-                  <ChatParticipantMini
-                    avatar={
-                      <img
-                        alt=""
-                        className="avatar__picture"
-                        src={`https://i.pravatar.cc/35?img=27`}
-                      />
-                    }
-                    name="SusanZ"
-                    status={IChatParticipantStatus.Away}
-                  />
-                  <ChatParticipantMini
-                    avatar={
-                      <img
-                        alt=""
-                        className="avatar__picture"
-                        src={`https://i.pravatar.cc/35?img=30`}
-                      />
-                    }
-                    name="SusanZ"
-                    status={IChatParticipantStatus.Offline}
-                  />
+                  {participantItems.map((item) => (
+                    <ChatParticipantMini
+                      key={item.id}
+                      avatar={
+                        <img
+                          alt=""
+                          className="avatar__picture"
+                          src={getAvatarUrl(item.avatarUrl)}
+                        />
+                      }
+                      name={item.name}
+                      status={makeParticipantStatus(item.status)}
+                    />
+                  ))}
+
                   <div
                     className="messageThreadHeader__actionButton"
-                    onClick={() => setIsInviteUserModalShown(true)}
+                    onClick={undefined}
                   >
                     <i className="fas fa-user-plus" />
                   </div>
@@ -115,11 +122,11 @@ export function ChatroomScreenUI() {
               <SendMessageBarUI />
             </div>
 
-            {isInviteUserModalShown && (
+            {/*isInviteUserModalShown && (
               <InviteUserModal
                 onCloseClick={() => setIsInviteUserModalShown(false)}
               />
-            )}
+            )*/}
           </div>
         );
       }}

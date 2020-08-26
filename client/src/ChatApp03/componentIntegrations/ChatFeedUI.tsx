@@ -7,14 +7,67 @@ import {
 import { Message } from "../components/Message";
 import { MessageHeader } from "../components/MessageHeader";
 import moment from "moment";
+import { Message as MessageModel } from "../model/Messages";
+import { getAvatarUrl } from "../helpers/avatar";
+import { CtxMessages, CtxLocalUser } from "./Contexts";
 
 export function ChatFeedUI() {
+  const messages = useContext(CtxMessages);
+  const localUser = useContext(CtxLocalUser);
   return (
     <Observer>
       {() => {
+        function makeMessageDirection(message: MessageModel) {
+          if (localUser.id === message.authorId)
+            return IMessageClusterDirection.Outbound;
+          else return IMessageClusterDirection.Inbound;
+        }
+
+        function makeMessageClusters() {
+          let clusterNodes: React.ReactNode[] = [];
+          let messageNodes: React.ReactNode[] = [];
+          let lastMessage: MessageModel | undefined;
+
+          for (let messageItem of messages.items) {
+            if (!lastMessage || lastMessage.authorId !== messageItem.authorId) {
+              messageNodes = [];
+              clusterNodes.push(
+                <MessageCluster
+                  key={messageItem.authorId}
+                  avatar={
+                    <img
+                      className="avatar__picture"
+                      src={getAvatarUrl(messageItem.authorAvatarUrl)}
+                    />
+                  }
+                  direction={makeMessageDirection(messageItem)}
+                  header={
+                    <MessageHeader
+                      personName={messageItem.authorName}
+                      messageDateTime={moment(messageItem.timeSent).format(
+                        "HH:mm"
+                      )}
+                    />
+                  }
+                  body={<>{messageNodes}</>}
+                />
+              );
+            }
+            messageNodes.push(
+              <Message
+                key={messageItem.id}
+                content={messageItem.text}
+                isInsertedByClient={messageItem.isLocalOnly}
+              />
+            );
+          }
+          return clusterNodes;
+        }
+
         return (
           <>
-            <MessageCluster
+            {makeMessageClusters()}
+            {/*<MessageCluster
               key={""}
               avatar={<img className="avatar__picture" src={``} />}
               direction={IMessageClusterDirection.Outbound}
@@ -73,7 +126,7 @@ export function ChatFeedUI() {
                   />
                 </>
               }
-            />
+            />*/}
           </>
         );
       }}

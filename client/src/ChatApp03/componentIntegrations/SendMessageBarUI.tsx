@@ -3,8 +3,10 @@ import { SendMessageBar } from "../components/SendMessageBar";
 import { Observer } from "mobx-react";
 import { flow } from "mobx";
 import { v4 as uuidv4 } from "uuid";
+import { CtxLocalUser } from "./Contexts";
 
 export function SendMessageBarUI() {
+  const localUser = useContext(CtxLocalUser);
 
   const handleKeyDown = useMemo(
     () => (event: any) => {
@@ -30,7 +32,14 @@ export function SendMessageBarUI() {
   return (
     <Observer>
       {() => {
-        return <SendMessageBar localUserName={"Local user name"} onEditorKeyDown={handleKeyDown} />;
+        const localUserName = localUser.name;
+
+        return (
+          <SendMessageBar
+            localUserName={localUserName}
+            onEditorKeyDown={handleKeyDown}
+          />
+        );
       }}
     </Observer>
   );
