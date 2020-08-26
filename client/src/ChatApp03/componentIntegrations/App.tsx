@@ -27,6 +27,8 @@ import {
   IParticipantStatus,
 } from "../model/Participants";
 import moment from "moment";
+import { TransportSvc } from "../services/TransportSvc";
+import { ChatHTTPApi } from "../services/ChatHTTPApi";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -35,10 +37,23 @@ function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
 export function App() {
   const [services] = useState(() => {
     const windowsSvc = new WindowsSvc();
+    const api = new ChatHTTPApi();
+
     const localUser = new LocalUser();
     const chatroom = new Chatroom();
     const messages = new Messages();
     const participants = new Participants();
+
+    const transportSvc = new TransportSvc(
+      windowsSvc,
+      messages,
+      chatroom,
+      participants,
+      localUser,
+      api
+    );
+
+    //----------------------------------------
 
     chatroom.topic = "General discussion";
 
@@ -51,7 +66,7 @@ export function App() {
       new Participant("p02", "ZuSusanne", "025.jpg", IParticipantStatus.Away)
     );
 
-    messages.items.push(
+    /*messages.items.push(
       new Message(
         "m01",
         "u01",
@@ -72,7 +87,7 @@ export function App() {
         [],
         false
       )
-    );
+    );*/
 
     return {
       windowsSvc,
@@ -80,6 +95,7 @@ export function App() {
       chatroom,
       participants,
       messages,
+      transportSvc,
     };
   });
 
@@ -90,6 +106,7 @@ export function App() {
         <div style={{ width: 800, height: 400 }} />
       </DefaultModal>
     ));*/
+    services.transportSvc.runLoop();
   });
 
   let uiTree = <ChatroomScreenUI />;

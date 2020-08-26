@@ -9,7 +9,6 @@ export function MessageBarRaw(
   },
   ref: any
 ) {
-  console.log(props.isTrackingLatestMessages);
   const [isScrollToEnd, setIsScrollToEnd] = useState(false);
 
   let isUserScroll = true;

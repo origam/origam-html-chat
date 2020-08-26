@@ -45,7 +45,7 @@ export function ChatFeedUI() {
                     <MessageHeader
                       personName={messageItem.authorName}
                       messageDateTime={moment(messageItem.timeSent).format(
-                        "HH:mm"
+                        "HH:mm:ss"
                       )}
                     />
                   }
