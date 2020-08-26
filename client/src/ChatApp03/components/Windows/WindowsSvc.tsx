@@ -29,28 +29,19 @@ export class WindowsSvc {
           const result: React.ReactNode[] = [];
           for (let i = 0; i < itemCnt; i++) {
             const window = this.windowStack[i];
+            if (i === itemCnt - 1) {
+              result.push(
+                <Observer key={`Overlay_${window.key}`}>
+                  {() => <Overlay />}
+                </Observer>
+              );
+            }
             result.push(
               <Observer key={window.key}>
                 {() => (
-                  <>
-                    {(() => {
-                      if (i === itemCnt - 1) {
-                        return (
-                          <>
-                            <Overlay />
-                            <FullscreenCentered>
-                              {window.render(window.modalHandle)}
-                            </FullscreenCentered>
-                          </>
-                        );
-                      }
-                      return (
-                        <FullscreenCentered>
-                          {window.render(window.modalHandle)}
-                        </FullscreenCentered>
-                      );
-                    })()}
-                  </>
+                  <FullscreenCentered key={window.key}>
+                    {window.render(window.modalHandle)}
+                  </FullscreenCentered>
                 )}
               </Observer>
             );

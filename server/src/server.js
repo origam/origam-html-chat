@@ -42,15 +42,21 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     const beforeIdIncluding = req.query.beforeIdIncluding;
     const limit = req.query.limit;
     await anounceUserSeen(userId, chatroomId, { User });
-    let query = Message.query().where("chatroomId", chatroomId).orderBy("timeSent");
+    let query = Message.query()
+      .where("chatroomId", chatroomId)
+      .orderBy("timeSent");
     if (afterIdIncluding) {
-      const afterMessage = await Message.query().findById(afterIdIncluding).select("timeSent");
+      const afterMessage = await Message.query()
+        .findById(afterIdIncluding)
+        .select("timeSent");
       if (afterMessage) {
         query = query.where("timeSent", ">=", afterMessage.timeSent);
       }
     }
     if (beforeIdIncluding) {
-      const beforeMessage = await Message.query().findById(beforeIdIncluding).select("timeSent");
+      const beforeMessage = await Message.query()
+        .findById(beforeIdIncluding)
+        .select("timeSent");
       if (beforeMessage) {
         query = query.where("timeSent", "<=", beforeMessage.timeSent);
       }
@@ -85,7 +91,9 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
   });
 
   app.post("/api/chatrooms/:chatroomId/info", async (req, res) => {
-    await Chatroom.query().findById(req.params.chatroomId).patch({ name: req.body.name });
+    await Chatroom.query()
+      .findById(req.params.chatroomId)
+      .patch({ name: req.body.name });
     res.send();
   });
 
@@ -96,17 +104,21 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     res.send(participants);
   });
 
-  app.post("/api/chatrooms/:chatroomId/participants/invite", async (req, res) => {
+  app.post("/api/chatrooms/:chatroomId/inviteUser", async (req, res) => {
     const chatroomId = req.params.chatroomId;
-    const inviteUserId = req.query.inviteUserId;
-    await Users.relatedQuery("chatrooms").for(inviteUserId).relate({ id: chatroomId, isInvited: true });
+    const inviteUserId = req.body.userId;
+    await User.relatedQuery("chatrooms")
+      .for(inviteUserId)
+      .relate({ id: chatroomId, isInvited: true });
     res.send();
   });
 
   app.post("/api/chatrooms/:chatroomId/leave", async (req, res) => {
     const userId = req.headers["x-fake-user-id"];
     const chatroomId = req.params.chatroomId;
-    await Users.relatedQuery("chatrooms").for(userId).unrelate({ id: chatroomId });
+    await Users.relatedQuery("chatrooms")
+      .for(userId)
+      .unrelate({ id: chatroomId });
     res.send();
   });
 
@@ -116,7 +128,8 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
       offset?
       searchTerm? 
     */
-    const { limit, offset, searchTerm } = req.query;
+    const { limit, offset, searchPhrase } = req.query;
+    console.log(limit, offset, searchPhrase);
     const chatroomId = req.params.chatroomId;
     let query = User.query().orderBy("name");
     if (limit !== undefined) {
@@ -125,8 +138,9 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     if (offset !== undefined) {
       query = query.offset(parseInt(offset));
     }
-    if (searchTerm !== undefined) {
-      query = query.where("name", "like", `%${searchTerm}%`);
+    if (searchPhrase !== undefined) {
+      query = query.where("name", "like", `%${searchPhrase}%`);
+      console.log(query.toString());
     }
     const users = await query;
     res.send(users);

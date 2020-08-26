@@ -1,17 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  HashRouter as Router,
-
-  Route, Switch
-} from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./admin.scss";
 import App from "./App";
 import { App as App3 } from "./ChatApp03/componentIntegrations/App";
 import { ChatAppSetup } from "./ChatAppSetup";
 import "./index.scss";
+import "./spinner.scss";
 import * as serviceWorker from "./serviceWorker";
-
 
 function Routed() {
   return (
@@ -40,4 +36,3 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
-

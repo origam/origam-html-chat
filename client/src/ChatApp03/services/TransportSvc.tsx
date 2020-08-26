@@ -19,7 +19,7 @@ export class TransportSvc {
     public api: ChatHTTPApi
   ) {}
 
-  pollingIntervalMs = 1000;
+  pollingIntervalMs = 10000;
 
   async realoadPolledData() {
     this.messages.clear();

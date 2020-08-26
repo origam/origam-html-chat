@@ -35,10 +35,55 @@ export interface IGetPolledDataResult {
   };
 }
 
+export interface IGetUsersToInviteResult {
+  users: {
+    id: string;
+    name: string;
+    avatarUrl: string;
+  }[];
+}
+
+export interface IInviteUsersArg {
+  users: { userId: string }[];
+}
+
 export class ChatHTTPApi {
-  constructor(public chatroomId = "", public urlPrefix = "") {}
+  constructor(public chatroomId = "") {}
+
+  urlPrefix = "http://localhost:9099/api";
 
   testNum = 0;
+
+  *getUsersToInvite(
+    searchPhrase: string,
+    limit: number,
+    offset: number
+  ): Generator<any, IGetUsersToInviteResult> {
+    const cancelSource = axios.CancelToken.source();
+    try {
+      const response = yield axios.get(
+        `${this.urlPrefix}/chatrooms/${this.chatroomId}/usersToInvite`,
+        {
+          params: { searchPhrase, limit, offset },
+          cancelToken: cancelSource.token,
+        }
+      );
+      return {
+        users: (response as any).data,
+      };
+    } finally {
+      cancelSource.cancel();
+    }
+  }
+
+  async inviteUsers(arg: IInviteUsersArg) {
+    for (let user of arg.users) {
+      await axios.post(
+        `${this.urlPrefix}/chatrooms/${this.chatroomId}/inviteUser`,
+        { userId: user.userId }
+      );
+    }
+  }
 
   async getPolledData(): Promise<IGetPolledDataResult> {
     const timeSent = moment().toISOString();

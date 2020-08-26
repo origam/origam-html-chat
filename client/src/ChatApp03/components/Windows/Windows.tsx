@@ -2,6 +2,7 @@ import React, { PropsWithChildren } from "react";
 import cx from "classnames";
 import { Button } from "../Buttons";
 import { IModalHandle } from "./WindowsSvc";
+import { BigSpinner } from "../BigSpinner";
 
 export function Overlay(props: PropsWithChildren<{}>) {
   return <div className="appOverlay">{props.children}</div>;
@@ -12,10 +13,13 @@ export function FullscreenCentered(props: PropsWithChildren<{}>) {
 }
 
 export function DefaultModal(
-  props: PropsWithChildren<{ footer?: React.ReactNode }>
+  props: PropsWithChildren<{
+    footer?: React.ReactNode;
+    additionalClassName?: string;
+  }>
 ) {
   return (
-    <div className="appModal">
+    <div className={cx("appModal", props.additionalClassName)}>
       <div className="appModal__body">{props.children}</div>
       {props.footer}
     </div>
@@ -60,6 +64,27 @@ export function SimpleMessage(props: {
     >
       <ModalCloseButton onClick={props.onClose} />
       {props.message}
+    </DefaultModal>
+  );
+}
+
+export function SimpleProgress(props: {
+  message?: React.ReactNode;
+  onCancel?: any;
+}) {
+  return (
+    <DefaultModal
+      additionalClassName="simpleProgress"
+      footer={
+        props.onCancel ? (
+          <ModalFooter align="center">
+            <Button onClick={props.onCancel}>Cancel</Button>
+          </ModalFooter>
+        ) : null
+      }
+    >
+      {props.message}
+      <BigSpinner />
     </DefaultModal>
   );
 }
@@ -113,5 +138,22 @@ export function renderSimpleQuestion(message: React.ReactNode) {
         onCancel={() => modal.resolveInteract({ isCancel: true })}
       />
     );
+  };
+}
+
+export function renderSimpleInformation(message: React.ReactNode) {
+  return (modal: IModalHandle<{}>) => {
+    return (
+      <SimpleMessage
+        message={message}
+        onClose={() => modal.resolveInteract({})}
+      />
+    );
+  };
+}
+
+export function renderSimpleProgres(message?: React.ReactNode) {
+  return (modal: IModalHandle<{}>) => {
+    return <SimpleProgress message={message} />;
   };
 }

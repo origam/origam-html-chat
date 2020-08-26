@@ -144,11 +144,11 @@ async function createSchema() {
 
 async function fillInitialData() {
   const users = [
-    await User.query().insertAndFetch({ name: "TomaskoPavel", avatarUrl: "avatar-001.jpg", id: uuid.v4() }),
-    await User.query().insertAndFetch({ name: "RedKathy", avatarUrl: "avatar-002.jpg", id: uuid.v4() }),
-    await User.query().insertAndFetch({ name: "WallaceElena", avatarUrl: "avatar-003.jpg", id: uuid.v4() }),
-    await User.query().insertAndFetch({ name: "SmithDon", avatarUrl: "avatar-004.jpg", id: uuid.v4() }),
-    await User.query().insertAndFetch({ name: "TheDevil", avatarUrl: "avatar-005.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "TomaskoPavel", avatarUrl: "001.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "RedKathy", avatarUrl: "002.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "WallaceElena", avatarUrl: "003.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "SmithDon", avatarUrl: "004.jpg", id: uuid.v4() }),
+    await User.query().insertAndFetch({ name: "TheDevil", avatarUrl: "005.jpg", id: uuid.v4() }),
   ];
 
   const chatrooms = [

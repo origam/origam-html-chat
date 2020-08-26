@@ -20,6 +20,7 @@ import {
   CtxChatroom,
   CtxParticipants,
   CtxInviteUserWorkflow,
+  CtxAPI,
 } from "./Contexts";
 import { Chatroom } from "../model/Chatroom";
 import {
@@ -37,9 +38,11 @@ function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
 }
 
 export function App() {
+  const chatroomId = "e5225420-888e-486d-b06e-4e49e24dc14e";
+
   const [services] = useState(() => {
     const windowsSvc = new WindowsSvc();
-    const api = new ChatHTTPApi();
+    const api = new ChatHTTPApi(chatroomId);
 
     const localUser = new LocalUser();
     const chatroom = new Chatroom();
@@ -55,7 +58,7 @@ export function App() {
       api
     );
 
-    const inviteuserWorkflow = new InviteUserWorkflow(windowsSvc);
+    const inviteuserWorkflow = new InviteUserWorkflow(windowsSvc, api);
 
     //----------------------------------------
 
@@ -101,6 +104,7 @@ export function App() {
       messages,
       transportSvc,
       inviteuserWorkflow,
+      api,
     };
   });
 
@@ -112,24 +116,25 @@ export function App() {
       </DefaultModal>
     ));*/
     services.transportSvc.runLoop();
-  });
+  }, []);
 
-  let uiTree = <ChatroomScreenUI />;
+  let uiTree = (
+    <>
+      <ChatroomScreenUI />
+      {services.windowsSvc.renderStack()}
+    </>
+  );
   uiTree = ctxProvide(uiTree, CtxWindowsSvc, services.windowsSvc);
   uiTree = ctxProvide(uiTree, CtxMessages, services.messages);
   uiTree = ctxProvide(uiTree, CtxLocalUser, services.localUser);
   uiTree = ctxProvide(uiTree, CtxParticipants, services.participants);
   uiTree = ctxProvide(uiTree, CtxChatroom, services.chatroom);
+  uiTree = ctxProvide(uiTree, CtxAPI, services.api);
   uiTree = ctxProvide(
     uiTree,
     CtxInviteUserWorkflow,
     services.inviteuserWorkflow
   );
 
-  return (
-    <>
-      {uiTree}
-      {services.windowsSvc.renderStack()}
-    </>
-  );
+  return <>{uiTree}</>;
 }

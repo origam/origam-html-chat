@@ -446,9 +446,9 @@ body,
 
 .appModal {
   min-width: 20vw;
-  max-width: 70vw;
+  max-width: 800px;
   min-height: 120px;
-  max-height: 60vh;
+  max-height: 600px;
   background-color: white;
   padding: 15px;
   box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.425);
@@ -504,9 +504,17 @@ body,
   }
 }
 
+.appModal.simpleProgress {
+  .appModal__body {
+    text-align: center;
+  }
+
+  height: 200px;
+}
+
 .chooseUserToInviteModalContent {
-  min-height: 300px;
-  min-width: 600px;
+  height: 500px;
+  width: 600px;
   display: flex;
   flex-direction: column;
 
@@ -519,6 +527,10 @@ body,
   }
 
   &__body {
+    flex: 1 0 0;
+  }
+
+  &__bodyColumn {
     flex: 1 0 0;
   }
 
@@ -596,4 +608,48 @@ body,
   margin-bottom: 20px;
   min-width: 400px;
   min-height: 200px;
+}
+
+.tagInput {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: 1px solid #d8d8d8;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  padding: 5px;
+  &__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 10px 5px 10px;
+    height: 30px;
+    border-radius: 15px;
+    border: 1px solid rgb(209, 209, 209);
+    background: white;
+    margin-right: 2px;
+    margin-bottom: 2px;
+  }
+  &__itemBody {
+    flex: 1 0 0;
+  }
+
+  &__itemPin {
+    flex: 0 0 15px;
+    padding: 5px;
+    margin-right: -5px;
+  }
+
+  &__close {
+    color: rgb(161, 161, 161);
+    cursor: pointer;
+  }
+}
+
+.chooseUserToInviteModalContent {
+  .tagInput {
+    min-height: 44px;
+    max-height: 110px;
+    overflow-y: auto;
+  }
 }
