@@ -56,7 +56,12 @@ export function ChatFeedUI() {
             messageNodes.push(
               <Message
                 key={messageItem.id}
-                content={messageItem.text}
+                content={
+                  <span
+                    className="dangerousContent"
+                    dangerouslySetInnerHTML={{ __html: messageItem.text }}
+                  />
+                }
                 isInsertedByClient={messageItem.isLocalOnly}
               />
             );
