@@ -39,6 +39,7 @@ export class TransportSvc {
         const lastMessage = this.messages.lastServerMessage;
         await this.loadPolledData(lastMessage && lastMessage.id);
       } catch (e) {
+        console.error(e);
         isDelay = false;
         const errDlg = this.windowSvc.push(renderErrorDialog(e));
         await errDlg.interact();

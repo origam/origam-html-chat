@@ -8,10 +8,28 @@ const port = 9099;
 
 async function anounceUserSeen(userId, chatroomId, { User }) {
   console.log(`Seen user ${userId} in ${chatroomId}`);
-  await User.relatedQuery("chatrooms")
-    .for(userId)
-    .patch({ isOnline: true, lastSeen: Date.now() })
-    .where("chatroomId", chatroomId);
+  const isAlreadyRelated =
+    (
+      await User.relatedQuery("chatrooms")
+        .for(userId)
+        .where("chatroomId", chatroomId)
+        .limit(1)
+    ).length > 0;
+  if (isAlreadyRelated) {
+    await User.relatedQuery("chatrooms")
+      .for(userId)
+      .patch({
+        isOnline: true,
+        lastSeen: Date.now(),
+      })
+      .where("chatroomId", chatroomId);
+  } else {
+    await User.relatedQuery("chatrooms").for(userId).relate({
+      id: chatroomId,
+      isOnline: true,
+      lastSeen: Date.now(),
+    });
+  }
 }
 
 async function periodicStatusUpdate({ User }) {
@@ -19,6 +37,71 @@ async function periodicStatusUpdate({ User }) {
     .patch({ isOnline: false })
     .where("isOnline", "true")
     .where("lastSeen", "<", Date.now() - 1 * 60 * 1000);
+}
+
+async function getChatroomMessages(
+  chatroomId,
+  beforeIdIncluding,
+  afterIdIncluding,
+  limit,
+  { Message }
+) {
+  let query = Message.query()
+    .withGraphFetched("author")
+    .where("chatroomId", chatroomId)
+    .orderBy("timeSent");
+  if (afterIdIncluding) {
+    const afterMessage = await Message.query()
+      .findById(afterIdIncluding)
+      .select("timeSent");
+    if (afterMessage) {
+      query = query.where("timeSent", ">=", afterMessage.timeSent);
+    }
+  }
+  if (beforeIdIncluding) {
+    const beforeMessage = await Message.query()
+      .findById(beforeIdIncluding)
+      .select("timeSent");
+    if (beforeMessage) {
+      query = query.where("timeSent", "<=", beforeMessage.timeSent);
+    }
+  }
+  if (limit) {
+    query = query.limit(parseInt(limit));
+  }
+  const messages = await query;
+  console.log(messages);
+  return messages.map((message) => ({
+    ...message,
+    author: undefined,
+    authorId: message.author.id,
+    authorName: message.author.name,
+    authorAvatarUrl: message.author.avatarUrl,
+    mentions: [],
+  }));
+}
+
+async function getChatroomParticipants(chatroomId, { Chatroom }) {
+  const participants = await Chatroom.relatedQuery("users")
+    .for(chatroomId)
+    .where((b) => b.where("isOnline", true).orWhere("isInvited", true));
+  return participants.map((participant) => ({
+    ...participant,
+    status: participant.isOnline ? "online" : "offline",
+  }));
+}
+
+async function getLocalUser(userId, { User }) {
+  const user = await User.query().findById(userId);
+  return user;
+}
+
+async function getChatroomInfo(chatroomId, { Chatroom }) {
+  const chatroom = await Chatroom.query().findById(chatroomId);
+  return {
+    id: chatroom.id,
+    topic: chatroom.name,
+  };
 }
 
 function start({ dataEngine, userRepo, chatroomRepo }) {
@@ -44,29 +127,13 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     const beforeIdIncluding = req.query.beforeIdIncluding;
     const limit = req.query.limit;
     await anounceUserSeen(userId, chatroomId, { User });
-    let query = Message.query()
-      .where("chatroomId", chatroomId)
-      .orderBy("timeSent");
-    if (afterIdIncluding) {
-      const afterMessage = await Message.query()
-        .findById(afterIdIncluding)
-        .select("timeSent");
-      if (afterMessage) {
-        query = query.where("timeSent", ">=", afterMessage.timeSent);
-      }
-    }
-    if (beforeIdIncluding) {
-      const beforeMessage = await Message.query()
-        .findById(beforeIdIncluding)
-        .select("timeSent");
-      if (beforeMessage) {
-        query = query.where("timeSent", "<=", beforeMessage.timeSent);
-      }
-    }
-    if (limit) {
-      query = query.limit(parseInt(limit));
-    }
-    const messages = await query;
+    const messages = await getChatroomMessages(
+      chatroomId,
+      beforeIdIncluding,
+      afterIdIncluding,
+      limit,
+      { Message }
+    );
     res.send(messages);
   });
 
@@ -107,9 +174,10 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
   });
 
   app.get("/api/chatrooms/:chatroomId/participants", async (req, res) => {
-    const participants = await Chatroom.relatedQuery("users")
-      .for(req.params.chatroomId)
-      .where((b) => b.where("isOnline", true).orWhere("isInvited", true));
+    const chatroomId = req.params.chatroomId;
+    const participants = await getChatroomParticipants(chatroomId, {
+      Chatroom,
+    });
     res.send(participants);
   });
 
@@ -172,6 +240,33 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
 
   let testNum = 0;
   app.get("/api/chatrooms/:chatroomId/polledData", async (req, res) => {
+    const userId = req.headers["x-fake-user-id"];
+    const chatroomId = req.params.chatroomId;
+    const afterIdIncluding = req.query.afterIdIncluding;
+    const beforeIdIncluding = req.query.beforeIdIncluding;
+    const limit = req.query.limit;
+
+    await anounceUserSeen(userId, chatroomId, { User });
+
+    const messages = await getChatroomMessages(
+      chatroomId,
+      beforeIdIncluding,
+      afterIdIncluding,
+      limit,
+      { Message }
+    );
+    const participants = await getChatroomParticipants(chatroomId, {
+      Chatroom,
+    });
+    const localUser = await getLocalUser(userId, { User });
+    const info = await getChatroomInfo(chatroomId, { Chatroom });
+    res.send({
+      messages,
+      participants,
+      localUser,
+      info,
+    });
+    return;
     const users = await User.query().select().orderBy([]);
     const timeSent = moment().toISOString();
     res.send({

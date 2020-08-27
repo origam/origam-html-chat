@@ -159,7 +159,7 @@ async function fillInitialData() {
     await Chatroom.query().insertAndFetch({ name: "Hot chicks", id: uuid.v4() }),
   ];
 
-  await chatrooms[0].$relatedQuery("users").relate({ id: users[0].id, isInvited: true });
+  /*await chatrooms[0].$relatedQuery("users").relate({ id: users[0].id, isInvited: true });
   await chatrooms[0].$relatedQuery("users").relate({ id: users[1].id, isInvited: true });
   await chatrooms[0].$relatedQuery("users").relate({ id: users[2].id, isInvited: true });
 
@@ -170,7 +170,7 @@ async function fillInitialData() {
 
   await chatrooms[2].$relatedQuery("users").relate({ id: users[2].id, isInvited: true });
   await chatrooms[2].$relatedQuery("users").relate({ id: users[3].id, isInvited: true });
-  await chatrooms[2].$relatedQuery("users").relate({ id: users[4].id, isInvited: true });
+  await chatrooms[2].$relatedQuery("users").relate({ id: users[4].id, isInvited: true });*/
 
   const check = await chatrooms[0].$loadRelated("users");
   console.log(JSON.stringify(check, null, 2));
