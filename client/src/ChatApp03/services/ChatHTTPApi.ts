@@ -56,11 +56,15 @@ export interface ISendMessageArg {
 }
 
 export class ChatHTTPApi {
-  constructor(public chatroomId = "") {}
+  constructor(public chatroomId = "", public fakeUserId?: string) {}
 
   urlPrefix = "http://localhost:9099/api";
 
   testNum = 0;
+
+  get headers() {
+    if (this.fakeUserId) return { "x-fake-user-id": this.fakeUserId };
+  }
 
   *getUsersToInvite(
     searchPhrase: string,
@@ -73,6 +77,7 @@ export class ChatHTTPApi {
         `${this.urlPrefix}/chatrooms/${this.chatroomId}/usersToInvite`,
         {
           params: { searchPhrase, limit, offset },
+          headers: this.headers,
           cancelToken: cancelSource.token,
         }
       );
@@ -88,7 +93,8 @@ export class ChatHTTPApi {
     for (let user of arg.users) {
       await axios.post(
         `${this.urlPrefix}/chatrooms/${this.chatroomId}/inviteUser`,
-        { userId: user.userId }
+        { userId: user.userId },
+        { headers: this.headers }
       );
     }
   }
@@ -96,57 +102,10 @@ export class ChatHTTPApi {
   async getPolledData(
     afterIdIncluding?: string
   ): Promise<IGetPolledDataResult> {
-    /*const timeSent = moment().toISOString();
-    console.log(timeSent);
-    const result: IGetPolledDataResult = {
-      messages: [
-        {
-          id: "m01",
-          authorId: "u22",
-          authorAvatarUrl: this.testNum % 2 ? "058.jpg" : "059.jpg",
-          authorName: `Author ${this.testNum}`,
-          mentions: [],
-          text: `Sample text ${this.testNum}`,
-          timeSent,
-        },
-      ],
-      info: {
-        topic: `Channel topic ${this.testNum}`,
-      },
-      participants: [
-        {
-          id: "p01",
-          name: `Participant ${this.testNum * 10}`,
-          avatarUrl: this.testNum % 2 ? "021.jpg" : "024.jpg",
-          status: this.testNum % 2 ? "online" : "away",
-        },
-        {
-          id: "p02",
-          name: `Participant ${this.testNum * 19}`,
-          avatarUrl: this.testNum % 2 ? "020.jpg" : "015.jpg",
-          status: this.testNum % 2 ? "online" : "away",
-        },
-        {
-          id: "p03",
-          name: `Participant ${this.testNum * 28}`,
-          avatarUrl: this.testNum % 2 ? "001.jpg" : "005.jpg",
-          status: this.testNum % 2 ? "offline" : "online",
-        },
-      ],
-      localUser: {
-        id: "u01",
-        name: `Local user name ${this.testNum}`,
-        avatarUrl: this.testNum % 2 ? `005.jpg` : `011.jpg`,
-      },
-    };
-
-    this.testNum++;
-
-    return result;*/
 
     const response = await axios.get(
       `${this.urlPrefix}/chatrooms/${this.chatroomId}/polledData`,
-      { params: { afterIdIncluding } }
+      { params: { afterIdIncluding }, headers: this.headers }
     );
 
     return response.data;
@@ -157,7 +116,8 @@ export class ChatHTTPApi {
       `${this.urlPrefix}/chatrooms/${this.chatroomId}/messages`,
       {
         ...arg,
-      }
+      },
+      { headers: this.headers }
     );
   }
 }

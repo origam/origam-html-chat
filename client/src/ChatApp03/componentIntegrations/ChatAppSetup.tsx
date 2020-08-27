@@ -24,7 +24,7 @@ export function ChatAppSetup() {
   return (
     <div>
       <h1>Setup</h1>
-      <Link to={`/chatroom?chatroomId=${selectedChatroom}&userId=${selectedUser}`}>Go to chatroom</Link>
+      <Link to={`/chatroom?chatroomId=${selectedChatroom}&fakeUserId=${selectedUser}`}>Go to chatroom</Link>
       <h2>Users</h2>
       <div>
         {users.map((user) => (
