@@ -60,6 +60,7 @@ export function ChatFeedUI() {
                 isInsertedByClient={messageItem.isLocalOnly}
               />
             );
+            lastMessage = messageItem;
           }
           return clusterNodes;
         }
