@@ -142,6 +142,27 @@ Request body: JSON object:
 
 
 
+`POST chatrooms/:chatroomId/inviteUsers`
+
+Description:
+> Invite given users to the chatroom
+
+URL parameters:
+
+ - `chatroomId` - GUID chatroom id to which the user should be invited.
+
+Request body: array od JSON objects:
+
+[
+
+  - `userId` - GUID identifier of user to be invited.
+
+]
+
+***
+
+
+
 `GET chatrooms/:chatroomId/usersToInvite`
 
 Description:
