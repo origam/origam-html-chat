@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://ptomask@bitbucket.org/origamsource/origam-html5-chat.git",
   "author": "Pavel Tomasko <ptomask@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "install-all": "cd client & yarn & cd ../server & yarn & cd .."
+  }
 }
