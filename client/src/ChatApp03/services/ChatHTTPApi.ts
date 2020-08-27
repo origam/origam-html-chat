@@ -102,7 +102,6 @@ export class ChatHTTPApi {
   async getPolledData(
     afterIdIncluding?: string
   ): Promise<IGetPolledDataResult> {
-
     const response = await axios.get(
       `${this.urlPrefix}/chatrooms/${this.chatroomId}/polledData`,
       { params: { afterIdIncluding }, headers: this.headers }
@@ -117,6 +116,14 @@ export class ChatHTTPApi {
       {
         ...arg,
       },
+      { headers: this.headers }
+    );
+  }
+
+  async abandonChatroom() {
+    await axios.post(
+      `${this.urlPrefix}/chatrooms/${this.chatroomId}/abandon`,
+      {},
       { headers: this.headers }
     );
   }

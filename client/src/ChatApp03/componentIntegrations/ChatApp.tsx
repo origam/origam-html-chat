@@ -17,8 +17,10 @@ import {
   CtxMessages,
   CtxParticipants,
   CtxWindowsSvc,
+  CtxAbandonChatroomWorkflow,
 } from "./Contexts";
-import { useLocation } from "react-router";
+import { useLocation, useHistory } from "react-router";
+import { AbandonChatroomWorkflow } from "../workflows/AbandonChatroomWorkflow";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -26,10 +28,13 @@ function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
 
 export function ChatApp() {
   const location = useLocation();
+  const history = useHistory();
   const locationQuery = qs.parse(location.search.slice(1));
 
   const chatroomId = locationQuery.chatroomId as string;
   const fakeUserId = locationQuery.fakeUserId as string;
+
+  const [isTerminated, setIsTerminated] = useState(false);
 
   const [services] = useState(() => {
     const windowsSvc = new WindowsSvc();
@@ -50,6 +55,12 @@ export function ChatApp() {
     );
 
     const inviteuserWorkflow = new InviteUserWorkflow(windowsSvc, api);
+    const abandonChatroomWorkflow = new AbandonChatroomWorkflow(
+      windowsSvc,
+      transportSvc,
+      () => setIsTerminated(true),
+      api
+    );
 
     return {
       windowsSvc,
@@ -59,6 +70,7 @@ export function ChatApp() {
       messages,
       transportSvc,
       inviteuserWorkflow,
+      abandonChatroomWorkflow,
       api,
     };
   });
@@ -66,11 +78,14 @@ export function ChatApp() {
   useEffect(() => {
     services.transportSvc.initialLoadPolledData();
     services.transportSvc.runLoop();
+    return () => {
+      services.transportSvc.terminateLoop();
+    };
   }, []);
 
   let uiTree = (
     <>
-      <ChatroomScreenUI />
+      {!isTerminated && <ChatroomScreenUI />}
       {services.windowsSvc.renderStack()}
     </>
   );
@@ -84,6 +99,11 @@ export function ChatApp() {
     uiTree,
     CtxInviteUserWorkflow,
     services.inviteuserWorkflow
+  );
+  uiTree = ctxProvide(
+    uiTree,
+    CtxAbandonChatroomWorkflow,
+    services.abandonChatroomWorkflow
   );
 
   return <>{uiTree}</>;

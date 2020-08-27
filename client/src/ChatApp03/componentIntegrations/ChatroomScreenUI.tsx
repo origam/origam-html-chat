@@ -16,6 +16,7 @@ import {
   CtxChatroom,
   CtxParticipants,
   CtxInviteUserWorkflow,
+  CtxAbandonChatroomWorkflow,
 } from "./Contexts";
 import { IParticipantStatus } from "../model/Participants";
 import { getAvatarUrl } from "../helpers/avatar";
@@ -37,6 +38,7 @@ export function ChatroomScreenUI() {
   const chatroom = useContext(CtxChatroom);
   const participants = useContext(CtxParticipants);
   const inviteUserWorkflow = useContext(CtxInviteUserWorkflow);
+  const abandonChatroomWorkflow = useContext(CtxAbandonChatroomWorkflow);
 
   function makeParticipantCountText(cnt: number) {
     return <>Participants: {cnt}</>;
@@ -115,6 +117,12 @@ export function ChatroomScreenUI() {
                     onClick={() => inviteUserWorkflow.start()}
                   >
                     <i className="fas fa-user-plus" />
+                  </div>
+                  <div
+                    className="messageThreadHeader__actionButton"
+                    onClick={() => abandonChatroomWorkflow.start()}
+                  >
+                    <i className="fas fa-user-minus" />
                   </div>
                 </div>
               </div>

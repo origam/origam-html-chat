@@ -20,6 +20,7 @@ export class TransportSvc {
   ) {}
 
   pollingIntervalMs = 10000;
+  isTerminated = false;
 
   async realoadPolledData() {
     this.messages.clear();
@@ -32,8 +33,9 @@ export class TransportSvc {
 
   async runLoop() {
     let isDelay = true;
-    while (true) {
+    while (!this.isTerminated) {
       if (isDelay) await delay(this.pollingIntervalMs);
+      if (this.isTerminated) return;
       isDelay = true;
       try {
         const lastMessage = this.messages.lastServerMessage;
@@ -46,6 +48,10 @@ export class TransportSvc {
         errDlg.close();
       }
     }
+  }
+
+  terminateLoop() {
+    this.isTerminated = true;
   }
 
   async loadPolledData(afterIdIncluding?: string) {

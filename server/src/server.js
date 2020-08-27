@@ -36,7 +36,7 @@ async function periodicStatusUpdate({ User }) {
   await User.relatedQuery("chatrooms")
     .patch({ isOnline: false })
     .where("isOnline", "true")
-    .where("lastSeen", "<", Date.now() - 1 * 60 * 1000);
+    .where("lastSeen", "<", Date.now() - 1 * 20 * 1000);
 }
 
 async function getChatroomMessages(
@@ -190,12 +190,13 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     res.send();
   });
 
-  app.post("/api/chatrooms/:chatroomId/leave", async (req, res) => {
+  app.post("/api/chatrooms/:chatroomId/abandon", async (req, res) => {
     const userId = req.headers["x-fake-user-id"];
     const chatroomId = req.params.chatroomId;
-    await Users.relatedQuery("chatrooms")
+    await User.relatedQuery("chatrooms")
       .for(userId)
-      .unrelate({ id: chatroomId });
+      .unrelate()
+      .where("chatroomId", chatroomId);
     res.send();
   });
 
@@ -320,7 +321,7 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     console.log(`Example app listening at http://localhost:${port}`);
   });
 
-  setInterval(() => periodicStatusUpdate({ User }), 60000);
+  setInterval(() => periodicStatusUpdate({ User }), 10000);
 }
 
 function startAdmin({ app, userRepo, chatroomRepo }) {

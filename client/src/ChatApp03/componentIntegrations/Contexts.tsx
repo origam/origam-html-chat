@@ -6,6 +6,7 @@ import { Messages } from "../model/Messages";
 import { Participants } from "../model/Participants";
 import { InviteUserWorkflow } from "../workflows/InviteUserWorkflow";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
+import { AbandonChatroomWorkflow } from "../workflows/AbandonChatroomWorkflow";
 
 export const CtxWindowsSvc = createContext<WindowsSvc>(null!);
 export const CtxLocalUser = createContext<LocalUser>(null!);
@@ -14,3 +15,6 @@ export const CtxChatroom = createContext<Chatroom>(null!);
 export const CtxParticipants = createContext<Participants>(null!);
 export const CtxAPI = createContext<ChatHTTPApi>(null!);
 export const CtxInviteUserWorkflow = createContext<InviteUserWorkflow>(null!);
+export const CtxAbandonChatroomWorkflow = createContext<
+  AbandonChatroomWorkflow
+>(null!);
