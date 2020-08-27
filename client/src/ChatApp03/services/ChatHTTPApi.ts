@@ -4,6 +4,8 @@ import { Chatroom } from "../model/Chatroom";
 import { Participant, IParticipantStatus } from "../model/Participants";
 import { LocalUser } from "../model/LocalUser";
 import moment from "moment";
+import { config } from "../config";
+
 
 export interface IGetPolledDataResult {
   messages: {
@@ -58,7 +60,7 @@ export interface ISendMessageArg {
 export class ChatHTTPApi {
   constructor(public chatroomId = "", public fakeUserId?: string) {}
 
-  urlPrefix = "http://localhost:9099/api";
+  urlPrefix = config.apiUrlPrefix;
 
   testNum = 0;
 

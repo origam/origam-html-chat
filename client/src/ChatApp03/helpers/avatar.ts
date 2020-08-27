@@ -1,4 +1,6 @@
-const avatarUrlPrefix = "/img/avatar-35/avatar-";
+import { config } from "../config";
+
+const avatarUrlPrefix = config.avatarUrlPrefix;
 
 export function getAvatarUrl(url: string) {
   return avatarUrlPrefix + url;

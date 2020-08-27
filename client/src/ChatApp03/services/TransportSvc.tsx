@@ -28,7 +28,14 @@ export class TransportSvc {
   }
 
   async initialLoadPolledData() {
-    await this.loadPolledData();
+    try {
+      await this.loadPolledData();
+    } catch (e) {
+      console.error(e);
+      const errDlg = this.windowSvc.push(renderErrorDialog(e));
+      await errDlg.interact();
+      errDlg.close();
+    }
   }
 
   async runLoop() {

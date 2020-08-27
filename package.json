@@ -1,0 +1,8 @@
+{
+  "name": "orichat",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://ptomask@bitbucket.org/origamsource/origam-html5-chat.git",
+  "author": "Pavel Tomasko <ptomask@gmail.com>",
+  "license": "MIT"
+}
