@@ -1,37 +1,21 @@
-import { ChatroomScreenUI } from "./ChatroomScreenUI";
-import React, {
-  useState,
-  createContext,
-  PropsWithChildren,
-  useEffect,
-} from "react";
+import React, { useEffect, useState } from "react";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
-import { LocalUser } from "../model/LocalUser";
-import {
-  DefaultModal,
-  ModalFooter,
-  ModalCloseButton,
-} from "../components/Windows/Windows";
-import { Messages, Message } from "../model/Messages";
-import {
-  CtxWindowsSvc,
-  CtxMessages,
-  CtxLocalUser,
-  CtxChatroom,
-  CtxParticipants,
-  CtxInviteUserWorkflow,
-  CtxAPI,
-} from "./Contexts";
 import { Chatroom } from "../model/Chatroom";
-import {
-  Participants,
-  Participant,
-  IParticipantStatus,
-} from "../model/Participants";
-import moment from "moment";
-import { TransportSvc } from "../services/TransportSvc";
+import { LocalUser } from "../model/LocalUser";
+import { Messages } from "../model/Messages";
+import { IParticipantStatus, Participant, Participants } from "../model/Participants";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
+import { TransportSvc } from "../services/TransportSvc";
 import { InviteUserWorkflow } from "../workflows/InviteUserWorkflow";
+import { ChatroomScreenUI } from "./ChatroomScreenUI";
+import {
+  CtxAPI, CtxChatroom,
+
+  CtxInviteUserWorkflow, CtxLocalUser, CtxMessages,
+
+
+  CtxParticipants, CtxWindowsSvc
+} from "./Contexts";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -115,6 +99,7 @@ export function App() {
         <div style={{ width: 800, height: 400 }} />
       </DefaultModal>
     ));*/
+    services.transportSvc.initialLoadPolledData();
     services.transportSvc.runLoop();
   }, []);
 

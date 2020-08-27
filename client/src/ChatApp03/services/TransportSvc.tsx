@@ -31,11 +31,15 @@ export class TransportSvc {
   }
 
   async runLoop() {
+    let isDelay = true;
     while (true) {
-      await delay(this.pollingIntervalMs);
+      if (isDelay) await delay(this.pollingIntervalMs);
+      isDelay = true;
       try {
-        await this.loadPolledData();
+        const lastMessage = this.messages.lastServerMessage;
+        await this.loadPolledData(lastMessage && lastMessage.id);
       } catch (e) {
+        isDelay = false;
         const errDlg = this.windowSvc.push(renderErrorDialog(e));
         await errDlg.interact();
         errDlg.close();
@@ -43,9 +47,9 @@ export class TransportSvc {
     }
   }
 
-  async loadPolledData() {
+  async loadPolledData(afterIdIncluding?: string) {
     //await axios.get("unknown-url");
-    const polledData = await this.api.getPolledData();
+    const polledData = await this.api.getPolledData(afterIdIncluding);
 
     this.localUser.name = polledData.localUser.name;
     this.localUser.id = polledData.localUser.id;

@@ -93,8 +93,10 @@ export class ChatHTTPApi {
     }
   }
 
-  async getPolledData(): Promise<IGetPolledDataResult> {
-    const timeSent = moment().toISOString();
+  async getPolledData(
+    afterIdIncluding?: string
+  ): Promise<IGetPolledDataResult> {
+    /*const timeSent = moment().toISOString();
     console.log(timeSent);
     const result: IGetPolledDataResult = {
       messages: [
@@ -140,10 +142,11 @@ export class ChatHTTPApi {
 
     this.testNum++;
 
-    return result;
+    return result;*/
 
     const response = await axios.get(
-      `${this.urlPrefix}/chatrooms/${this.chatroomId}/polledData`
+      `${this.urlPrefix}/chatrooms/${this.chatroomId}/polledData`,
+      { params: { afterIdIncluding } }
     );
 
     return response.data;

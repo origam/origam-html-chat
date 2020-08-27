@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const uuid = require("uuid");
+const moment = require("moment");
+
 const app = express();
 const port = 9099;
 
@@ -168,13 +170,51 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
     res.send(chatrooms);
   });
 
-  app.get("/api/messages", async (req, res) => {
-    res.send(msgStorage);
-  });
-
-  app.post("/api/messages", async (req, res) => {
-    msgStorage.push(req.body);
-    res.sendStatus(200);
+  let testNum = 0;
+  app.get("/api/chatrooms/:chatroomId/polledData", async (req, res) => {
+    const users = await User.query().select().orderBy([]);
+    const timeSent = moment().toISOString();
+    res.send({
+      messages: [
+        {
+          id: "m01",
+          authorId: "u22",
+          authorAvatarUrl: testNum % 2 ? "058.jpg" : "059.jpg",
+          authorName: `Author ${testNum}`,
+          mentions: [],
+          text: `Sample text ${testNum}`,
+          timeSent,
+        },
+      ],
+      info: {
+        topic: `Channel topic ${testNum}`,
+      },
+      participants: [
+        {
+          id: "p01",
+          name: `Participant ${testNum * 10}`,
+          avatarUrl: testNum % 2 ? "021.jpg" : "024.jpg",
+          status: testNum % 2 ? "online" : "away",
+        },
+        {
+          id: "p02",
+          name: `Participant ${testNum * 19}`,
+          avatarUrl: testNum % 2 ? "020.jpg" : "015.jpg",
+          status: testNum % 2 ? "online" : "away",
+        },
+        {
+          id: "p03",
+          name: `Participant ${testNum * 28}`,
+          avatarUrl: testNum % 2 ? "001.jpg" : "005.jpg",
+          status: testNum % 2 ? "offline" : "online",
+        },
+      ],
+      localUser: {
+        id: "u01",
+        name: `Local user name ${testNum}`,
+        avatarUrl: testNum % 2 ? `005.jpg` : `011.jpg`,
+      },
+    });
   });
 
   const adminRouter = express.Router();
