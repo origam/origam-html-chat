@@ -1,25 +1,19 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
-import { InviteUserModal } from "../components/InviteUserModal";
-import { MessageBar } from "../components/MessageBar";
-import { Sidebar } from "../components/Sidebar";
-import { SidebarRow } from "../components/SidebarRow";
-import { ChatFeedUI } from "./ChatFeedUI";
-import { ChatParticipantsUI } from "./ChatParticipantsUI";
-import { SendMessageBarUI } from "./SendMessageBarUI";
-import { SampleMessages } from "../components/SampleMessages";
 import { Observer } from "mobx-react";
+import React, { useContext, useEffect, useRef } from "react";
 import {
   ChatParticipantMini,
-  IChatParticipantStatus,
+  IChatParticipantStatus
 } from "../components/ChatParticipant";
-import {
-  CtxChatroom,
-  CtxParticipants,
-  CtxInviteUserWorkflow,
-  CtxAbandonChatroomWorkflow,
-} from "./Contexts";
-import { IParticipantStatus } from "../model/Participants";
+import { MessageBar } from "../components/MessageBar";
 import { getAvatarUrl } from "../helpers/avatar";
+import { IParticipantStatus } from "../model/Participants";
+import { ChatFeedUI } from "./ChatFeedUI";
+import {
+  CtxAbandonChatroomWorkflow, CtxChatroom,
+
+  CtxInviteUserWorkflow, CtxParticipants
+} from "./Contexts";
+import { SendMessageBarUI } from "./SendMessageBarUI";
 
 export function ChatroomScreenUI() {
   const refMessageBar = useRef<any>();

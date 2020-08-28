@@ -1,7 +1,7 @@
-import { observable, action } from "mobx";
-import React, { Fragment, createContext } from "react";
+import { action, observable } from "mobx";
 import { Observer } from "mobx-react";
-import { Overlay, FullscreenCentered } from "./Windows";
+import React from "react";
+import { FullscreenCentered, Overlay } from "./Windows";
 
 export interface IModalHandle<TInteractor> {
   close(): void;

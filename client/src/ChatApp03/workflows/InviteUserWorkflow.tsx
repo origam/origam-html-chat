@@ -1,11 +1,9 @@
-import { WindowsSvc, IModalHandle } from "../components/Windows/WindowsSvc";
 import { renderInviteUserDialog } from "../components/Dialogs/InviteUserDialog";
 import {
-  SimpleQuestion,
-  renderSimpleQuestion,
   renderSimpleInformation,
-  renderSimpleProgres,
+  renderSimpleProgres, renderSimpleQuestion
 } from "../components/Windows/Windows";
+import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
 
 export class InviteUserWorkflow {

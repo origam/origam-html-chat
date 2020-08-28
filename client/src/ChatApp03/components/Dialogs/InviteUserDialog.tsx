@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
 import _ from "lodash";
+import { action, computed, flow, observable } from "mobx";
+import { Observer } from "mobx-react";
+import React, { useContext, useEffect, useState } from "react";
+import { AutoSizer, List } from "react-virtualized";
+import { CtxAPI } from "../../componentIntegrations/Contexts";
+import { getAvatarUrl } from "../../helpers/avatar";
+import { ChatHTTPApi } from "../../services/ChatHTTPApi";
+import { Button } from "../Buttons";
+import { TagInput, TagInputItem, TagInputItemClose } from "../TagInput";
 import {
   DefaultModal,
-  ModalFooter,
-  ModalCloseButton,
+
+  ModalCloseButton, ModalFooter
 } from "../Windows/Windows";
-import { Button } from "../Buttons";
 import { IModalHandle } from "../Windows/WindowsSvc";
-import { AutoSizer, List } from "react-virtualized";
-import { TagInput, TagInputItem, TagInputItemClose } from "../TagInput";
-import { computed, observable, action, flow } from "mobx";
-import { Observer } from "mobx-react";
-import { getAvatarUrl } from "../../helpers/avatar";
-import axios from "axios";
-import { ChatHTTPApi } from "../../services/ChatHTTPApi";
-import { CtxAPI } from "../../componentIntegrations/Contexts";
 
 export interface IInteractor {
   choosenUsers?: UserToInvite[];
@@ -113,7 +112,7 @@ export function InviteUserDialog(props: {
     }
     state.setItems(users);*/
     state.loadUsersToChooseImm();
-  }, []);
+  }, [state]);
   return (
     <DefaultModal
       footer={
