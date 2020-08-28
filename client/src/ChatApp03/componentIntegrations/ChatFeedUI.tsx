@@ -33,7 +33,7 @@ export function ChatFeedUI() {
               messageNodes = [];
               clusterNodes.push(
                 <MessageCluster
-                  key={messageItem.authorId}
+                  key={messageItem.id}
                   avatar={
                     <img
                       className="avatar__picture"
