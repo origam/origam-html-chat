@@ -225,6 +225,30 @@ function start({ dataEngine, userRepo, chatroomRepo }) {
   });
 
   app.get("/api/chatrooms/:chatroomId/usersToMention", async (req, res) => {
+    /*
+      limit?
+      offset?
+      searchTerm? 
+    */
+    const { limit, offset, searchPhrase } = req.query;
+    console.log(limit, offset, searchPhrase);
+    const chatroomId = req.params.chatroomId;
+    let query = User.query().orderBy("name");
+    if (limit !== undefined) {
+      query = query.limit(parseInt(limit));
+    }
+    if (offset !== undefined) {
+      query = query.offset(parseInt(offset));
+    }
+    if (searchPhrase !== undefined) {
+      query = query.where("name", "like", `%${searchPhrase}%`);
+      console.log(query.toString());
+    }
+    const users = await query;
+    res.send(users);
+  });
+
+  app.get("/api/chatrooms/:chatroomId/usersToMention", async (req, res) => {
     const users = await User.query().select().orderBy([]);
     res.send();
   });

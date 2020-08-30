@@ -58,6 +58,7 @@ export function ChatFeedUI() {
                 key={messageItem.id}
                 content={
                   <span
+                    onClick={(evt) => evt.preventDefault()}
                     className="dangerousContent"
                     dangerouslySetInnerHTML={{ __html: messageItem.text }}
                   />

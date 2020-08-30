@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { CtxMentionUserWorkflow } from "../componentIntegrations/Contexts";
+import { UserToMention } from "./Dialogs/MentionUserDialog";
+import { Entity, Modifier, EditorState } from "draft-js";
 
 export function SendMessageBar(props: {
   //onEditorKeyDown: any;
@@ -9,7 +12,46 @@ export function SendMessageBar(props: {
   editorState: any;
   onEditorStateChange: any;
   onHandleReturn: any;
+  onSendMessageClick: any;
 }) {
+  useEffect(() => {
+    setTimeout(() => {}, 5000);
+  }, []);
+
+  function mentionUsers(users: UserToMention[]) {
+    console.log("Mentioning...");
+    let editorState = props.editorState;
+    for (let user of users) {
+      let currentContent = editorState.getCurrentContent();
+      let currentSelection = editorState.getSelection();
+      const newEntityKey = Entity.create("MENTION", "IMMUTABLE", {
+        text: `@${user.name}`,
+        url: `@${user.name}`,
+        value: `${user.id}`,
+      });
+      const textWithEntity = Modifier.insertText(
+        currentContent,
+        currentSelection,
+        `@${user.name}`,
+        undefined,
+        newEntityKey
+      );
+      editorState = EditorState.push(
+        editorState,
+        textWithEntity,
+        "insert-characters"
+      );
+      currentContent = editorState.getCurrentContent();
+      currentSelection = editorState.getSelection();
+      editorState = EditorState.push(
+        editorState,
+        Modifier.insertText(currentContent, currentSelection, " "),
+        "insert-characters"
+      );
+    }
+    props.onEditorStateChange?.(editorState);
+  }
+
   return (
     <div className="sendMessageBar">
       <div className="sendMessageBar__userName">{props.localUserName}:</div>
@@ -24,10 +66,13 @@ export function SendMessageBar(props: {
         {...({
           handleReturn: props.onHandleReturn,
         } as any)}
-        toolbarClassName="toolbarClassName"
-        wrapperClassName="wrapperClassName"
-        editorClassName="editorClassName"
+        toolbarClassName="sendMessageEditorToolbar"
+        wrapperClassName=""
+        editorClassName=""
         toolbarOnFocus={true}
+        toolbarCustomButtons={[
+          <MentionButton onUsersMentioned={mentionUsers} />,
+        ]}
         onEditorStateChange={props.onEditorStateChange}
         toolbar={{
           inline: {
@@ -57,21 +102,29 @@ export function SendMessageBar(props: {
             "history",
           ],
         }}
-        mention={{
-          separator: " ",
-          trigger: "@",
-          suggestions: [
-            { text: "APPLE", value: "apple", url: "apple" },
-            { text: "BANANA", value: "banana", url: "banana" },
-            { text: "CHERRY", value: "cherry", url: "cherry" },
-            { text: "DURIAN", value: "durian", url: "durian" },
-            { text: "EGGFRUIT", value: "eggfruit", url: "eggfruit" },
-            { text: "FIG", value: "fig", url: "fig" },
-            { text: "GRAPEFRUIT", value: "grapefruit", url: "grapefruit" },
-            { text: "HONEYDEW", value: "honeydew", url: "honeydew" },
-          ],
-        }}
       />
+      <button
+        className="sendMessageBar__sendBtn"
+        onClick={props.onSendMessageClick}
+      >
+        <i className="far fa-paper-plane fa-lg" />
+      </button>
     </div>
+  );
+}
+
+export function MentionButton(props: {
+  onUsersMentioned?: (users: UserToMention[]) => void;
+}) {
+  const mentionWorkflow = useContext(CtxMentionUserWorkflow);
+  return (
+    <button
+      onClick={() =>
+        mentionWorkflow.start((users) => props.onUsersMentioned?.(users))
+      }
+      className="mentionButton"
+    >
+      @
+    </button>
   );
 }

@@ -86,6 +86,31 @@ export class ChatHTTPApi {
     }
   }
 
+  *getUsersToMention(
+    searchPhrase: string,
+    limit: number,
+    offset: number
+  ): Generator<any, IGetUsersToInviteResult> {
+    const cancelSource = axios.CancelToken.source();
+    try {
+      const response = yield axios.get(
+        `${this.urlPrefix}/chatrooms/${this.chatroomId}/usersToMention`,
+        {
+          params: { searchPhrase, limit, offset },
+          headers: this.headers,
+          cancelToken: cancelSource.token,
+        }
+      );
+      return {
+        users: (response as any).data,
+      };
+    } finally {
+      cancelSource.cancel();
+    }
+  }
+
+
+
   async inviteUsers(arg: IInviteUsersArg) {
     for (let user of arg.users) {
       await axios.post(

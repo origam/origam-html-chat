@@ -18,9 +18,11 @@ import {
   CtxParticipants,
   CtxWindowsSvc,
   CtxAbandonChatroomWorkflow,
+  CtxMentionUserWorkflow,
 } from "./Contexts";
 import { useLocation, useHistory } from "react-router";
 import { AbandonChatroomWorkflow } from "../workflows/AbandonChatroomWorkflow";
+import { MentionUserWorkflow } from "../workflows/MentionUserWorkflow";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -54,7 +56,8 @@ export function ChatApp() {
       api
     );
 
-    const inviteuserWorkflow = new InviteUserWorkflow(windowsSvc, api);
+    const inviteUserWorkflow = new InviteUserWorkflow(windowsSvc, api);
+    const mentionUserWorkflow = new MentionUserWorkflow(windowsSvc, api);
     const abandonChatroomWorkflow = new AbandonChatroomWorkflow(
       windowsSvc,
       transportSvc,
@@ -69,7 +72,8 @@ export function ChatApp() {
       participants,
       messages,
       transportSvc,
-      inviteuserWorkflow,
+      inviteUserWorkflow,
+      mentionUserWorkflow,
       abandonChatroomWorkflow,
       api,
     };
@@ -98,7 +102,12 @@ export function ChatApp() {
   uiTree = ctxProvide(
     uiTree,
     CtxInviteUserWorkflow,
-    services.inviteuserWorkflow
+    services.inviteUserWorkflow
+  );
+  uiTree = ctxProvide(
+    uiTree,
+    CtxMentionUserWorkflow,
+    services.mentionUserWorkflow
   );
   uiTree = ctxProvide(
     uiTree,
