@@ -1,6 +1,6 @@
-import axios from "axios";
+//import axios from "axios";
 import { config } from "../config";
-
+import axiosLib from "axios";
 
 export interface IGetPolledDataResult {
   messages: {
@@ -55,12 +55,28 @@ export interface ISendMessageArg {
 export class ChatHTTPApi {
   constructor(public chatroomId = "", public fakeUserId?: string) {}
 
+  axios = axiosLib.create({});
+
   urlPrefix = config.apiUrlPrefix;
 
   testNum = 0;
 
+  get authToken() {
+    return null;
+  }
+
   get headers() {
-    if (this.fakeUserId) return { "x-fake-user-id": this.fakeUserId };
+    let result: { [key: string]: any } = {};
+
+    if (this.fakeUserId) {
+      result = { ...result, "x-fake-user-id": this.fakeUserId };
+    }
+
+    if (this.authToken) {
+      result = { ...result, authorization: `Bearer ${this.authToken}` };
+    }
+
+    return result;
   }
 
   *getUsersToInvite(
@@ -68,9 +84,9 @@ export class ChatHTTPApi {
     limit: number,
     offset: number
   ): Generator<any, IGetUsersToInviteResult> {
-    const cancelSource = axios.CancelToken.source();
+    const cancelSource = axiosLib.CancelToken.source();
     try {
-      const response = yield axios.get(
+      const response = yield this.axios.get(
         `${this.urlPrefix}/chatrooms/${this.chatroomId}/usersToInvite`,
         {
           params: { searchPhrase, limit, offset },
@@ -91,9 +107,9 @@ export class ChatHTTPApi {
     limit: number,
     offset: number
   ): Generator<any, IGetUsersToInviteResult> {
-    const cancelSource = axios.CancelToken.source();
+    const cancelSource = axiosLib.CancelToken.source();
     try {
-      const response = yield axios.get(
+      const response = yield this.axios.get(
         `${this.urlPrefix}/chatrooms/${this.chatroomId}/usersToMention`,
         {
           params: { searchPhrase, limit, offset },
@@ -109,11 +125,9 @@ export class ChatHTTPApi {
     }
   }
 
-
-
   async inviteUsers(arg: IInviteUsersArg) {
     for (let user of arg.users) {
-      await axios.post(
+      await this.axios.post(
         `${this.urlPrefix}/chatrooms/${this.chatroomId}/inviteUser`,
         { userId: user.userId },
         { headers: this.headers }
@@ -124,7 +138,7 @@ export class ChatHTTPApi {
   async getPolledData(
     afterIdIncluding?: string
   ): Promise<IGetPolledDataResult> {
-    const response = await axios.get(
+    const response = await this.axios.get(
       `${this.urlPrefix}/chatrooms/${this.chatroomId}/polledData`,
       { params: { afterIdIncluding }, headers: this.headers }
     );
@@ -133,7 +147,7 @@ export class ChatHTTPApi {
   }
 
   async sendMessage(arg: ISendMessageArg) {
-    await axios.post(
+    await this.axios.post(
       `${this.urlPrefix}/chatrooms/${this.chatroomId}/messages`,
       {
         ...arg,
@@ -143,7 +157,7 @@ export class ChatHTTPApi {
   }
 
   async abandonChatroom() {
-    await axios.post(
+    await this.axios.post(
       `${this.urlPrefix}/chatrooms/${this.chatroomId}/abandon`,
       {},
       { headers: this.headers }

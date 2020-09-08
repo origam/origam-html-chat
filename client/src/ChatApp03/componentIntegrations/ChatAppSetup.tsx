@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { flow } from "mobx";
 import { Link } from "react-router-dom";
 
-const URL_BASE = "http://localhost:9099/api";
+import {config} from '../config';
 
 export function ChatAppSetup() {
   const [users, setUsers] = useState<any[]>([]);
@@ -13,10 +13,10 @@ export function ChatAppSetup() {
   const [selectedChatroom, setSelectedChatroom] = useState("");
   useEffect(() => {
     flow(function* () {
-      const users = yield axios.get(`${URL_BASE}/users`);
+      const users = yield axios.get(`${config.apiUrlPrefix}/users`);
       console.log(users.data);
       setUsers(users.data);
-      const chatrooms = yield axios.get(`${URL_BASE}/chatrooms`);
+      const chatrooms = yield axios.get(`${config.apiUrlPrefix}/chatrooms`);
       console.log(chatrooms.data);
       setChatrooms(chatrooms.data);
     })();
