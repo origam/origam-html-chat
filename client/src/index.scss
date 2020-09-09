@@ -123,9 +123,26 @@ body,
   }
   &__title {
     h1 {
+      position: relative;
+      display: inline-block;
       margin: 0px;
       padding: 0px;
       font-size: 1.3em;
+      cursor: pointer;
+      .messageThreadHeader__editIcon {
+        position: absolute;
+        top: 0;
+        right: -25px;
+        color: #cacaca;
+      }
+      &:hover {
+        background: #cacaca;
+        border-radius: 2px;
+
+        &.messageThreadHeader__editIcon {
+          display: block !important;
+        }
+      }
     }
   }
   &__actionButton {

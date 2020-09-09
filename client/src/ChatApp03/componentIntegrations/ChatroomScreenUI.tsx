@@ -2,18 +2,32 @@ import { Observer } from "mobx-react";
 import React, { useContext, useEffect, useRef } from "react";
 import {
   ChatParticipantMini,
-  IChatParticipantStatus
+  IChatParticipantStatus,
 } from "../components/ChatParticipant";
 import { MessageBar } from "../components/MessageBar";
 import { getAvatarUrl } from "../helpers/avatar";
 import { IParticipantStatus } from "../model/Participants";
 import { ChatFeedUI } from "./ChatFeedUI";
 import {
-  CtxAbandonChatroomWorkflow, CtxChatroom,
-
-  CtxInviteUserWorkflow, CtxParticipants
+  CtxAbandonChatroomWorkflow,
+  CtxChatroom,
+  CtxInviteUserWorkflow,
+  CtxParticipants,
 } from "./Contexts";
 import { SendMessageBarUI } from "./SendMessageBarUI";
+
+export function ChatroomName(props: { value: string }) {
+  return (
+    <div className="messageThreadHeader__title">
+      <h1 onClick={() => prompt("Enter new chatroom title")}>
+        {props.value || <>&nbsp;</>}
+        <div className="messageThreadHeader__editIcon">
+          <i className="fas fa-edit fa-xs" />
+        </div>
+      </h1>
+    </div>
+  );
+}
 
 export function ChatroomScreenUI() {
   const refMessageBar = useRef<any>();
@@ -83,9 +97,7 @@ export function ChatroomScreenUI() {
             <div className="messageArea">
               <div className="messageThreadHeader">
                 <div className="messageThreadHeader__info">
-                  <div className="messageThreadHeader__title">
-                    <h1>{chatroomName || <>&nbsp;</>}</h1>
-                  </div>
+                  <ChatroomName value={chatroomName} />
                   <div className="messageThreadHeader__body">
                     {participantsCountText}
                   </div>
