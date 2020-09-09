@@ -23,6 +23,7 @@ import {
 import { useLocation, useHistory } from "react-router";
 import { AbandonChatroomWorkflow } from "../workflows/AbandonChatroomWorkflow";
 import { MentionUserWorkflow } from "../workflows/MentionUserWorkflow";
+import { config } from "../config";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -80,6 +81,7 @@ export function ChatApp() {
   });
 
   useEffect(() => {
+    config.authToken = sessionStorage.getItem("origamAuthToken");
     services.transportSvc.initialLoadPolledData();
     services.transportSvc.runLoop();
     return () => {

@@ -62,7 +62,7 @@ export class ChatHTTPApi {
   testNum = 0;
 
   get authToken() {
-    return null;
+    return config.authToken;
   }
 
   get headers() {
@@ -73,7 +73,7 @@ export class ChatHTTPApi {
     }
 
     if (this.authToken) {
-      result = { ...result, authorization: `Bearer ${this.authToken}` };
+      result = { ...result, Authorization: `Bearer ${this.authToken}` };
     }
 
     return result;
