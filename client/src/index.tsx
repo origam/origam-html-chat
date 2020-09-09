@@ -13,6 +13,9 @@ import { ChatAppSetup } from "./ChatApp03/componentIntegrations/ChatAppSetup";
 import "./index.scss";
 import "./spinner.scss";
 import * as serviceWorker from "./serviceWorker";
+import { config } from "./ChatApp03/config";
+
+config.authToken = sessionStorage.getItem("origamAuthToken");
 
 function Routed() {
   return (

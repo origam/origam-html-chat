@@ -81,7 +81,6 @@ export function ChatApp() {
   });
 
   useEffect(() => {
-    config.authToken = sessionStorage.getItem("origamAuthToken");
     services.transportSvc.initialLoadPolledData();
     services.transportSvc.runLoop();
     return () => {

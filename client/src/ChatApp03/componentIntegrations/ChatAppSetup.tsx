@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { flow } from "mobx";
 import { Link } from "react-router-dom";
 
-import {config} from '../config';
+import { config } from "../config";
 
 export function ChatAppSetup() {
   const [users, setUsers] = useState<any[]>([]);
@@ -13,10 +13,18 @@ export function ChatAppSetup() {
   const [selectedChatroom, setSelectedChatroom] = useState("");
   useEffect(() => {
     flow(function* () {
-      const users = yield axios.get(`${config.apiUrlPrefix}/users`);
+      let headers: any = {};
+      if (config.authToken) {
+        headers = { ...headers, Authorization: `Bearer ${config.authToken}` };
+      }
+      const users = yield axios.get(`${config.apiUrlPrefix}/users`, {
+        headers,
+      });
       console.log(users.data);
       setUsers(users.data);
-      const chatrooms = yield axios.get(`${config.apiUrlPrefix}/chatrooms`);
+      const chatrooms = yield axios.get(`${config.apiUrlPrefix}/chatrooms`, {
+        headers,
+      });
       console.log(chatrooms.data);
       setChatrooms(chatrooms.data);
     })();
@@ -24,7 +32,11 @@ export function ChatAppSetup() {
   return (
     <div>
       <h1>Setup</h1>
-      <Link to={`/chatroom?chatroomId=${selectedChatroom}&fakeUserId=${selectedUser}`}>Go to chatroom</Link>
+      <Link
+        to={`/chatroom?chatroomId=${selectedChatroom}&fakeUserId=${selectedUser}`}
+      >
+        Go to chatroom
+      </Link>
       <h2>Users</h2>
       <div>
         {users.map((user) => (
