@@ -10,13 +10,14 @@ import { Button } from "../Buttons";
 import { TagInput, TagInputItem, TagInputItemClose } from "../TagInput";
 import {
   DefaultModal,
-
-  ModalCloseButton, ModalFooter
+  ModalCloseButton,
+  ModalFooter,
 } from "../Windows/Windows";
 import { IModalHandle } from "../Windows/WindowsSvc";
 
 export interface IInteractor {
   choosenUsers?: UserToInvite[];
+  chatroomTopic?: string;
   isCancel?: boolean;
 }
 
@@ -30,13 +31,14 @@ class UserToInvite {
 
 class DialogState {
   constructor(public api: ChatHTTPApi) {
-    console.log('Creating new dialog state.')
+    console.log("Creating new dialog state.");
   }
 
   @observable rawUsers: UserToInvite[] = [];
   @observable choosenUsers: UserToInvite[] = [];
   @observable searchPhrase: string = "";
   @observable chatroomTopic: string = "";
+  references: { [key: string]: any } = {};
 
   @computed get usersToChooseFrom() {
     return this.rawUsers.filter((user) => !this.choosenUserIds.has(user.id));
@@ -75,6 +77,10 @@ class DialogState {
     this.chatroomTopic = event.target.value;
   }
 
+  @action.bound setReferences(references: { [key: string]: any } | undefined) {
+    this.references = references || {};
+  }
+
   _loadingPromise: any;
 
   loadUsersToChooseImm = () => {
@@ -84,10 +90,11 @@ class DialogState {
     const _this = this;
     this._loadingPromise = flow(function* () {
       try {
-        const usersToInvite = yield* _this.api.getUsersToInvite(
+        const usersToInvite = yield* _this.api.getUsersToInviteByReferences(
           _this.searchPhrase,
           100,
-          0
+          0,
+          _this.references
         );
         _this.setItems(usersToInvite.users);
       } finally {
@@ -100,11 +107,15 @@ class DialogState {
 }
 
 export function CreateChatroomDialog(props: {
+  references?: { [key: string]: any };
   onCancel?: any;
-  onSubmit?: (choosenUsers: UserToInvite[]) => void;
+  onSubmit?: (choosenUsers: UserToInvite[], chatroomTopic: string) => void;
 }) {
   const api = useContext(CtxAPI);
   const [state] = useState(() => new DialogState(api));
+  useEffect(() => {
+    state.setReferences(props.references);
+  }, [props.references]);
   useEffect(() => {
     /*const users: UserToInvite[] = [];
     for (let i = 1; i < 50; i++) {
@@ -123,13 +134,16 @@ export function CreateChatroomDialog(props: {
     <DefaultModal
       footer={
         <ModalFooter align="center">
-          <Button onClick={() => props.onSubmit?.(state.choosenUsers)}>
+          <Button
+            onClick={() =>
+              props.onSubmit?.(state.choosenUsers, state.chatroomTopic)
+            }
+          >
             Ok
           </Button>
         </ModalFooter>
       }
     >
-      <ModalCloseButton onClick={props.onCancel} />
       <div className="chooseUserToInviteModalContent">
         <div className="chooseUserToInviteModalContent__header">
           <p>Enter a topic for the new chatroom:</p>
@@ -229,12 +243,17 @@ export function CreateChatroomDialog(props: {
   );
 }
 
-export function renderCreateChatroomDialog() {
+export function renderCreateChatroomDialog(
+  references: { [key: string]: any } | undefined
+) {
   return (modal: IModalHandle<IInteractor>) => {
     return (
       <CreateChatroomDialog
+        references={references}
         onCancel={() => modal.resolveInteract({ isCancel: true })}
-        onSubmit={(choosenUsers) => modal.resolveInteract({ choosenUsers })}
+        onSubmit={(choosenUsers, chatroomTopic) =>
+          modal.resolveInteract({ choosenUsers, chatroomTopic })
+        }
       />
     );
   };

@@ -34,6 +34,9 @@ export function ChatApp() {
   const location = useLocation();
   const history = useHistory();
   const locationQuery = qs.parse(location.search.slice(1));
+  const references = Object.fromEntries(
+    Object.entries(locationQuery).filter(([k, v]) => k.startsWith("reference"))
+  );
 
   const chatroomId = locationQuery.chatroomId as string;
   const fakeUserId = locationQuery.fakeUserId as string;
@@ -91,7 +94,7 @@ export function ChatApp() {
         services.transportSvc.terminateLoop();
       };
     } else {
-      services.createChatroomWorkflow.start();
+      services.createChatroomWorkflow.start(references);
     }
   }, [!!chatroomId]);
 

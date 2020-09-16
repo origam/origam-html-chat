@@ -102,6 +102,30 @@ export class ChatHTTPApi {
     }
   }
 
+  *getUsersToInviteByReferences(
+    searchPhrase: string,
+    limit: number,
+    offset: number,
+    references: { [key: string]: any }
+  ): Generator<any, IGetUsersToInviteResult> {
+    const cancelSource = axiosLib.CancelToken.source();
+    try {
+      const response = yield this.axios.get(
+        `${this.urlPrefix}/users/listToInvite`,
+        {
+          params: { searchPhrase, limit, offset, ...references },
+          headers: this.headers,
+          cancelToken: cancelSource.token,
+        }
+      );
+      return {
+        users: (response as any).data,
+      };
+    } finally {
+      cancelSource.cancel();
+    }
+  }
+
   *getUsersToMention(
     searchPhrase: string,
     limit: number,
