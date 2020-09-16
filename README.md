@@ -1,4 +1,115 @@
+# Application startup
+
+The app opens by navigating to:
+
+`#/chatroom?chatroomId=...&referenceX=...&referenceY=...&...`
+
+## Joining an existing chatroom
+
+When `chatroomId` is given, the chat thread interface is displayed and the user can start chatting. All the endpoints given in protocol description - when meaningful - are given the `chatroomId` to bind the operations and queries to the specific chatroom.
+
+## Creating new chatroom
+
+When there is no user in the chatroom the app expects to be started with `chatroomId` empty or not given at all. When this happens the app:
+
+ 1. displays a dialog, where the user is expected to fill in the name of chatroom to be created and select users he or she wants to invite to the chatroom from a list obtained by calling:
+ 
+    `GET users/listToInvite?referenceX=...&referenceY=...&...` 
+
+    All the query parameters, beginning with `reference` prefix are passed to the endpoint as they were given when the app was started so that the list of the users can possibly be e.g. serverside-filtered according to the object the chatroom shall be bound to. The result is expected to be in the exact same form as for `GET chatrooms/:chatroomId/usersToInvite` endpoint. The output is expected not to contain the current user.
+
+ 2. calls `POST /chatrooms/create` after user submits the dialog. It is expected to:
+    - Create new chatroom on server in the app domain (whatever it means in practice)
+    - Set the chatroom topic/name
+    - Invite current user to the chatroom so that he or she can then read/send messages and otherwise interact with the chatroom
+    - Invite users given in the request body so the can do the same
+  
+    The method returns the newly created `chatroomId`.
+
+ 3. App then redirects itself to `#/chatroom?chatroomId=...` with references stripped away and `chatroomId` set as given in the previous point. The proccess then continues as stated in *Joining an existing chatroom* section.
+
 # Origam chat HTTP protocol description
+
+
+`POST chatrooms/create`
+
+Description:
+> Create a chatroom, set its name and invite users to it.
+
+Request body: JSON object:
+
+
+  
+  - `topic` - GUID identifier of the message 
+  - `references` - References passed from application url (all the fields beginning by `reference` prefix)
+    - `referenceA` - ...
+    - `referenceB` - ...
+  - `inviteUsers`- array of users to invite to the chatroom [
+
+    - `id` - GUID user identifier.
+
+  - ] 
+
+Return value: JSON object:
+
+ - `chatroomId` - GUID of the newly created chatroom.
+
+Example:
+
+App started by url:
+
+`#/chatroom?referenceId=abc123&referenceEntity=SomeEntityName&referenceOther=other_reference_data`
+
+will consequently make request semantically similar to:
+
+```
+POST chatrooms/create
+
+{
+  "topic" : "Bugs in version 2029.13",
+  "references": {
+    "referenceId": "abc123",
+    "referenceEntity": "SomeEntityName",
+    "referenceOther": "other_reference_data"
+  },
+  "inviteUsers": [
+    "guid-01-ab-cd",
+    "guid-02-ef-gh"
+  ]
+}
+
+````
+
+***
+
+`GET users/listToInvite`
+
+
+Description:
+> Lists users which can be invited to the given channel, filtering them by given phrase, limiting the returned item count. 
+
+Query parameters:
+
+ - `referenceA`, `referenceB`, ... - strings passed as given in the app bootstrap url
+ - `limit` - *(optional)* number limiting number of users returned.
+ - `offset` - *(optional)* number offset where list should begin.
+ - `searchPhrase` - *(optional)* - string used to fultext constrain the query to just users of interrest.
+
+Return value: flat JSON array:
+
+[
+
+   - `id` - GUID user identifier.
+   - `name` - string user name.
+   - `avatarUrl` - string url of an image to display as the participant's avatar.
+
+]
+
+
+
+***
+
+
 
 
 `GET chatrooms/:chatroomId/messages`
