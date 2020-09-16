@@ -8,12 +8,12 @@ import {
   Redirect,
 } from "react-router-dom";
 import "./admin.scss";
-import { ChatApp } from "./ChatApp03/componentIntegrations/ChatApp";
-import { ChatAppSetup } from "./ChatApp03/componentIntegrations/ChatAppSetup";
+import { ChatApp } from "./ChatApp/componentIntegrations/ChatApp";
+import { ChatAppSetup } from "./ChatApp/componentIntegrations/ChatAppSetup";
 import "./index.scss";
 import "./spinner.scss";
 import * as serviceWorker from "./serviceWorker";
-import { config } from "./ChatApp03/config";
+import { config } from "./ChatApp/config";
 
 config.authToken = sessionStorage.getItem("origamAuthToken");
 
@@ -22,7 +22,7 @@ function Routed() {
     <Router>
       <Switch>
         <Route path="/" exact={true}>
-          <Redirect to="/setup" />
+          <Redirect to="/chatroom" />
         </Route>
         <Route path="/chatroom">
           <ChatApp />

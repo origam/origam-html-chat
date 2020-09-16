@@ -24,6 +24,7 @@ import { useLocation, useHistory } from "react-router";
 import { AbandonChatroomWorkflow } from "../workflows/AbandonChatroomWorkflow";
 import { MentionUserWorkflow } from "../workflows/MentionUserWorkflow";
 import { config } from "../config";
+import { CreateChatroomWorkflow } from "../workflows/CreateChatroomWorkflow";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -65,6 +66,7 @@ export function ChatApp() {
       () => setIsTerminated(true),
       api
     );
+    const createChatroomWorkflow = new CreateChatroomWorkflow(windowsSvc, api);
 
     return {
       windowsSvc,
@@ -76,21 +78,26 @@ export function ChatApp() {
       inviteUserWorkflow,
       mentionUserWorkflow,
       abandonChatroomWorkflow,
+      createChatroomWorkflow,
       api,
     };
   });
 
   useEffect(() => {
-    services.transportSvc.initialLoadPolledData();
-    services.transportSvc.runLoop();
-    return () => {
-      services.transportSvc.terminateLoop();
-    };
-  }, []);
+    if (chatroomId) {
+      services.transportSvc.initialLoadPolledData();
+      services.transportSvc.runLoop();
+      return () => {
+        services.transportSvc.terminateLoop();
+      };
+    } else {
+      services.createChatroomWorkflow.start();
+    }
+  }, [!!chatroomId]);
 
   let uiTree = (
     <>
-      {!isTerminated && <ChatroomScreenUI />}
+      {!isTerminated && chatroomId && <ChatroomScreenUI />}
       {services.windowsSvc.renderStack()}
     </>
   );

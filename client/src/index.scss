@@ -611,7 +611,8 @@ body,
     flex: 1 0 0;
   }
 
-  .searchUserInput {
+  .searchUserInput,
+  .chatroomTopicInput {
     border: none;
     outline: 1px solid rgb(216, 216, 216);
     height: 30px;
