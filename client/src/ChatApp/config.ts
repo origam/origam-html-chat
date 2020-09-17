@@ -3,7 +3,7 @@ export const config: {
   avatarUrlPrefix: string;
   authToken: string | null;
 } = {
-  apiUrlPrefix: "./chatApi",
+  apiUrlPrefix: "/chatrooms/Chat",
   avatarUrlPrefix: "./img/avatars",
   authToken: null,
 };

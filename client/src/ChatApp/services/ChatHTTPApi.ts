@@ -158,7 +158,6 @@ export class ChatHTTPApi {
     topic: string,
     inviteUsers: string[]
   ): Promise<{ chatroomId: any }> {
-    return { chatroomId: "chatroom-0123" };
     const response = await this.axios.post(
       `${this.urlPrefix}/chatrooms/create`,
       {
