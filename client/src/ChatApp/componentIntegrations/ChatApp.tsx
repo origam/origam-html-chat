@@ -67,7 +67,8 @@ export function ChatApp() {
       windowsSvc,
       transportSvc,
       () => setIsTerminated(true),
-      api
+      api,
+      localUser
     );
     const createChatroomWorkflow = new CreateChatroomWorkflow(
       windowsSvc,

@@ -130,6 +130,29 @@ export class ChatHTTPApi {
     }
   }
 
+  *getUsersToOutvite(
+    searchPhrase: string,
+    limit: number,
+    offset: number
+  ): Generator<any, IGetUsersToInviteResult> {
+    const cancelSource = axiosLib.CancelToken.source();
+    try {
+      const response = yield this.axios.get(
+        `${this.urlPrefix}/chatrooms/${this.chatroomId}/usersToOutvite`,
+        {
+          params: { searchPhrase, limit, offset },
+          headers: this.headers,
+          cancelToken: cancelSource.token,
+        }
+      );
+      return {
+        users: (response as any).data,
+      };
+    } finally {
+      cancelSource.cancel();
+    }
+  }
+
   *getUsersToMention(
     searchPhrase: string,
     limit: number,
@@ -174,6 +197,16 @@ export class ChatHTTPApi {
     for (let user of arg.users) {
       await this.axios.post(
         `${this.urlPrefix}/chatrooms/${this.chatroomId}/inviteUser`,
+        { userId: user.userId },
+        { headers: this.headers }
+      );
+    }
+  }
+
+  async outviteUsers(arg: IInviteUsersArg) {
+    for (let user of arg.users) {
+      await this.axios.post(
+        `${this.urlPrefix}/chatrooms/${this.chatroomId}/outviteUser`,
         { userId: user.userId },
         { headers: this.headers }
       );
