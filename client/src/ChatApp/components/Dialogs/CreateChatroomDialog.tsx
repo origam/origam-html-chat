@@ -3,7 +3,7 @@ import { action, computed, flow, observable } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useContext, useEffect, useState } from "react";
 import { AutoSizer, List } from "react-virtualized";
-import { CtxAPI } from "../../componentIntegrations/Contexts";
+import { CtxAPI, CtxWindowsSvc } from "../../componentIntegrations/Contexts";
 import { getAvatarUrl } from "../../helpers/avatar";
 import { ChatHTTPApi } from "../../services/ChatHTTPApi";
 import { Button } from "../Buttons";
@@ -13,7 +13,8 @@ import {
   ModalCloseButton,
   ModalFooter,
 } from "../Windows/Windows";
-import { IModalHandle } from "../Windows/WindowsSvc";
+import { IModalHandle, WindowsSvc } from "../Windows/WindowsSvc";
+import { renderErrorDialog } from "./ErrorDialog";
 
 export interface IInteractor {
   choosenUsers?: UserToInvite[];
@@ -30,7 +31,7 @@ class UserToInvite {
 }
 
 class DialogState {
-  constructor(public api: ChatHTTPApi) {
+  constructor(public api: ChatHTTPApi, public windowsSvc: WindowsSvc) {
     console.log("Creating new dialog state.");
   }
 
@@ -97,6 +98,11 @@ class DialogState {
           _this.references
         );
         _this.setItems(usersToInvite.users);
+      } catch (e) {
+        console.error(e);
+        const errDlg = _this.windowsSvc.push(renderErrorDialog(e));
+        yield errDlg.interact();
+        errDlg.close();
       } finally {
         _this._loadingPromise = undefined;
       }
@@ -112,22 +118,12 @@ export function CreateChatroomDialog(props: {
   onSubmit?: (choosenUsers: UserToInvite[], chatroomTopic: string) => void;
 }) {
   const api = useContext(CtxAPI);
-  const [state] = useState(() => new DialogState(api));
+  const windowsSvc = useContext(CtxWindowsSvc);
+  const [state] = useState(() => new DialogState(api, windowsSvc));
   useEffect(() => {
     state.setReferences(props.references);
   }, [props.references]);
   useEffect(() => {
-    /*const users: UserToInvite[] = [];
-    for (let i = 1; i < 50; i++) {
-      users.push(
-        new UserToInvite(
-          `uti${i}`,
-          `User to invite ${i}`,
-          `${String(i).padStart(3, "0")}.jpg`
-        )
-      );
-    }
-    state.setItems(users);*/
     state.loadUsersToChooseImm();
   }, [state]);
   return (
