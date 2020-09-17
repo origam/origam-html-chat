@@ -79,6 +79,10 @@ export class ChatHTTPApi {
     return result;
   }
 
+  setChatroomId(chatroomId: string) {
+    this.chatroomId = chatroomId;
+  }
+
   *getUsersToInvite(
     searchPhrase: string,
     limit: number,
@@ -147,6 +151,24 @@ export class ChatHTTPApi {
     } finally {
       cancelSource.cancel();
     }
+  }
+
+  async createChatroom(
+    references: { [key: string]: any },
+    topic: string,
+    inviteUsers: string[]
+  ): Promise<{ chatroomId: any }> {
+    return { chatroomId: "chatroom-0123" };
+    const response = await this.axios.post(
+      `${this.urlPrefix}/chatrooms/create`,
+      {
+        topic,
+        references,
+        inviteUsers: inviteUsers.map((userId) => ({ id: userId })),
+      },
+      { headers: this.headers }
+    );
+    return { chatroomId: response.data.chatroomId };
   }
 
   async inviteUsers(arg: IInviteUsersArg) {

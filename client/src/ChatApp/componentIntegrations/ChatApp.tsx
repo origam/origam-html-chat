@@ -69,7 +69,12 @@ export function ChatApp() {
       () => setIsTerminated(true),
       api
     );
-    const createChatroomWorkflow = new CreateChatroomWorkflow(windowsSvc, api);
+    const createChatroomWorkflow = new CreateChatroomWorkflow(
+      windowsSvc,
+      api,
+      history,
+      location
+    );
 
     return {
       windowsSvc,
@@ -88,6 +93,7 @@ export function ChatApp() {
 
   useEffect(() => {
     if (chatroomId) {
+      services.api.setChatroomId(chatroomId);
       services.transportSvc.initialLoadPolledData();
       services.transportSvc.runLoop();
       return () => {

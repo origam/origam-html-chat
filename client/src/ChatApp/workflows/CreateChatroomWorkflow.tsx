@@ -8,9 +8,15 @@ import {
 } from "../components/Windows/Windows";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
+import qs from "querystring";
 
 export class CreateChatroomWorkflow {
-  constructor(public windowsSvc: WindowsSvc, public api: ChatHTTPApi) {}
+  constructor(
+    public windowsSvc: WindowsSvc,
+    public api: ChatHTTPApi,
+    public history: any,
+    public location: any
+  ) {}
 
   async start(references: { [key: string]: any } | undefined) {
     const createChatroomDialog = this.windowsSvc.push(
@@ -19,8 +25,8 @@ export class CreateChatroomWorkflow {
     try {
       while (true) {
         try {
-          const inviteUserDialogResult = await createChatroomDialog.interact();
-          if (!inviteUserDialogResult.chatroomTopic) {
+          const createChatroomDialogResult = await createChatroomDialog.interact();
+          if (!createChatroomDialogResult.chatroomTopic) {
             const infoDialog = this.windowsSvc.push(
               renderSimpleInformation("You have not entered any topic.")
             );
@@ -28,16 +34,24 @@ export class CreateChatroomWorkflow {
             infoDialog.close();
             continue;
           }
-          if (inviteUserDialogResult.choosenUsers) {
+          if (createChatroomDialogResult.choosenUsers) {
             const progressDialog = this.windowsSvc.push(
               renderSimpleProgres("Creating chatroom...")
             );
             try {
-              await this.api.inviteUsers({
-                users: inviteUserDialogResult.choosenUsers.map((user) => ({
-                  userId: user.id,
-                })),
+              debugger;
+              const createChatroomResult = await this.api.createChatroom(
+                references || {},
+                createChatroomDialogResult.chatroomTopic,
+                createChatroomDialogResult.choosenUsers.map((user) => user.id)
+              );
+              this.history.replace({
+                pathname: this.location.pathname,
+                search: `?${qs.stringify({
+                  chatroomId: createChatroomResult.chatroomId,
+                })}`,
               });
+              return;
             } finally {
               progressDialog.close();
             }
