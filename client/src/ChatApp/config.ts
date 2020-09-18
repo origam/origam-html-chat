@@ -4,6 +4,6 @@ export const config: {
   authToken: string | null;
 } = {
   apiUrlPrefix: "/chatrooms/Chat",
-  avatarUrlPrefix: "./img/avatars",
+  avatarUrlPrefix: "/chatrooms/Avatar/",
   authToken: null,
 };
