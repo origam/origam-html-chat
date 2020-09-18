@@ -13,13 +13,15 @@ import {
   CtxChatroom,
   CtxInviteUserWorkflow,
   CtxParticipants,
+  CtxRenameChatroomWorkflow,
 } from "./Contexts";
 import { SendMessageBarUI } from "./SendMessageBarUI";
 
 export function ChatroomName(props: { value: string }) {
+  const renameChatroomWorkflow = useContext(CtxRenameChatroomWorkflow);
   return (
     <div className="messageThreadHeader__title">
-      <h1 onClick={() => prompt("Enter new chatroom title")}>
+      <h1 onClick={() => renameChatroomWorkflow.start()}>
         {props.value || <>&nbsp;</>}
         <div className="messageThreadHeader__editIcon">
           <i className="fas fa-edit fa-xs" />

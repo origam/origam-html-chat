@@ -242,7 +242,7 @@ export class ChatHTTPApi {
     );
   }
 
-  async pathChatroomInfo(topic: string) {
+  async patchChatroomInfo(topic: string) {
     await this.axios.patch(
       `${this.urlPrefix}/chatrooms/${this.chatroomId}/info`,
       { topic },

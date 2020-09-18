@@ -624,6 +624,11 @@ body,
   }
 }
 
+.renameChatroomModalContent {
+  @extend .chooseUserToInviteModalContent;
+  height: unset;
+}
+
 .userList {
   outline: 1px solid rgb(216, 216, 216);
   overflow: hidden;

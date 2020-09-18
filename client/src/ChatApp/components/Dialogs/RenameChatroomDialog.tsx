@@ -51,7 +51,8 @@ export function RenameChatroomDialog(props: {
         </ModalFooter>
       }
     >
-      <div className="chooseUserToInviteModalContent">
+      <ModalCloseButton onClick={props.onCancel} />
+      <div className="renameChatroomModalContent">
         <div className="chooseUserToInviteModalContent__header">
           <p>Enter new topic for this chatroom:</p>
           <Observer>

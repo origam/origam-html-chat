@@ -8,6 +8,7 @@ import { InviteUserWorkflow } from "../workflows/InviteUserWorkflow";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
 import { AbandonChatroomWorkflow } from "../workflows/AbandonChatroomWorkflow";
 import { MentionUserWorkflow } from "../workflows/MentionUserWorkflow";
+import { RenameChatroomWorkflow } from "../workflows/RenameChatroomWorkflow";
 
 export const CtxWindowsSvc = createContext<WindowsSvc>(null!);
 export const CtxLocalUser = createContext<LocalUser>(null!);
@@ -20,3 +21,6 @@ export const CtxMentionUserWorkflow = createContext<MentionUserWorkflow>(null!);
 export const CtxAbandonChatroomWorkflow = createContext<
   AbandonChatroomWorkflow
 >(null!);
+export const CtxRenameChatroomWorkflow = createContext<RenameChatroomWorkflow>(
+  null!
+);

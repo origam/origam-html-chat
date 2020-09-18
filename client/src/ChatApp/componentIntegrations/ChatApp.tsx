@@ -19,12 +19,14 @@ import {
   CtxWindowsSvc,
   CtxAbandonChatroomWorkflow,
   CtxMentionUserWorkflow,
+  CtxRenameChatroomWorkflow,
 } from "./Contexts";
 import { useLocation, useHistory } from "react-router";
 import { AbandonChatroomWorkflow } from "../workflows/AbandonChatroomWorkflow";
 import { MentionUserWorkflow } from "../workflows/MentionUserWorkflow";
 import { config } from "../config";
 import { CreateChatroomWorkflow } from "../workflows/CreateChatroomWorkflow";
+import { RenameChatroomWorkflow } from "../workflows/RenameChatroomWorkflow";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -77,6 +79,8 @@ export function ChatApp() {
       location
     );
 
+    const renameChatroomWorkflow = new RenameChatroomWorkflow(windowsSvc, api);
+
     return {
       windowsSvc,
       localUser,
@@ -88,6 +92,7 @@ export function ChatApp() {
       mentionUserWorkflow,
       abandonChatroomWorkflow,
       createChatroomWorkflow,
+      renameChatroomWorkflow,
       api,
     };
   });
@@ -131,6 +136,11 @@ export function ChatApp() {
     uiTree,
     CtxAbandonChatroomWorkflow,
     services.abandonChatroomWorkflow
+  );
+  uiTree = ctxProvide(
+    uiTree,
+    CtxRenameChatroomWorkflow,
+    services.renameChatroomWorkflow
   );
 
   return <>{uiTree}</>;
