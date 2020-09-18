@@ -190,7 +190,7 @@ export class ChatHTTPApi {
       },
       { headers: this.headers }
     );
-    return { chatroomId: response.data.chatroomId };
+    return { chatroomId: response.data };
   }
 
   async inviteUsers(arg: IInviteUsersArg) {
