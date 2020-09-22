@@ -53,16 +53,18 @@ export function ModalCloseButton(props: { onClick?: any }) {
 export function SimpleMessage(props: {
   onClose?: any;
   message: React.ReactNode;
+  noClose?: boolean;
+  noOk?: boolean;
 }) {
   return (
     <DefaultModal
       footer={
-        <ModalFooter align="center">
-          <Button onClick={props.onClose}>Ok</Button>
-        </ModalFooter>
+        !props.noOk ? <ModalFooter align="center">
+           <Button onClick={props.onClose}>Ok</Button>
+        </ModalFooter> : null
       }
     >
-      <ModalCloseButton onClick={props.onClose} />
+      {!props.noClose && <ModalCloseButton onClick={props.onClose} />}
       {props.message}
     </DefaultModal>
   );
@@ -141,11 +143,17 @@ export function renderSimpleQuestion(message: React.ReactNode) {
   };
 }
 
-export function renderSimpleInformation(message: React.ReactNode) {
+export function renderSimpleInformation(
+  message: React.ReactNode,
+  noClose?: boolean,
+  noOk?: boolean
+) {
   return (modal: IModalHandle<{}>) => {
     return (
       <SimpleMessage
         message={message}
+        noClose={noClose}
+        noOk={noOk}
         onClose={() => modal.resolveInteract({})}
       />
     );
