@@ -243,7 +243,7 @@ export class ChatHTTPApi {
   }
 
   async patchChatroomInfo(topic: string) {
-    await this.axios.patch(
+    await this.axios.post(
       `${this.urlPrefix}/chatrooms/${this.chatroomId}/info`,
       { topic },
       { headers: this.headers }
