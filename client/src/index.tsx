@@ -15,7 +15,6 @@ import "./spinner.scss";
 import * as serviceWorker from "./serviceWorker";
 import { config } from "./ChatApp/config";
 
-config.authToken = sessionStorage.getItem("origamAuthToken");
 
 function Routed() {
   return (

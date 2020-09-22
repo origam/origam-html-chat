@@ -62,7 +62,7 @@ export class ChatHTTPApi {
   testNum = 0;
 
   get authToken() {
-    return config.authToken;
+    return sessionStorage.getItem('origamAuthToken') || config.authToken;
   }
 
   get headers() {
