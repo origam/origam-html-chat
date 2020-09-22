@@ -62,7 +62,6 @@ export class TransportSvc {
   }
 
   async loadPolledData(afterIdIncluding?: string) {
-    //await axios.get("unknown-url");
     const polledData = await this.api.getPolledData(afterIdIncluding);
 
     this.localUser.name = polledData.localUser.name;
@@ -70,6 +69,9 @@ export class TransportSvc {
     this.localUser.avatarUrl = polledData.localUser.avatarUrl;
 
     this.chatroom.topic = polledData.info.topic;
+    document.title = polledData.info.topic
+      ? `Chat: ${polledData.info.topic}`
+      : "Chat (no topic)";
 
     this.messages.mergeMessages({ messages: polledData.messages });
 

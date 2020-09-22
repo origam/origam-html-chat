@@ -66,5 +66,5 @@
     ]
   },
   "homepage": ".",
-  "proxy": "http://localhost:9099"
+  "proxy": "http://localhost:44356"
 }
