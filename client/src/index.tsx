@@ -13,8 +13,6 @@ import { ChatAppSetup } from "./ChatApp/componentIntegrations/ChatAppSetup";
 import "./index.scss";
 import "./spinner.scss";
 import * as serviceWorker from "./serviceWorker";
-import { config } from "./ChatApp/config";
-
 
 function Routed() {
   return (
