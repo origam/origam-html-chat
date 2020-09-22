@@ -49,13 +49,6 @@ export class InviteUserWorkflow {
                   } finally {
                     progressDialog.close();
                   }
-                  const infoDialog = this.windowsSvc.push(
-                    renderSimpleInformation(
-                      `Invited users: ${inviteUserDialogResult.choosenUsers.length}`
-                    )
-                  );
-                  await infoDialog.interact();
-                  infoDialog.close();
                   return;
                 } else if (confirmationResult.isCancel) {
                 }
