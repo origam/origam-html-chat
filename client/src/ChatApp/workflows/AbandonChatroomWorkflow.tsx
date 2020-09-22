@@ -59,13 +59,15 @@ export class AbandonChatroomWorkflow {
                   } finally {
                     progressDialog.close();
                   }
-                  if (userIds.findIndex((id) => this.localUser.id) > -1) {
+                  if (userIds.findIndex((user) => user.userId === this.localUser.id) > -1) {
                     // Kicked off users contained local user. Terminate the app...
                     this.transportSvc.terminateLoop();
                     this.terminateChatroom();
                     this.windowsSvc.push(
                       renderSimpleInformation(
-                        "You have abandoned the chatroom."
+                        "You have abandoned the chatroom.",
+                        true,
+                        true
                       )
                     );
                   }
