@@ -1,5 +1,7 @@
+import { autorun } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useContext, useEffect, useRef } from "react";
+import { usePrev } from "../../util/hooks";
 import {
   ChatParticipantMini,
   IChatParticipantStatus,
@@ -12,6 +14,7 @@ import {
   CtxAbandonChatroomWorkflow,
   CtxChatroom,
   CtxInviteUserWorkflow,
+  CtxMessages,
   CtxParticipants,
   CtxRenameChatroomWorkflow,
 } from "./Contexts";
@@ -33,11 +36,26 @@ export function ChatroomName(props: { value: string }) {
 
 export function ChatroomScreenUI() {
   const refMessageBar = useRef<any>();
+  const messages = useContext(CtxMessages);
 
   useEffect(() => {
-    if (refMessageBar.current) {
-      refMessageBar.current.scrollToEnd();
-    }
+    let prevMsgCount: number | undefined;
+    return autorun(() => {
+      console.log(prevMsgCount, messages.items.length, messages.items);
+      if (
+        refMessageBar.current &&
+        (prevMsgCount === 0 || prevMsgCount === undefined) &&
+        messages.items.length !== 0
+      ) {
+        // 1s should be enough to be sure that the component has been already laid out
+        // Otherwise this autorun gets called before the components observer before
+        // the scrolled block has been filled in with messages.
+        setTimeout(() => {
+          refMessageBar.current?.scrollToEnd();
+        }, 1000);
+      }
+      prevMsgCount = messages.items.length;
+    });
   }, []);
 
   function handleScrolledToTail(isTailed: boolean) {
@@ -133,7 +151,7 @@ export function ChatroomScreenUI() {
               </div>
               <MessageBar
                 ref={refMessageBar}
-                messages={/*<SampleMessages />*/ <ChatFeedUI />}
+                messages={<ChatFeedUI />}
                 onUserScrolledToTail={handleScrolledToTail}
                 isTrackingLatestMessages={false}
               />

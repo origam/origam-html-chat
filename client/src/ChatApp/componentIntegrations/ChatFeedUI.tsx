@@ -74,66 +74,6 @@ export function ChatFeedUI() {
         return (
           <>
             {makeMessageClusters()}
-            {/*<MessageCluster
-              key={""}
-              avatar={<img className="avatar__picture" src={``} />}
-              direction={IMessageClusterDirection.Outbound}
-              header={
-                <MessageHeader
-                  personName={"TEST PARTICIPANT NAME"}
-                  messageDateTime={moment().format("HH:mm")}
-                />
-              }
-              body={
-                <>
-                  <Message
-                    key={""}
-                    content={"Message 1"}
-                    isInsertedByClient={false}
-                  />
-                  <Message
-                    key={""}
-                    content={"Message 2"}
-                    isInsertedByClient={false}
-                  />
-                  <Message
-                    key={""}
-                    content={"Message 3"}
-                    isInsertedByClient={false}
-                  />
-                </>
-              }
-            />
-            <MessageCluster
-              key={""}
-              avatar={<img className="avatar__picture" src={``} />}
-              direction={IMessageClusterDirection.Inbound}
-              header={
-                <MessageHeader
-                  personName={"TEST PARTICIPANT NAME"}
-                  messageDateTime={moment().format("HH:mm")}
-                />
-              }
-              body={
-                <>
-                  <Message
-                    key={""}
-                    content={"Message 1"}
-                    isInsertedByClient={false}
-                  />
-                  <Message
-                    key={""}
-                    content={"Message 2"}
-                    isInsertedByClient={false}
-                  />
-                  <Message
-                    key={""}
-                    content={"Message 3"}
-                    isInsertedByClient={false}
-                  />
-                </>
-              }
-            />*/}
           </>
         );
       }}

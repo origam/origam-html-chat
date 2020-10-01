@@ -1,4 +1,11 @@
-import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState, useEffect } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import cx from "classnames";
 
 export function MessageBarRaw(
@@ -14,31 +21,38 @@ export function MessageBarRaw(
   let isUserScroll = true;
   let hIsUserScrollTimeout: any;
 
-  useImperativeHandle(ref, () => ({
-    scrollToEnd() {
-      scrollToEnd();
+  const scrollToEnd = useMemo(
+    () => () => {
+      if (refContentContainer.current) {
+        //console.log(refContentContainer.current!.scrollHeight, refContentContainer.current!.clientHeight);
+        const elm = refContentContainer.current!;
+        elm.scrollTop = elm.scrollHeight - elm.clientHeight;
+        isUserScroll = false;
+        clearTimeout(hIsUserScrollTimeout);
+        hIsUserScrollTimeout = setTimeout(() => (isUserScroll = true), 200);
+      }
     },
-  }));
+    []
+  );
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      scrollToEnd() {
+        scrollToEnd();
+      },
+    }),
+    [scrollToEnd]
+  );
 
   const refContentContainer = useRef<HTMLDivElement>(null);
-
-  function scrollToEnd() {
-    if (refContentContainer.current) {
-      //console.log(refContentContainer.current!.scrollHeight, refContentContainer.current!.clientHeight);
-      const elm = refContentContainer.current!;
-      elm.scrollTop = elm.scrollHeight - elm.clientHeight;
-      isUserScroll = false;
-      clearTimeout(hIsUserScrollTimeout);
-      hIsUserScrollTimeout = setTimeout(() => (isUserScroll = true), 200);
-    }
-  }
 
   const handleScrollToEndClick = useMemo(
     () => () => {
       scrollToEnd();
       props.onUserScrolledToTail?.(true);
     },
-    []
+    [scrollToEnd, props.onUserScrolledToTail]
   );
 
   const checkScrollToEnd = useMemo(
@@ -86,7 +100,11 @@ export function MessageBarRaw(
 
   return (
     <div className="messageBarContainer">
-      <div className="messageBar" ref={refContentContainer} onScroll={handleMessageBarScroll}>
+      <div
+        className="messageBar"
+        ref={refContentContainer}
+        onScroll={handleMessageBarScroll}
+      >
         {props.messages}
       </div>
       <div
