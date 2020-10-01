@@ -100,9 +100,6 @@ export function ChatroomScreenUI() {
               <div className="messageThreadHeader">
                 <div className="messageThreadHeader__info">
                   <ChatroomName value={chatroomName} />
-                  <div className="messageThreadHeader__body">
-                    {participantsCountText}
-                  </div>
                 </div>
                 <div className="messageThreadHeader__actions">
                   {participantItems.map((item) => (
