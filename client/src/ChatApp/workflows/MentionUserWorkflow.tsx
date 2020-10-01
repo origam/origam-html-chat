@@ -19,6 +19,7 @@ export class MentionUserWorkflow {
             feedUsersToMention(mentionDialogResult.choosenUsers);
             return;
           }
+          if (mentionDialogResult.isCancel) return;
         } catch (e) {
           console.error(e);
           const errDlg = this.windowsSvc.push(renderErrorDialog(e));
