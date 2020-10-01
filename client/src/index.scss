@@ -288,6 +288,10 @@ body,
     background-color: #f1f1f1;
     overflow: hidden;
     box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.651);
+    .avatar__picture {
+      width: 35px;
+      height: 35px;
+    }
   }
 
   .avatar__status {
