@@ -105,7 +105,7 @@ export function MessageBarRaw(
         ref={refContentContainer}
         onScroll={handleMessageBarScroll}
       >
-        {props.messages}
+        <div className="messageBar__inner">{props.messages}</div>
       </div>
       <div
         className={cx("messageBarContainer__scrollToEndControl", {

@@ -218,6 +218,11 @@ body,
   background-color: #ffffff;
   padding: 5px 20px 5px 20px;
   position: relative;
+  align-items: center;
+  &__inner {
+    max-width: 800px;
+    width: 100%;
+  }
   .backgroundElement {
     position: absolute;
     top: 0;
