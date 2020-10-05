@@ -38,7 +38,6 @@ body,
   display: flex;
   flex-direction: column;
   border-right: 1px solid #dddddd;
-  //box-shadow: 1px 0px 3px 0px #00000071;
 
   &__row {
     flex: 0 0 0px;
@@ -287,7 +286,6 @@ body,
     border-radius: 50%;
     background-color: #f1f1f1;
     overflow: hidden;
-    box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.651);
     .avatar__picture {
       width: 35px;
       height: 35px;
@@ -305,19 +303,16 @@ body,
 
     &--isOnline {
       background-color: rgb(15, 240, 15);
-      //box-shadow: 0 0 20px 3px rgb(15, 240, 15);
       border: 1px solid #dddddd;
     }
 
     &--isAway {
       background-color: rgb(155, 155, 155);
-      //box-shadow: 0 0 20px 3px rgb(155, 155, 155);
       border: 1px solid #eeeeee;
     }
 
     &--isOffline {
       background-color: rgb(0, 0, 0);
-      //box-shadow: 0 0 20px 3px rgb(0, 0, 0);
       border: 1px solid #eeeeee;
     }
   }
@@ -330,8 +325,6 @@ body,
 
   .message {
     background-color: #4c84ff;;
-    color: white;
-    //border: 1px solid #aaaaaa;
 
     &:first-of-type {
       border-radius: 0px 8px 8px 0px;
@@ -364,8 +357,7 @@ body,
 
   .message {
     background-color: #e9e8f0;
-    color: white;
-    //border: 1px solid #aaaaaa;
+    color: #0d0d0d;
 
     &:first-of-type {
       border-radius: 8px 0px 0px 8px;
@@ -383,7 +375,6 @@ body,
   margin-bottom: 1px;
   padding: 5px 10px 5px 10px;
   max-width: 70%;
-  //box-shadow: 0px 1px 5px 0px rgba(49, 49, 49, 0.199);
 
   .dangerousContent {
     p:first-child {
@@ -395,12 +386,13 @@ body,
     }
     a.wysiwyg-mention {
       color: white;
-      //font-weight: bold;
+	  padding: 2px 4px 2px 4px;
       font-style: oblique;
       text-decoration: none;
       &:hover {
-        color: yellow;
-        background-color: darkblue;
+        color: white;
+        background-color: #4c84ff;
+		border-radius: 2px;
       }
     }
   }
@@ -410,7 +402,7 @@ body,
   }
 
   &.message--isInsertedByClient {
-    background-color: rgb(224, 224, 224);
+    background-color: #eaf0f9;
     color: black;
     a.wysiwyg-mention {
       color: black;
@@ -723,10 +715,11 @@ body,
     padding: 5px 10px 5px 10px;
     height: 30px;
     border-radius: 15px;
-    border: 1px solid rgb(209, 209, 209);
-    background: white;
+    border: 1px solid #4c84ff);
+    background: #4c84ff;
     margin-right: 2px;
     margin-bottom: 2px;
+	color: white;
   }
   &__itemBody {
     flex: 1 0 0;
@@ -739,7 +732,7 @@ body,
   }
 
   &__close {
-    color: rgb(161, 161, 161);
+    color: white;
     cursor: pointer;
   }
 }
