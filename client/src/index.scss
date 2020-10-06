@@ -325,6 +325,15 @@ body,
 
   .message {
     background-color: #4c84ff;
+	color: white;
+
+    a.wysiwyg-mention {
+      color: white;
+      &:hover {
+        color: #4c84ff;
+        background-color: white;
+		border-radius: 2px;
+      }
 
     &:first-of-type {
       border-radius: 0px 8px 8px 0px;
@@ -385,9 +394,9 @@ body,
       margin-block-start: 1em;
     }
     a.wysiwyg-mention {
-      color: white;
+      color: 0d0d0d;
 	  padding: 2px 4px 2px 4px;
-      font-style: oblique;
+      font-weight: bold;
       text-decoration: none;
       &:hover {
         color: white;
