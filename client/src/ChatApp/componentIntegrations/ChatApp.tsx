@@ -79,7 +79,7 @@ export function ChatApp() {
       location
     );
 
-    const renameChatroomWorkflow = new RenameChatroomWorkflow(windowsSvc, api);
+    const renameChatroomWorkflow = new RenameChatroomWorkflow(windowsSvc, api, transportSvc);
 
     return {
       windowsSvc,

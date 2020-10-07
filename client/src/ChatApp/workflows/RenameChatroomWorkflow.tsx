@@ -1,3 +1,4 @@
+import { takeRight } from "lodash";
 import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { renderRenameChatroomDialog } from "../components/Dialogs/RenameChatroomDialog";
 import {
@@ -6,9 +7,14 @@ import {
 } from "../components/Windows/Windows";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
+import { TransportSvc } from "../services/TransportSvc";
 
 export class RenameChatroomWorkflow {
-  constructor(public windowsSvc: WindowsSvc, public api: ChatHTTPApi) {}
+  constructor(
+    public windowsSvc: WindowsSvc,
+    public api: ChatHTTPApi,
+    public transportSvc: TransportSvc
+  ) {}
 
   async start() {
     const renameChatroomDialog = this.windowsSvc.push(
@@ -36,6 +42,7 @@ export class RenameChatroomWorkflow {
             await this.api.patchChatroomInfo(
               renameChatroomDialogResult.chatroomTopic
             );
+            await this.transportSvc.loadPolledDataRecentMessagesOnly();
           } finally {
             progressDialog.close();
           }

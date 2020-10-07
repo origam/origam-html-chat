@@ -38,6 +38,11 @@ export class TransportSvc {
     }
   }
 
+  async loadPolledDataRecentMessagesOnly() {
+    const lastMessage = this.messages.lastServerMessage;
+    await this.loadPolledData(lastMessage && lastMessage.id);
+  }
+
   async runLoop() {
     let isDelay = true;
     while (!this.isTerminated) {
@@ -45,8 +50,7 @@ export class TransportSvc {
       if (this.isTerminated) return;
       isDelay = true;
       try {
-        const lastMessage = this.messages.lastServerMessage;
-        await this.loadPolledData(lastMessage && lastMessage.id);
+        await this.loadPolledDataRecentMessagesOnly();
       } catch (e) {
         console.error(e);
         isDelay = false;
