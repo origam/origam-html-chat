@@ -89,13 +89,13 @@ export function SendMessageBarUI() {
           timeSent: moment().toISOString(),
           mentions,
         });
+        setEditorState(EditorState.createEmpty());
         flow(function* () {
           try {
             setIsWorking(true);
             yield api.sendMessage({ id, mentions, text: htmlState });
           } finally {
             setIsWorking(false);
-            setEditorState(EditorState.createEmpty());
           }
           //yield* api.sendMessage(chatroomSettings.chatroomId ?? "", "", { id: id, text });
         })();

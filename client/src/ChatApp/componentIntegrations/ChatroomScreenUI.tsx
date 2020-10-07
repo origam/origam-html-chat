@@ -59,7 +59,7 @@ export function ChatroomScreenUI() {
   }, []);
 
   function handleScrolledToTail(isTailed: boolean) {
-    //console.log("hstt", isTailed);
+    console.log("hstt", isTailed);
     //chatroomSettings.isScrollingToLatestMessages = isTailed;
   }
 
@@ -153,7 +153,7 @@ export function ChatroomScreenUI() {
                 ref={refMessageBar}
                 messages={<ChatFeedUI />}
                 onUserScrolledToTail={handleScrolledToTail}
-                isTrackingLatestMessages={false}
+                isTrackingLatestMessages={true}
               />
               <SendMessageBarUI />
             </div>
