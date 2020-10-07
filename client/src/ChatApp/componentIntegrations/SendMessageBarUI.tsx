@@ -54,7 +54,7 @@ export function SendMessageBarUI() {
   const handleEditorReturn = useMemo(
     () => (event: any) => {
       // console.log("return");
-      if (event.ctrlKey && event.altKey) {
+      if (!event.ctrlKey) {
         sendMessage();
         return "handled";
       } else {
