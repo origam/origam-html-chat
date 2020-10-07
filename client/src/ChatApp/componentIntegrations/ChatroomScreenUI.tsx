@@ -1,6 +1,6 @@
 import { autorun } from "mobx";
 import { Observer } from "mobx-react";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { usePrev } from "../../util/hooks";
 import {
   ChatParticipantMini,
@@ -38,6 +38,8 @@ export function ChatroomScreenUI() {
   const refMessageBar = useRef<any>();
   const messages = useContext(CtxMessages);
 
+  const [isFollowingTail, setFollowingTail] = useState(true);
+
   useEffect(() => {
     let prevMsgCount: number | undefined;
     return autorun(() => {
@@ -59,8 +61,7 @@ export function ChatroomScreenUI() {
   }, []);
 
   function handleScrolledToTail(isTailed: boolean) {
-    console.log("hstt", isTailed);
-    //chatroomSettings.isScrollingToLatestMessages = isTailed;
+    setFollowingTail(isTailed);
   }
 
   const chatroom = useContext(CtxChatroom);
@@ -153,9 +154,14 @@ export function ChatroomScreenUI() {
                 ref={refMessageBar}
                 messages={<ChatFeedUI />}
                 onUserScrolledToTail={handleScrolledToTail}
-                isTrackingLatestMessages={true}
+                isTrackingLatestMessages={isFollowingTail}
               />
-              <SendMessageBarUI />
+              <SendMessageBarUI
+                onMessageWillSend={() => {
+                  setFollowingTail(true);
+                  refMessageBar.current?.scrollToEnd();
+                }}
+              />
             </div>
 
             {/*isInviteUserModalShown && (

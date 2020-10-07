@@ -1,4 +1,5 @@
 import Draft, { convertToRaw, EditorState } from "draft-js";
+import { clearEditorContent } from "draftjs-utils";
 import draftToHtml from "draftjs-to-html";
 import { flow } from "mobx";
 import { Observer } from "mobx-react";
@@ -36,7 +37,9 @@ const getEntities = (editorState: any, entityType: any = null) => {
   return entities;
 };
 
-export function SendMessageBarUI() {
+export function SendMessageBarUI(props: {
+  onMessageWillSend?(msg: string): void;
+}) {
   const api = useContext(CtxAPI);
   const localUser = useContext(CtxLocalUser);
   const messages = useContext(CtxMessages);
@@ -77,6 +80,7 @@ export function SendMessageBarUI() {
       if (content.hasText()) {
         const entities = getEntities(editorState, "MENTION");
         const htmlState = draftToHtml(convertToRaw(content));
+        props.onMessageWillSend?.(htmlState);
         // console.log(htmlState);
         const mentions = entities.map((item) => item.entity.getData().value);
         const id = uuidv4();
@@ -89,9 +93,10 @@ export function SendMessageBarUI() {
           timeSent: moment().toISOString(),
           mentions,
         });
-        setEditorState(EditorState.createEmpty());
+
         flow(function* () {
           try {
+            setEditorState(clearEditorContent(editorState));
             setIsWorking(true);
             yield api.sendMessage({ id, mentions, text: htmlState });
           } finally {
