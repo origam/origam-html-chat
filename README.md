@@ -28,6 +28,95 @@ When there is no user in the chatroom the app expects to be started with `chatro
 
  3. App then redirects itself to `#/chatroom?chatroomId=...` with references stripped away and `chatroomId` set as given in the previous point. The proccess then continues as stated in *Joining an existing chatroom* section.
 
+# Hashtag functionality
+
+The application allows inserting links into messages being sent and also joining them to the chatroom itself. The links, when navigated, will open linked view / record in the main client.
+
+## The hashtag dialog
+
+Choosing of the entity / record being linked is performed in a dialog screen, basically it is a screen with two data views, the top one allows for choosing a *category*, which is usually an entity type to be linked and the bottom one is an *object* which offers rows of given entity to be linked.
+
+The top view receives rows filtered by given category search phrase, limited and offsetted as needed.
+
+The bottom view receives rows filtered by given search phrase, limited and offsetted as well as filtered by a category choosen from the top view. The bottom view essentially uses different metadata (e.g. displayed columns) for the category choosen.
+
+## Hashtag HTTP API
+
+### Getting available categories
+
+`GET hashtag/categories`
+
+Query parameters:
+
+ - `searchPhrase`- *(optional)* - string used to fulltext constrain the query to just users of interrest.
+ - `limit` - *(optional)* number limiting number of items returned.
+ - `offset` - *(optional)* number offset where list should begin.
+
+Return value: JSON object:
+
+ - `metadata` - ??? Data sources / combobox description as available in InitUI 
+ - `data` - 2D array of arbitrary content, representing a set of categories, complying the query and metadata
+
+### Getting available objects for given category
+
+`GET hashtag/objects`
+
+Query parameters
+
+ - `categoryId` - string used to filter the result to contain only items from specified category
+ - `searchPhrase`- *(optional)* - string used to fulltext constrain the query to just users of interrest.
+ - `limit` - *(optional)* number limiting number of items returned.
+ - `offset` - *(optional)* number offset where list should begin.
+
+Return value: JSON object:
+
+ - `metadata` - ??? Data sources / combobox description as available in InitUI 
+ - `data` - 2D array of arbitrary content, representing a set of objects, complying the query and metadata
+
+
+
+### Composing a link ???
+
+`POST hashtag/link`
+
+POST body:
+
+ - `objects` [
+
+   - `categoryId` - category id of link to be created
+   - `objectId` - object id of link to be created
+ - ] 
+
+Return value: JSON object:
+
+ - `objects` [
+   - `categoryId` - category id of created link
+   - `objectId` - object id of created link
+   - `text` - textual representation of created link
+   - `url` - ??? url of the link
+ - ]
+
+### Adding a link to the chatroom
+
+`POST chatrooms/:chatroomId/setLinks`
+
+POST body:
+
+ - `objects` [
+
+   - `categoryId` - category id of link to be linked
+   - `objectId` - object id of link to be linked
+ - ]
+
+
+
+## UNRESOLVED
+
+ - Link text change? (getLookupLabels...)
+
+
+
+
 # Origam chat HTTP protocol description
 
 
@@ -78,7 +167,7 @@ POST chatrooms/create
   ]
 }
 
-````
+```
 
 ***
 
@@ -190,6 +279,12 @@ URL parameters:
 Return value: JSON object:
 
  - `topic` - string human readable text to display as the chatroom's name / title
+ - `links` [
+   - `categoryId` - Linked category id
+   - `objectId` - Linked object id
+   - `url` - URL of the link
+   - `text` - Textual representation of the link
+ - ]
 
 ***
 
