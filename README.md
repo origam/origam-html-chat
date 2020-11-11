@@ -42,6 +42,16 @@ The bottom view receives rows filtered by given search phrase, limited and offse
 
 ## Hashtag HTTP API
 
+### Getting hashtag dialog metadata
+
+`GET hashtag/metadata`
+
+Return value:
+
+ - `categoriesMetadata` - Data sources / combobox description similarily as available in InitUI 
+ - `objectsMetadata` - Metadata mapping from categoryId to metadata record given similarily as in InitUI screen description
+   - *categoryId* - Metadata for given category
+
 ### Getting available categories
 
 `GET hashtag/categories`
@@ -54,10 +64,8 @@ Query parameters:
 
 Return value: JSON object:
 
- - `metadata` - ??? Data sources / combobox description as available in InitUI 
  - `data` - 2D array of arbitrary content, representing a set of categories, complying the query and metadata
- - `categoryMetadata` - Metadata mapping from categoryId to metadata record given similarily as in InitUI screen description
-   - *categoryId* - Metadata for given category
+
 
 ### Getting available objects for given category
 
@@ -72,7 +80,6 @@ Query parameters
 
 Return value: JSON object:
 
- - `metadata` - optional - Data sources / combobox description as available in InitUI.
  - `data` - 2D array of arbitrary content, representing a set of objects, complying the query and metadata
 
 
