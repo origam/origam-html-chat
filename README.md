@@ -56,6 +56,8 @@ Return value: JSON object:
 
  - `metadata` - ??? Data sources / combobox description as available in InitUI 
  - `data` - 2D array of arbitrary content, representing a set of categories, complying the query and metadata
+ - `categoryMetadata` - Metadata mapping from categoryId to metadata record given similarily as in InitUI screen description
+   - *categoryId* - Metadata for given category
 
 ### Getting available objects for given category
 
@@ -70,7 +72,7 @@ Query parameters
 
 Return value: JSON object:
 
- - `metadata` - ??? Data sources / combobox description as available in InitUI 
+ - `metadata` - optional - Data sources / combobox description as available in InitUI.
  - `data` - 2D array of arbitrary content, representing a set of objects, complying the query and metadata
 
 
