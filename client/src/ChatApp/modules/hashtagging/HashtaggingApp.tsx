@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.scss";
-import { CtxHashtagRootStore } from "./components/Common";
+import { CtxHashtagRootStore, useRootStore } from "./components/Common";
 import { HashtagDialogContent } from "./components/HashtagDialog";
 import {
   Column,
@@ -22,7 +22,7 @@ import {
   ModalFooter,
 } from "../../components/Windows/Windows";
 import { Button } from "../../components/Buttons";
-import { Observer } from "mobx-react";
+import { observer, Observer } from "mobx-react";
 faker.seed(987);
 
 export function capitalize(sin: string) {
@@ -89,19 +89,31 @@ export function populateHashtaggingStore(rootStore: HashtagRootStore) {
 }
 
 export function renderHashtaggingDialog() {
+  return <Dialog />;
+}
+
+const Dialog = observer(function Dialog() {
+  const root = useRootStore();
+  const selectedIds = root.dataTableStore.getDataTable("objects")
+    ?.selectedRowIds;
+  const selectedCount = selectedIds ? selectedIds.size : 0;
   return (
     <DefaultModal
       footer={
         <ModalFooter align="center">
-          <Button onClick={undefined}>Ok</Button>
-          <Button onClick={undefined}>Cancel</Button>
+          {selectedCount > 0 && (
+            <Button onClick={root.screenProcess.handleOkClick}>
+              Create tags ({selectedCount})
+            </Button>
+          )}
+          <Button onClick={root.screenProcess.handleCancelClick}>Cancel</Button>
         </ModalFooter>
       }
     >
-      <ModalCloseButton onClick={undefined} />
+      <ModalCloseButton onClick={root.screenProcess.handleCloseClick} />
       <div className="hashtaggingDialogContainer">
         <HashtagDialogContent />
       </div>
     </DefaultModal>
   );
-}
+});

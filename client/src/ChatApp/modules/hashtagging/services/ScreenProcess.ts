@@ -37,7 +37,16 @@ export class ScreenProcess {
 
   interpreter?: Interpreter<any>;
 
-  start() {
+  feedChoosenHashtags: (
+    items: Array<{ hashtagCategoryName: string; hashtagObjectId: any }>
+  ) => void = () => {};
+
+  start(
+    feedChoosenHashtags: (
+      items: Array<{ hashtagCategoryName: string; hashtagObjectId: any }>
+    ) => void
+  ) {
+    this.feedChoosenHashtags = feedChoosenHashtags;
     this.interpreter = interpret(this.createMachine(), { devTools: true });
     this.interpreter.onTransition((state, event) => {
       console.log("TRANSITION", event, state);
@@ -60,6 +69,11 @@ export class ScreenProcess {
                 src: "svcReactions",
               },
             ],
+            onEntry: ["actClearAllData"],
+            on: {
+              CANCEL: "#screenProcess.FINISHED",
+              OK: ".CREATE_HASHTAGS",
+            },
             initial: "LOAD_CATEGORIES",
             states: {
               LOAD_CATEGORIES: {
@@ -114,12 +128,25 @@ export class ScreenProcess {
                   },
                 },
               },
+              CREATE_HASHTAGS: {
+                invoke: { src: "svcCreateHashtags" },
+                on: {
+                  DONE: "#screenProcess.FINISHED",
+                },
+              },
             },
+          },
+          FINISHED: {
+            type: "final",
           },
         },
       },
       {
         actions: {
+          actClearAllData: (ctx, event) => {
+            this.clearCategoriesData();
+            this.clearObjectsData();
+          },
           actFixCategorySelection: (ctx, event) => {
             const dataTable = this.root.dataTableStore.getDataTable(
               "categories"
@@ -145,6 +172,7 @@ export class ScreenProcess {
               ) {
                 const tableConfig = choosenCategoryRow[2];
                 console.log(toJS(tableConfig));
+                this.clearObjectsData();
                 this.dataTableObjects.dataSource.clearFields();
                 this.dataTableObjects.dataSource.fields.push(
                   ...tableConfig.dataSourceFields.map(
@@ -223,7 +251,10 @@ export class ScreenProcess {
             return () => chCancel.trig();
           },
           svcHashtagDialog: (ctx, event) => (callback, onReceive) => {
-            this.windowsSvc.push(() => renderHashtaggingDialog());
+            const hModal = this.windowsSvc.push(() =>
+              renderHashtaggingDialog()
+            );
+            return () => hModal.close();
           },
           svcReactions: (ctx, event) => (callback, onReceive) => {
             const _disposers: any[] = [];
@@ -231,9 +262,37 @@ export class ScreenProcess {
               for (let h of _disposers) h();
             };
           },
+          svcCreateHashtags: (ctx, event) => (callback, onReceive) => {
+            const selectedObjectRowIds = this.dataTableObjects?.selectedRowIds;
+            const selectedCategoryId = this.dataTableCategories?.tableCursor
+              .selectedRowId;
+            if (selectedCategoryId && selectedObjectRowIds) {
+              this.feedChoosenHashtags(
+                Array.from(selectedObjectRowIds.values()).map((rowId) => {
+                  return {
+                    hashtagCategoryName: selectedCategoryId,
+                    hashtagObjectId: rowId,
+                  };
+                })
+              );
+            }
+
+            callback("DONE");
+          },
         },
       }
     );
+  }
+
+  @action.bound
+  clearCategoriesData() {
+    this.dataTableCategories?.clearData();
+  }
+
+  @action.bound
+  clearObjectsData() {
+    this.dataTableObjects?.clearData();
+    this.dataTableObjects?.clearSelectedRows();
   }
 
   handleUIInitialized() {
@@ -263,6 +322,21 @@ export class ScreenProcess {
     this.handleSelectedCategoryChangeImm,
     400
   );
+
+  @action.bound
+  handleCancelClick() {
+    this.interpreter?.send("CANCEL");
+  }
+
+  @action.bound
+  handleCloseClick() {
+    this.interpreter?.send("CANCEL");
+  }
+
+  @action.bound
+  handleOkClick() {
+    this.interpreter?.send("OK");
+  }
 
   get selectedCategoryId() {
     return this.root.dataTableStore.getDataTable("categories")?.tableCursor

@@ -136,7 +136,11 @@ export function HashtagButton(props: {}) {
   return (
     <button
       className="hashtagButton"
-      onClick={() => hashtagRootStore.screenProcess.start()}
+      onClick={() =>
+        hashtagRootStore.screenProcess.start((ht) => {
+          console.log(ht);
+        })
+      }
     >
       #
     </button>
