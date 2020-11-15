@@ -8,6 +8,8 @@ import {
   DataSource,
   DataSourceField,
   DataTable,
+  IColumn,
+  IDataSourceField,
 } from "./stores/DataTableStore";
 import { HashtagRootStore } from "./stores/RootStore";
 import { ObjectTouchMover } from "./util/ObjectTouchMover";
@@ -30,19 +32,7 @@ export function capitalize(sin: string) {
 export function populateHashtaggingStore(rootStore: HashtagRootStore) {
   function makeObjectsTable() {
     const dataTable = new DataTable(new TableCursor(), "objects", 0);
-    const columns = [
-      new Column(dataTable, "firstName", "First name", "text"),
-      new Column(dataTable, "lastName", "Last name", "text"),
-      new Column(dataTable, "city", "City", "text"),
-      new Column(dataTable, "dateOfBirth", "Birth date", "text"),
-      new Column(
-        dataTable,
-        "transactionCount",
-        "Number of transactions",
-        "number"
-      ),
-    ];
-    columns[3].width = 250;
+    const columns: IColumn[] = [];
 
     for (let c of columns) {
       c.touchMover = new ObjectTouchMover(new Column2TouchMoveControlee(c));
@@ -50,15 +40,7 @@ export function populateHashtaggingStore(rootStore: HashtagRootStore) {
 
     dataTable.columns.push(...columns);
     const dataSource = new DataSource("objects");
-    const dataSourceFields = [
-      new DataSourceField("id", 0),
-      new DataSourceField("firstName", 1),
-      new DataSourceField("lastName", 2),
-      new DataSourceField("city", 3),
-      new DataSourceField("dateOfBirth", 4),
-      new DataSourceField("transactionCount", 5),
-      new DataSourceField("refCategoryId", 6),
-    ];
+    const dataSourceFields: IDataSourceField[] = [];
     dataSource.fields.push(...dataSourceFields);
     dataTable.dataSource = dataSource;
 
@@ -80,7 +62,7 @@ export function populateHashtaggingStore(rootStore: HashtagRootStore) {
 
   function makeCategoriesTable() {
     const dataTable = new DataTable(new TableCursor(), "categories", 0);
-    const columns = [new Column(dataTable, "name", "Name", "text")];
+    const columns = [new Column(dataTable, "hashtagLabel", "Name", "text")];
 
     columns[0].touchMover = new ObjectTouchMover(
       new Column2TouchMoveControlee(columns[0])
@@ -89,8 +71,9 @@ export function populateHashtaggingStore(rootStore: HashtagRootStore) {
     dataTable.columns.push(...columns);
     const dataSource = new DataSource("categories");
     const dataSourceFields = [
-      new DataSourceField("id", 0),
-      new DataSourceField("name", 1),
+      new DataSourceField("hashtagName", 0),
+      new DataSourceField("hashtagLabel", 1),
+      new DataSourceField("objectComboboxMetadata", 2),
     ];
     dataSource.fields.push(...dataSourceFields);
     dataTable.dataSource = dataSource;

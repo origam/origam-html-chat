@@ -1,6 +1,7 @@
 //import axios from "axios";
 import { config } from "../config";
 import axiosLib from "axios";
+import { PubSub } from "../modules/hashtagging/services/APIService";
 
 export interface IGetPolledDataResult {
   messages: {
@@ -250,11 +251,38 @@ export class ChatHTTPApi {
     );
   }
 
-  async getHashtagCategories() {
+  async getHashtagAvailableCategories() {
     return (
       await axiosLib.get(`../internalApi/HashTag/categories`, {
         headers: this.headers,
       })
     ).data;
+  }
+
+  async getHashtagAvailableObjects(
+    categoryId: string,
+    limit: number,
+    offset: number,
+    searchPhrase: string,
+    chCancel?: PubSub
+  ) {
+    const source = axiosLib.CancelToken.source();
+    const _disposer = chCancel?.subs(() => source.cancel());
+    try {
+      return (
+        await axiosLib.get(`../internalApi/HashTag/${categoryId}/objects`, {
+          params: { searchPhrase, limit, offset },
+          headers: this.headers,
+          cancelToken: source.token,
+        })
+      ).data;
+    } catch (e) {
+      if (axiosLib.isCancel(e)) {
+        e.$isCancellation = true;
+      }
+      throw e;
+    } finally {
+      _disposer?.();
+    }
   }
 }

@@ -17,6 +17,7 @@ export interface IDataSource {
   fields: IDataSourceField[];
   fieldById: Map<string, IDataSourceField>;
 
+  clearFields(): void;
   getFieldById(id: string): IDataSourceField | undefined;
 }
 
@@ -31,6 +32,10 @@ export class DataSource implements IDataSource {
 
   @computed get fieldById() {
     return new Map(this.fields.map((item) => [item.id, item]));
+  }
+
+  @action.bound clearFields() {
+    this.fields.length = 0;
   }
 
   getFieldById(id: string) {
@@ -66,7 +71,7 @@ export interface IDataTable {
   getDataSourceFieldById(id: string): IDataSourceField | undefined;
 
   getRowById(rowId: string): any[][] | undefined;
-  selectedRow: any[][] | undefined;
+  selectedRow: any[] | undefined;
 
   getRowId(row: any[]): any;
 
@@ -74,6 +79,9 @@ export interface IDataTable {
 
   setRows(rows: any[][]): void;
   clearSelectedRows(): void;
+  clearData(): void;
+
+  clearColumns(): void;
 
   handleSelectionChange(event: any, rowId: string, state: boolean): void;
   handleDataCellClick(event: any, rowIndex: number, columnIndex: number): void;
@@ -85,7 +93,7 @@ export interface IColumnOwner {
 }
 
 export class Column2TouchMoveControlee implements ITouchMoveControlee {
-  constructor(public column: Column) {}
+  constructor(public column: IColumn) {}
 
   getInitialCoords(): { x: number; y: number } {
     return {
@@ -179,6 +187,14 @@ export class DataTable implements IDataTable, IColumnOwner {
 
   @action.bound setRows(rows: any[][]) {
     this.rows = rows;
+  }
+
+  @action.bound clearData() {
+    this.rows.length = 0;
+  }
+
+  @action.bound clearColumns() {
+    this.columns.length = 0;
   }
 
   clearSelectedRows(): void {

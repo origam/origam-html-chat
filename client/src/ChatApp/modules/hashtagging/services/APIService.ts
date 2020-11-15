@@ -1,6 +1,7 @@
 import faker from "faker";
 import { ChatHTTPApi } from "../../../services/ChatHTTPApi";
 import { HashtagRootStore } from "../stores/RootStore";
+import xmlJs from "xml-js";
 
 faker.seed(9876);
 
@@ -76,8 +77,7 @@ export class APIService {
     limit: number,
     chCancel?: PubSub
   ): Promise<any> {
-
-    console.log(await this.api.getHashtagCategories());
+    /* console.log(await this.api.getHashtagCategories());
     console.log("getCategories", searchTerm);
     await delay(250, chCancel);
     const filt = categories.filter((item) => {
@@ -86,7 +86,40 @@ export class APIService {
         .toLocaleLowerCase()
         .includes((searchTerm || "").toLocaleLowerCase());
     });
-    return filt.slice(offset, offset + limit);
+    return filt.slice(offset, offset + limit);*/
+    const categories = await this.api.getHashtagAvailableCategories();
+    function transformCombo(combo: any) {
+      const control = combo?.elements?.[0];
+      const controlColumns = control?.elements?.[0]?.elements;
+      if (control && controlColumns) {
+        const identifierIndex = parseInt(control.attributes.IdentifierIndex);
+        const tableConfig = {
+          identifierIndex,
+          columns: controlColumns.map((ccol: any) => {
+            return {
+              type: ccol.attributes.Column,
+              label: ccol.attributes.Name,
+              name: ccol.attributes.Id,
+            };
+          }),
+          dataSourceFields: [
+            { name: "$Id", dataIndex: identifierIndex },
+            ...controlColumns.map((ccol: any) => {
+              return {
+                name: ccol.attributes.Id,
+                dataIndex: parseInt(ccol.attributes.Index),
+              };
+            }),
+          ],
+        };
+        return tableConfig;
+      }
+    }
+    return categories.map((item: any) => [
+      item.hashtagName,
+      item.hashtagLabel,
+      transformCombo(xmlJs.xml2js(item.objectComboboxMetada)),
+    ]);
   }
 
   async getObjects(
@@ -96,6 +129,17 @@ export class APIService {
     limit: number,
     chCancel?: PubSub
   ): Promise<any> {
+    return await this.api.getHashtagAvailableObjects(
+      categoryId,
+      1000,
+      0,
+      searchTerm,
+      chCancel
+    );
+    /*
+    console.log(
+      await this.api.getHashtagAvailableObjects(categoryId, 1000, 0, "")
+    );
     console.log("getObjects", categoryId, searchTerm);
     await delay(300, chCancel);
     const filt = objects
@@ -120,6 +164,6 @@ export class APIService {
             .includes((searchTerm || "").toLocaleLowerCase?.())
         );
       });
-    return filt.slice(offset, offset + limit);
+    return filt.slice(offset, offset + limit);*/
   }
 }

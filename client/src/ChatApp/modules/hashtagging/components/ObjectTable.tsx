@@ -129,7 +129,7 @@ const DataCell = observer(function DataCell(props: {
   } = useDataCell(props.rowIndex, props.columnIndex);
   let rui = <></>;
   if (spObjects) {
-    rui = <Highlighter searchWords={[spObjects]} textToHighlight={value} />;
+    rui = <Highlighter searchWords={[spObjects]} textToHighlight={`${value}`}/>;
   } else {
     rui = <>{value}</>;
   }
