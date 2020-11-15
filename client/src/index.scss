@@ -126,7 +126,7 @@ body,
       display: inline-block;
       margin: 0px;
       padding: 0px;
-      
+
       font-size: 1.5em;
       cursor: pointer;
       .messageThreadHeader__editIcon {
@@ -325,16 +325,16 @@ body,
 
   .message {
     background-color: #4c84ff;
-	color: white;
+    color: white;
 
     a.wysiwyg-mention {
       color: white;
       &:hover {
         color: #4c84ff;
         background-color: white;
-		border-radius: 2px;
+        border-radius: 2px;
       }
-	}
+    }
 
     &:first-of-type {
       border-radius: 0px 8px 8px 0px;
@@ -396,13 +396,13 @@ body,
     }
     a.wysiwyg-mention {
       color: 0d0d0d;
-	  padding: 2px 4px 2px 4px;
+      padding: 2px 4px 2px 4px;
       font-weight: bold;
       text-decoration: none;
       &:hover {
         color: white;
         background-color: #4c84ff;
-		border-radius: 2px;
+        border-radius: 2px;
       }
     }
   }
@@ -486,8 +486,8 @@ body,
 
   .rdw-editor-main {
     border: 1px solid #cccccc;
-	border-radius: 10px;
-	padding-left: 10px;
+    border-radius: 10px;
+    padding-left: 10px;
   }
 
   .sendMessageBar__textarea {
@@ -537,9 +537,9 @@ body,
 
 .appModal {
   min-width: 20vw;
-  max-width: 800px;
+  max-width: 1200px;
   min-height: 120px;
-  max-height: 600px;
+  max-height: 900px;
   background-color: white;
   padding: 15px;
   box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.425);
@@ -629,7 +629,7 @@ body,
   .chatroomTopicInput {
     border: none;
     border: 1px solid rgb(216, 216, 216);
-	border-radius: 2px;
+    border-radius: 2px;
     height: 30px;
     width: 100%;
     padding: 10px;
@@ -646,7 +646,7 @@ body,
 
 .userList {
   border: 1px solid rgb(216, 216, 216);
-  	border-radius: 2px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
@@ -694,10 +694,10 @@ body,
   color: white;
   border: 1px solid #4c84ff;
 
-  transition: all .3s linear;
+  transition: all 0.3s linear;
   &:hover {
-	background: #e9e8f0;
-	color: #4c84ff;
+    background: #e9e8f0;
+    color: #4c84ff;
     transform: scale(1.1);
   }
 }
@@ -729,7 +729,7 @@ body,
     background: #4c84ff;
     margin-right: 2px;
     margin-bottom: 2px;
-	color: white;
+    color: white;
   }
   &__itemBody {
     flex: 1 0 0;
@@ -793,7 +793,8 @@ body,
   }
 }
 
-.mentionButton {
+.mentionButton,
+.hashtagButton {
   margin: 1px;
   padding: 2px !important;
   height: 26px;
@@ -810,5 +811,36 @@ body,
   text-transform: capitalize;
   &:active {
     box-shadow: 1px 1px 0px #bfbdbd inset;
+  }
+}
+
+.splitter {
+  &.horizontal {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .gutter {
+    background-clip: padding-box;
+    background-color: rgb(231, 231, 231);
+    &:hover {
+      border-color: rgb(204, 204, 204) !important;
+    }
+  }
+  .gutter.gutter-horizontal {
+    cursor: ew-resize;
+    width: 7px;
+    margin: 0 -3px;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+  }
+
+  .gutter.gutter-vertical {
+    cursor: ns-resize;
+    height: 7px;
+    margin: -3px 0;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    height: 100%;
   }
 }

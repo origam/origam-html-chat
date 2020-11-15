@@ -27,6 +27,9 @@ import { MentionUserWorkflow } from "../workflows/MentionUserWorkflow";
 import { config } from "../config";
 import { CreateChatroomWorkflow } from "../workflows/CreateChatroomWorkflow";
 import { RenameChatroomWorkflow } from "../workflows/RenameChatroomWorkflow";
+import { HashtagRootStore } from "../modules/hashtagging/stores/RootStore";
+import { CtxHashtagRootStore } from "../modules/hashtagging/components/Common";
+import { populateHashtaggingStore } from "../modules/hashtagging/HashtaggingApp";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -79,7 +82,14 @@ export function ChatApp() {
       location
     );
 
-    const renameChatroomWorkflow = new RenameChatroomWorkflow(windowsSvc, api, transportSvc);
+    const renameChatroomWorkflow = new RenameChatroomWorkflow(
+      windowsSvc,
+      api,
+      transportSvc
+    );
+
+    const hashtagRootStore = new HashtagRootStore(windowsSvc);
+    populateHashtaggingStore(hashtagRootStore);
 
     return {
       windowsSvc,
@@ -88,6 +98,7 @@ export function ChatApp() {
       participants,
       messages,
       transportSvc,
+      hashtagRootStore,
       inviteUserWorkflow,
       mentionUserWorkflow,
       abandonChatroomWorkflow,
@@ -142,6 +153,7 @@ export function ChatApp() {
     CtxRenameChatroomWorkflow,
     services.renameChatroomWorkflow
   );
+  uiTree = ctxProvide(uiTree, CtxHashtagRootStore, services.hashtagRootStore);
 
   return <>{uiTree}</>;
 }

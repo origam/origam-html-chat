@@ -4,6 +4,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { CtxMentionUserWorkflow } from "../componentIntegrations/Contexts";
 import { UserToMention } from "./Dialogs/MentionUserDialog";
 import { Entity, Modifier, EditorState } from "draft-js";
+import { CtxHashtagRootStore } from "../modules/hashtagging/components/Common";
 
 export function SendMessageBar(props: {
   //onEditorKeyDown: any;
@@ -72,6 +73,7 @@ export function SendMessageBar(props: {
         toolbarOnFocus={true}
         toolbarCustomButtons={[
           <MentionButton onUsersMentioned={mentionUsers} />,
+          <HashtagButton />,
         ]}
         onEditorStateChange={props.onEditorStateChange}
         toolbar={{
@@ -94,7 +96,7 @@ export function SendMessageBar(props: {
             //"list",
             //"textAlign",
             //"colorPicker",
-            //"link",
+            "link",
             //"embedded",
             "emoji",
             //"image",
@@ -125,6 +127,18 @@ export function MentionButton(props: {
       className="mentionButton"
     >
       @
+    </button>
+  );
+}
+
+export function HashtagButton(props: {}) {
+  const hashtagRootStore = useContext(CtxHashtagRootStore);
+  return (
+    <button
+      className="hashtagButton"
+      onClick={() => hashtagRootStore.screenProcess.start()}
+    >
+      #
     </button>
   );
 }
