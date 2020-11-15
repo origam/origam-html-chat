@@ -88,7 +88,7 @@ export function ChatApp() {
       transportSvc
     );
 
-    const hashtagRootStore = new HashtagRootStore(windowsSvc);
+    const hashtagRootStore = new HashtagRootStore(windowsSvc, api);
     populateHashtaggingStore(hashtagRootStore);
 
     return {

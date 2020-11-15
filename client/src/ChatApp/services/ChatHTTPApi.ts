@@ -62,7 +62,7 @@ export class ChatHTTPApi {
   testNum = 0;
 
   get authToken() {
-    return sessionStorage.getItem('origamAuthToken') || config.authToken;
+    return sessionStorage.getItem("origamAuthToken") || config.authToken;
   }
 
   get headers() {
@@ -248,5 +248,13 @@ export class ChatHTTPApi {
       { topic },
       { headers: this.headers }
     );
+  }
+
+  async getHashtagCategories() {
+    return (
+      await axiosLib.get(`../internalApi/HashTag/categories`, {
+        headers: this.headers,
+      })
+    ).data;
   }
 }

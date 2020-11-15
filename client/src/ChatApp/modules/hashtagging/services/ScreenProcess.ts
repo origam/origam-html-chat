@@ -14,11 +14,11 @@ import { renderHashtaggingDialog } from "../HashtaggingApp";
 });*/
 
 export class ScreenProcess {
-  constructor(
-    public root: HashtagRootStore,
-    public apiService: APIService,
-    public windowsSvc: WindowsSvc
-  ) {}
+  constructor(public root: HashtagRootStore, public windowsSvc: WindowsSvc) {}
+
+  get apiService() {
+    return this.root.apiService;
+  }
 
   interpreter?: Interpreter<any>;
 
@@ -147,7 +147,7 @@ export class ScreenProcess {
             return () => chCancel.trig();
           },
           svcHashtagDialog: (ctx, event) => (callback, onReceive) => {
-            this.windowsSvc.push(() => renderHashtaggingDialog() )
+            this.windowsSvc.push(() => renderHashtaggingDialog());
           },
         },
       }

@@ -1,6 +1,8 @@
 import faker from "faker";
+import { ChatHTTPApi } from "../../../services/ChatHTTPApi";
+import { HashtagRootStore } from "../stores/RootStore";
 
-faker.seed(9876)
+faker.seed(9876);
 
 export class PubSub {
   reg = new Map<number, any>();
@@ -52,7 +54,7 @@ function makeObjects() {
       faker.address.city(),
       faker.date.past().toString(),
       faker.random.number(500),
-      `id-cat-${(Math.random()*50).toFixed(0)}`
+      `id-cat-${(Math.random() * 50).toFixed(0)}`,
     ]);
   }
   return result;
@@ -62,12 +64,20 @@ const categories = makeCategories();
 const objects = makeObjects();
 
 export class APIService {
+  constructor(public rootStore: HashtagRootStore) {}
+
+  get api() {
+    return this.rootStore.httpApi;
+  }
+
   async getCategories(
     searchTerm: string,
     offset: number,
     limit: number,
     chCancel?: PubSub
   ): Promise<any> {
+
+    console.log(await this.api.getHashtagCategories());
     console.log("getCategories", searchTerm);
     await delay(250, chCancel);
     const filt = categories.filter((item) => {

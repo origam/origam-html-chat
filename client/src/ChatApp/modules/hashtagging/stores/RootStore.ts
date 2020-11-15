@@ -1,16 +1,14 @@
 import { WindowsSvc } from "../../../components/Windows/WindowsSvc";
+import { ChatHTTPApi } from "../../../services/ChatHTTPApi";
 import { APIService } from "../services/APIService";
 import { ScreenProcess } from "../services/ScreenProcess";
 import { DataTableStore } from "./DataTableStore";
 import { SearchStore } from "./SearchStore";
 
-const apiService = new APIService();
-
 export class HashtagRootStore {
-  constructor(public windowsSvc: WindowsSvc) {}
-
-  apiService = apiService;
-  screenProcess = new ScreenProcess(this, apiService, this.windowsSvc);
+  constructor(public windowsSvc: WindowsSvc, public httpApi: ChatHTTPApi) {}
+  apiService = new APIService(this);
+  screenProcess = new ScreenProcess(this, this.windowsSvc);
   dataTableStore = new DataTableStore(this);
   searchStore = new SearchStore(this);
 }
