@@ -53,6 +53,42 @@ export function SendMessageBar(props: {
     props.onEditorStateChange?.(editorState);
   }
 
+  function insertHashtags(
+    tags: Array<{ hashtagCategoryName: string; hashtagObjectId: any }>
+  ) {
+    console.log("Inserting tags...");
+    let editorState = props.editorState;
+    for (let tag of tags) {
+      let currentContent = editorState.getCurrentContent();
+      let currentSelection = editorState.getSelection();
+      const newEntityKey = Entity.create("LINK", "IMMUTABLE", {
+        text: `#${tag.hashtagCategoryName}/${tag.hashtagObjectId}`,
+        url: `web+origam-link://objectTag?categoryId=${tag.hashtagCategoryName}&objectId=${tag.hashtagObjectId}`,
+        value: `${tag.hashtagObjectId}`,
+      });
+      const textWithEntity = Modifier.insertText(
+        currentContent,
+        currentSelection,
+        `#${tag.hashtagCategoryName}/${tag.hashtagObjectId}`,
+        undefined,
+        newEntityKey
+      );
+      editorState = EditorState.push(
+        editorState,
+        textWithEntity,
+        "insert-characters"
+      );
+      currentContent = editorState.getCurrentContent();
+      currentSelection = editorState.getSelection();
+      editorState = EditorState.push(
+        editorState,
+        Modifier.insertText(currentContent, currentSelection, " "),
+        "insert-characters"
+      );
+    }
+    props.onEditorStateChange?.(editorState);
+  }
+
   return (
     <div className="sendMessageBar">
       <div className="sendMessageBar__userName">{props.localUserName}:</div>
@@ -73,7 +109,7 @@ export function SendMessageBar(props: {
         toolbarOnFocus={true}
         toolbarCustomButtons={[
           <MentionButton onUsersMentioned={mentionUsers} />,
-          <HashtagButton />,
+          <HashtagButton onTagsCreated={insertHashtags} />,
         ]}
         onEditorStateChange={props.onEditorStateChange}
         toolbar={{
@@ -131,7 +167,11 @@ export function MentionButton(props: {
   );
 }
 
-export function HashtagButton(props: {}) {
+export function HashtagButton(props: {
+  onTagsCreated: (
+    tags: Array<{ hashtagCategoryName: string; hashtagObjectId: any }>
+  ) => void;
+}) {
   const hashtagRootStore = useContext(CtxHashtagRootStore);
   return (
     <button
@@ -139,6 +179,7 @@ export function HashtagButton(props: {}) {
       onClick={() =>
         hashtagRootStore.screenProcess.start((ht) => {
           console.log(ht);
+          props.onTagsCreated?.(ht);
         })
       }
     >
