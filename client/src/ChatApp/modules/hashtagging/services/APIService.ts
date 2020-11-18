@@ -132,38 +132,13 @@ export class APIService {
     return await this.api.getHashtagAvailableObjects(
       categoryId,
       1000,
-      0,
-      searchTerm,
+      1,
+      searchTerm || undefined,
       chCancel
     );
-    /*
-    console.log(
-      await this.api.getHashtagAvailableObjects(categoryId, 1000, 0, "")
-    );
-    console.log("getObjects", categoryId, searchTerm);
-    await delay(300, chCancel);
-    const filt = objects
-      .filter((item) => !categoryId || item[6] === categoryId)
-      .filter((item) => {
-        if (!searchTerm) return true;
-        return (
-          (item[1] || "")
-            .toLocaleLowerCase?.()
-            .includes((searchTerm || "").toLocaleLowerCase?.()) ||
-          (item[2] || "")
-            .toLocaleLowerCase?.()
-            .includes((searchTerm || "").toLocaleLowerCase?.()) ||
-          (item[3] || "")
-            .toLocaleLowerCase?.()
-            .includes((searchTerm || "").toLocaleLowerCase?.()) ||
-          (item[4] || "")
-            .toLocaleLowerCase?.()
-            .includes((searchTerm || "").toLocaleLowerCase?.()) ||
-          (item[5] || "")
-            .toLocaleLowerCase?.()
-            .includes((searchTerm || "").toLocaleLowerCase?.())
-        );
-      });
-    return filt.slice(offset, offset + limit);*/
+  }
+
+  async getHashtagLabels(categoryId: string, labelIds: string[]) {
+    return await this.api.getHashtagLabels(categoryId, labelIds);
   }
 }

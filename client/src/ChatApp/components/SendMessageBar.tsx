@@ -54,7 +54,11 @@ export function SendMessageBar(props: {
   }
 
   function insertHashtags(
-    tags: Array<{ hashtagCategoryName: string; hashtagObjectId: any }>
+    tags: Array<{
+      hashtagCategoryName: string;
+      hashtagObjectId: any;
+      hashtagLabel: string;
+    }>
   ) {
     console.log("Inserting tags...");
     let editorState = props.editorState;
@@ -62,14 +66,14 @@ export function SendMessageBar(props: {
       let currentContent = editorState.getCurrentContent();
       let currentSelection = editorState.getSelection();
       const newEntityKey = Entity.create("LINK", "IMMUTABLE", {
-        text: `#${tag.hashtagCategoryName}/${tag.hashtagObjectId}`,
+        text: `#${tag.hashtagCategoryName}/${tag.hashtagLabel}`,
         url: `web+origam-link://objectTag?categoryId=${tag.hashtagCategoryName}&objectId=${tag.hashtagObjectId}`,
         value: `${tag.hashtagObjectId}`,
       });
       const textWithEntity = Modifier.insertText(
         currentContent,
         currentSelection,
-        `#${tag.hashtagCategoryName}/${tag.hashtagObjectId}`,
+        `#${tag.hashtagCategoryName}/${tag.hashtagLabel}`,
         undefined,
         newEntityKey
       );

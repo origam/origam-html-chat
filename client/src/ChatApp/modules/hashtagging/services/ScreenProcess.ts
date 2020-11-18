@@ -234,10 +234,12 @@ export class ScreenProcess {
               )
               .then(
                 action((items) => {
-                  const value = items.Value.map((item: any, idx: number) => [
+                  const value = items.Value;
+                  console.log(value)
+                  /*.map((item: any, idx: number) => [
                     `id-${idx}`,
                     ...item,
-                  ]);
+                  ]);*/
                   this.root.dataTableStore
                     .getDataTable("objects")
                     ?.setRows(value);
@@ -267,17 +269,25 @@ export class ScreenProcess {
             const selectedCategoryId = this.dataTableCategories?.tableCursor
               .selectedRowId;
             if (selectedCategoryId && selectedObjectRowIds) {
-              this.feedChoosenHashtags(
-                Array.from(selectedObjectRowIds.values()).map((rowId) => {
-                  return {
-                    hashtagCategoryName: selectedCategoryId,
-                    hashtagObjectId: rowId,
-                  };
-                })
-              );
+              this.apiService
+                .getHashtagLabels(
+                  selectedCategoryId,
+                  Array.from(selectedObjectRowIds.values())
+                )
+                .then((labels) => {
+                  console.log(labels);
+                  this.feedChoosenHashtags(
+                    Array.from(selectedObjectRowIds.values()).map((rowId) => {
+                      return {
+                        hashtagCategoryName: selectedCategoryId,
+                        hashtagObjectId: rowId,
+                        hashtagLabel: labels[rowId],
+                      };
+                    })
+                  );
+                  callback("DONE");
+                });
             }
-
-            callback("DONE");
           },
         },
       }

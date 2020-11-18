@@ -261,9 +261,9 @@ export class ChatHTTPApi {
 
   async getHashtagAvailableObjects(
     categoryId: string,
-    limit: number,
-    offset: number,
-    searchPhrase: string,
+    pageSize: number,
+    pageNumber: number,
+    searchPhrase: string | undefined,
     chCancel?: PubSub
   ) {
     const source = axiosLib.CancelToken.source();
@@ -271,7 +271,7 @@ export class ChatHTTPApi {
     try {
       return (
         await axiosLib.get(`../internalApi/HashTag/${categoryId}/objects`, {
-          params: { searchPhrase, limit, offset },
+          params: { searchPhrase, limit: pageSize, pageNumber: pageNumber },
           headers: this.headers,
           cancelToken: source.token,
         })
@@ -284,5 +284,18 @@ export class ChatHTTPApi {
     } finally {
       _disposer?.();
     }
+  }
+
+  async getHashtagLabels(categoryId: string, labelIds: string[]) {
+    return (
+      await axiosLib.post(
+        `../internalApi/HashTag/${categoryId}/labels`,
+        { LabelIds: labelIds },
+        {
+          headers: this.headers,
+          //cancelToken: source.token,
+        }
+      )
+    ).data.value;
   }
 }
