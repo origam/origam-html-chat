@@ -160,7 +160,7 @@ export function renderSimpleInformation(
   };
 }
 
-export function renderSimpleProgres(message?: React.ReactNode) {
+export function renderSimpleProgress(message?: React.ReactNode) {
   return (modal: IModalHandle<{}>) => {
     return <SimpleProgress message={message} />;
   };

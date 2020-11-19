@@ -3,7 +3,7 @@ import { ChatHTTPApi } from "../services/ChatHTTPApi";
 import {
   renderSimpleQuestion,
   renderSimpleInformation,
-  renderSimpleProgres,
+  renderSimpleProgress,
 } from "../components/Windows/Windows";
 import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { Messages } from "../model/Messages";
@@ -45,7 +45,7 @@ export class AbandonChatroomWorkflow {
                 if (confirmationResult.isOk) {
                   // TODO: call api to invite the user.
                   const progressDialog = this.windowsSvc.push(
-                    renderSimpleProgres("Working...")
+                    renderSimpleProgress("Working...")
                   );
                   const userIds = outviteUserDialogResult.choosenUsers.map(
                     (user) => ({

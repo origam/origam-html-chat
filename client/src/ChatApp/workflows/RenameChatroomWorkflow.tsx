@@ -3,7 +3,7 @@ import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { renderRenameChatroomDialog } from "../components/Dialogs/RenameChatroomDialog";
 import {
   renderSimpleInformation,
-  renderSimpleProgres,
+  renderSimpleProgress,
 } from "../components/Windows/Windows";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
@@ -36,7 +36,7 @@ export class RenameChatroomWorkflow {
             continue;
           }
           const progressDialog = this.windowsSvc.push(
-            renderSimpleProgres("Working...")
+            renderSimpleProgress("Working...")
           );
           try {
             await this.api.patchChatroomInfo(

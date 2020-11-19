@@ -3,7 +3,7 @@ import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { renderInviteUserDialog } from "../components/Dialogs/InviteUserDialog";
 import {
   renderSimpleInformation,
-  renderSimpleProgres,
+  renderSimpleProgress,
   renderSimpleQuestion,
 } from "../components/Windows/Windows";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
@@ -36,7 +36,7 @@ export class CreateChatroomWorkflow {
           }
           if (createChatroomDialogResult.choosenUsers) {
             const progressDialog = this.windowsSvc.push(
-              renderSimpleProgres("Creating chatroom...")
+              renderSimpleProgress("Creating chatroom...")
             );
             try {
               const createChatroomResult = await this.api.createChatroom(

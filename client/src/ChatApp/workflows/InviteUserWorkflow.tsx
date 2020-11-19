@@ -2,7 +2,7 @@ import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { renderInviteUserDialog } from "../components/Dialogs/InviteUserDialog";
 import {
   renderSimpleInformation,
-  renderSimpleProgres,
+  renderSimpleProgress,
   renderSimpleQuestion,
 } from "../components/Windows/Windows";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
@@ -36,7 +36,7 @@ export class InviteUserWorkflow {
                 if (confirmationResult.isOk) {
                   // TODO: call api to invite the user.
                   const progressDialog = this.windowsSvc.push(
-                    renderSimpleProgres("Working...")
+                    renderSimpleProgress("Working...")
                   );
                   try {
                     await this.api.inviteUsers({

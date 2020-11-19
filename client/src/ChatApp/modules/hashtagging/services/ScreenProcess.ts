@@ -14,6 +14,7 @@ import {
 } from "../stores/DataTableStore";
 import { ObjectTouchMover } from "../util/ObjectTouchMover";
 import { renderErrorDialog } from "../../../components/Dialogs/ErrorDialog";
+import { renderSimpleProgress } from "../../../components/Windows/Windows";
 
 inspect({
   // options
@@ -139,7 +140,10 @@ export class ScreenProcess {
                 },
               },
               CREATE_HASHTAGS: {
-                invoke: { src: "svcCreateHashtags" },
+                invoke: [
+                  { src: "svcCreateHashtags" },
+                  { src: "svcProgressDialog" },
+                ],
                 on: {
                   DONE: "#screenProcess.FINISHED",
                 },
@@ -285,6 +289,12 @@ export class ScreenProcess {
               renderErrorDialog(event.payload?.exception)
             );
             hModal.interact().then(() => callback("OK"));
+            return () => hModal.close();
+          },
+          svcProgressDialog: (ctx, event) => (callback, onReceive) => {
+            const hModal = this.windowsSvc.push(
+              renderSimpleProgress("Working...")
+            );
             return () => hModal.close();
           },
           svcReactions: (ctx, event) => (callback, onReceive) => {
