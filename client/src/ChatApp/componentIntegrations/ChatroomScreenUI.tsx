@@ -2,6 +2,7 @@ import { autorun } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { usePrev } from "../../util/hooks";
+import { buildReferenceLink } from "../../util/links";
 import {
   ChatParticipantMini,
   IChatParticipantStatus,
@@ -12,6 +13,7 @@ import { IParticipantStatus } from "../model/Participants";
 import { ChatFeedUI } from "./ChatFeedUI";
 import {
   CtxAbandonChatroomWorkflow,
+  CtxAPI,
   CtxChatroom,
   CtxInviteUserWorkflow,
   CtxMessages,
@@ -30,6 +32,31 @@ export function ChatroomName(props: { value: string }) {
           <i className="fas fa-edit fa-xs" />
         </div>
       </h1>
+    </div>
+  );
+}
+
+export function ChatroomHashtag(props: {
+  categoryId: string | null;
+  referenceId: string | null;
+}) {
+  const api = useContext(CtxAPI);
+  const [linkText, setLinkText] = useState("");
+  useEffect(() => {
+    if (props.categoryId && props.referenceId) {
+      api
+        .getHashtagLabels(props.categoryId, [props.referenceId])
+        .then((result) => {
+          setLinkText(`${props.categoryId} / ${result[props.referenceId!]}`);
+        });
+    }
+  }, [props.categoryId, props.referenceId]);
+  if (!props.categoryId || !props.referenceId) return null;
+  return (
+    <div className="chatroomHashtag">
+      <a href={buildReferenceLink(props.categoryId, props.referenceId)}>
+        {linkText}
+      </a>
     </div>
   );
 }
@@ -94,6 +121,8 @@ export function ChatroomScreenUI() {
         );
         const participantItems = participants.items;
         const chatroomName = chatroom.topic;
+        const chatroomReferenceId = chatroom.referenceId;
+        const chatroomCategoryId = chatroom.categoryId;
 
         return (
           <div className="App">
@@ -119,6 +148,10 @@ export function ChatroomScreenUI() {
               <div className="messageThreadHeader">
                 <div className="messageThreadHeader__info">
                   <ChatroomName value={chatroomName} />
+                  <ChatroomHashtag
+                    categoryId={chatroomCategoryId}
+                    referenceId={chatroomReferenceId}
+                  />
                 </div>
                 <div className="messageThreadHeader__actions">
                   {participantItems.map((item) => (

@@ -76,6 +76,8 @@ export class TransportSvc {
     document.title = polledData.info.topic
       ? `Chat: ${polledData.info.topic}`
       : "Chat (no topic)";
+      this.chatroom.categoryId = polledData.info.categoryName;
+      this.chatroom.referenceId = polledData.info.referenceId;
 
     this.messages.mergeMessages({ messages: polledData.messages });
 

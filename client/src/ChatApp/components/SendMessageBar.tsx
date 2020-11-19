@@ -5,6 +5,7 @@ import { CtxMentionUserWorkflow } from "../componentIntegrations/Contexts";
 import { UserToMention } from "./Dialogs/MentionUserDialog";
 import { Entity, Modifier, EditorState } from "draft-js";
 import { CtxHashtagRootStore } from "../modules/hashtagging/components/Common";
+import { buildReferenceLink } from "../../util/links";
 
 export function SendMessageBar(props: {
   //onEditorKeyDown: any;
@@ -67,7 +68,7 @@ export function SendMessageBar(props: {
       let currentSelection = editorState.getSelection();
       const newEntityKey = Entity.create("LINK", "IMMUTABLE", {
         text: `#${tag.hashtagCategoryName}/${tag.hashtagLabel}`,
-        url: `web+origam-link://objectTag?categoryId=${tag.hashtagCategoryName}&objectId=${tag.hashtagObjectId}`,
+        url: buildReferenceLink(tag.hashtagCategoryName, tag.hashtagObjectId),
         value: `${tag.hashtagObjectId}`,
       });
       const textWithEntity = Modifier.insertText(

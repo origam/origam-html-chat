@@ -19,6 +19,8 @@ export interface IGetPolledDataResult {
   }[];
   info: {
     topic: string;
+    categoryName: string;
+    referenceId: string;
   };
   participants: {
     id: string;
