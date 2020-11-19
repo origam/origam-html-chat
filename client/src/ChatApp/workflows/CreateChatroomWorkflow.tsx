@@ -39,7 +39,6 @@ export class CreateChatroomWorkflow {
               renderSimpleProgres("Creating chatroom...")
             );
             try {
-              debugger;
               const createChatroomResult = await this.api.createChatroom(
                 references || {},
                 createChatroomDialogResult.chatroomTopic,

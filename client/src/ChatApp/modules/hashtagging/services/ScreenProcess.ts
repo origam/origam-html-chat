@@ -13,12 +13,13 @@ import {
   DataSourceField,
 } from "../stores/DataTableStore";
 import { ObjectTouchMover } from "../util/ObjectTouchMover";
+import { renderErrorDialog } from "../../../components/Dialogs/ErrorDialog";
 
-/*inspect({
+inspect({
   // options
   // url: 'https://statecharts.io/inspect', // (default)
   iframe: false, // open in new window
-});*/
+});
 
 export class ScreenProcess {
   constructor(public root: HashtagRootStore, public windowsSvc: WindowsSvc) {}
@@ -79,8 +80,7 @@ export class ScreenProcess {
             ],
             onEntry: ["actClearAllData"],
             on: {
-              CANCEL: "#screenProcess.FINISHED",
-              OK: ".CREATE_HASHTAGS",
+              ERROR: ".ERROR_DIALOG",
             },
             initial: "LOAD_CATEGORIES",
             states: {
@@ -134,12 +134,20 @@ export class ScreenProcess {
                     target: "LOAD_OBJECTS",
                     actions: ["actSelectedCategoryChanged"],
                   },
+                  CANCEL: "#screenProcess.FINISHED",
+                  OK: "CREATE_HASHTAGS",
                 },
               },
               CREATE_HASHTAGS: {
                 invoke: { src: "svcCreateHashtags" },
                 on: {
                   DONE: "#screenProcess.FINISHED",
+                },
+              },
+              ERROR_DIALOG: {
+                invoke: { src: "svcErrorDialog" },
+                on: {
+                  OK: "IDLE",
                 },
               },
             },
@@ -221,13 +229,16 @@ export class ScreenProcess {
           svcLoadCategories: (ctx, event) => (callback, onReceive) => {
             const chCancel = new PubSub();
             this.apiService
-              .getCategories(this.categorySearchTerm, 0, 1000, chCancel)
+              .getCategories(this.categorySearchTerm, 1, 1000, chCancel)
               .then((items) => {
                 this.root.dataTableStore
                   .getDataTable("categories")
                   ?.setRows(items);
                 callback("DONE");
-              });
+              })
+              .catch((exception) =>
+                callback({ type: "ERROR", payload: { exception } })
+              );
             return () => chCancel.trig();
           },
           svcLoadObjects: (ctx, event) => (callback, onReceive) => {
@@ -257,13 +268,23 @@ export class ScreenProcess {
               .catch((e) => {
                 if (e.$isCancellation) return;
                 throw e;
-              });
+              })
+              .catch((exception) =>
+                callback({ type: "ERROR", payload: { exception } })
+              );
             return () => chCancel.trig();
           },
           svcHashtagDialog: (ctx, event) => (callback, onReceive) => {
             const hModal = this.windowsSvc.push(() =>
               renderHashtaggingDialog()
             );
+            return () => hModal.close();
+          },
+          svcErrorDialog: (ctx, event) => (callback, onReceive) => {
+            const hModal = this.windowsSvc.push(
+              renderErrorDialog(event.payload?.exception)
+            );
+            hModal.interact().then(() => callback("OK"));
             return () => hModal.close();
           },
           svcReactions: (ctx, event) => (callback, onReceive) => {
@@ -294,7 +315,10 @@ export class ScreenProcess {
                     })
                   );
                   callback("DONE");
-                });
+                })
+                .catch((exception) =>
+                  callback({ type: "ERROR", payload: { exception } })
+                );
             }
           },
         },

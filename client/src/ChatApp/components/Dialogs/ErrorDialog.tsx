@@ -20,7 +20,7 @@ export function renderErrorDialog(exception: any) {
       <div>There has been an error:</div>
       <textarea
         className="errorDialog__textarea"
-        value={exception.message ?? "" + exception}
+        value={exception?.message ?? "" + exception}
         readOnly={true}
       />
     </DefaultModal>
