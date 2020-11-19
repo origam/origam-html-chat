@@ -9,8 +9,9 @@ import { useRootStore } from "./Common";
 import { observer } from "mobx-react";
 
 import Split from "react-split";
+import { BigSpinner } from "../../../components/BigSpinner";
 
-export function HashtagDialogContent() {
+export const HashtagDialogContent = observer(function HashtagDialogContent() {
   const rootStore = useRootStore();
   useEffect(() => {
     rootStore.screenProcess.handleUIInitialized();
@@ -31,6 +32,11 @@ export function HashtagDialogContent() {
             <CtxEntityId.Provider value="categories">
               <div className="dataTable">
                 <CategoryTable />
+                {rootStore.screenProcess.isCategoriesLoading && (
+                  <div className="dataTableOverlay">
+                    <BigSpinner />
+                  </div>
+                )}
               </div>
             </CtxEntityId.Provider>
           </div>
@@ -42,6 +48,11 @@ export function HashtagDialogContent() {
             <CtxEntityId.Provider value="objects">
               <div className="dataTable">
                 <ObjectTable />
+                {rootStore.screenProcess.isObjectsLoading  && (
+                  <div className="dataTableOverlay">
+                    <BigSpinner />
+                  </div>
+                )}
               </div>
             </CtxEntityId.Provider>
           </div>
@@ -49,7 +60,7 @@ export function HashtagDialogContent() {
       </div>
     </div>
   );
-}
+});
 
 export const CategorySearch = observer(function CategorySearch() {
   const root = useRootStore();

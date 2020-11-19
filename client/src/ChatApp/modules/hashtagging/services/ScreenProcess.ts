@@ -6,7 +6,15 @@ import { inspect } from "@xstate/inspect";
 import { HashtagRootStore } from "../stores/RootStore";
 import { WindowsSvc } from "../../../components/Windows/WindowsSvc";
 import { renderHashtaggingDialog } from "../HashtaggingApp";
-import { action, reaction, runInAction, toJS } from "mobx";
+import {
+  action,
+  autorun,
+  computed,
+  observable,
+  reaction,
+  runInAction,
+  toJS,
+} from "mobx";
 import {
   Column,
   Column2TouchMoveControlee,
@@ -25,6 +33,8 @@ inspect({
 export class ScreenProcess {
   constructor(public root: HashtagRootStore, public windowsSvc: WindowsSvc) {}
 
+  @observable state: any = undefined;
+
   get apiService() {
     return this.root.apiService;
   }
@@ -35,6 +45,14 @@ export class ScreenProcess {
 
   get dataTableObjects() {
     return this.root.dataTableStore.getDataTable("objects");
+  }
+
+  @computed get isCategoriesLoading() {
+    return this.state?.matches({ DIALOG_DISPLAYED: "LOAD_CATEGORIES" });
+  }
+
+  @computed get isObjectsLoading() {
+    return this.state?.matches({ DIALOG_DISPLAYED: "LOAD_OBJECTS" });
   }
 
   interpreter?: Interpreter<any>;
@@ -59,7 +77,7 @@ export class ScreenProcess {
     this.feedChoosenHashtags = feedChoosenHashtags;
     this.interpreter = interpret(this.createMachine(), { devTools: true });
     this.interpreter.onTransition((state, event) => {
-      console.log("TRANSITION", event, state);
+      this.state = state;
     });
     this.interpreter.start();
   }
