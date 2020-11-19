@@ -38,12 +38,20 @@ export class ScreenProcess {
   interpreter?: Interpreter<any>;
 
   feedChoosenHashtags: (
-    items: Array<{ hashtagCategoryName: string; hashtagObjectId: any }>
+    items: Array<{
+      hashtagCategoryName: string;
+      hashtagObjectId: any;
+      hashtagLabel: string;
+    }>
   ) => void = () => {};
 
   start(
     feedChoosenHashtags: (
-      items: Array<{ hashtagCategoryName: string; hashtagObjectId: any }>
+      items: Array<{
+        hashtagCategoryName: string;
+        hashtagObjectId: any;
+        hashtagLabel: string;
+      }>
     ) => void
   ) {
     this.feedChoosenHashtags = feedChoosenHashtags;
@@ -235,7 +243,7 @@ export class ScreenProcess {
               .then(
                 action((items) => {
                   const value = items.Value;
-                  console.log(value)
+                  console.log(value);
                   /*.map((item: any, idx: number) => [
                     `id-${idx}`,
                     ...item,

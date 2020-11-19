@@ -173,7 +173,11 @@ export function MentionButton(props: {
 
 export function HashtagButton(props: {
   onTagsCreated: (
-    tags: Array<{ hashtagCategoryName: string; hashtagObjectId: any }>
+    tags: Array<{
+      hashtagCategoryName: string;
+      hashtagObjectId: any;
+      hashtagLabel: string;
+    }>
   ) => void;
 }) {
   const hashtagRootStore = useContext(CtxHashtagRootStore);
