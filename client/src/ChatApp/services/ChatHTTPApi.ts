@@ -298,6 +298,6 @@ export class ChatHTTPApi {
           //cancelToken: source.token,
         }
       )
-    ).data.value;
+    ).data;
   }
 }

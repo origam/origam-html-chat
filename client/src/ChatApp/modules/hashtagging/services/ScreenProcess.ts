@@ -275,15 +275,9 @@ export class ScreenProcess {
               )
               .then(
                 action((items) => {
-                  const value = items.Value;
-                  console.log(value);
-                  /*.map((item: any, idx: number) => [
-                    `id-${idx}`,
-                    ...item,
-                  ]);*/
                   this.root.dataTableStore
                     .getDataTable("objects")
-                    ?.setRows(value);
+                    ?.setRows(items);
                   callback("DONE");
                 })
               )
@@ -332,7 +326,6 @@ export class ScreenProcess {
                   Array.from(selectedObjectRowIds.values())
                 )
                 .then((labels) => {
-                  console.log(labels);
                   this.feedChoosenHashtags(
                     Array.from(selectedObjectRowIds.values()).map((rowId) => {
                       return {
