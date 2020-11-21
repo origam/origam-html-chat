@@ -24,11 +24,10 @@ import { ObjectTouchMover } from "../util/ObjectTouchMover";
 import { renderErrorDialog } from "../../../components/Dialogs/ErrorDialog";
 import { renderSimpleProgress } from "../../../components/Windows/Windows";
 
+/*
 inspect({
-  // options
-  // url: 'https://statecharts.io/inspect', // (default)
   iframe: false, // open in new window
-});
+});*/
 
 export class ScreenProcess {
   constructor(public root: HashtagRootStore, public windowsSvc: WindowsSvc) {}
