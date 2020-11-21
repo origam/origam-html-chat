@@ -64,6 +64,9 @@ export class ScreenProcess {
     }>
   ) => void = () => {};
 
+  isLastPageLoaded = false;
+  lastPageLoaded = 0;
+
   start(
     feedChoosenHashtags: (
       items: Array<{
@@ -144,6 +147,7 @@ export class ScreenProcess {
                 on: {
                   SEARCH_OBJECT_CHANGED: {
                     target: "LOAD_OBJECTS",
+                    actions: ["actClearObjectsData"],
                   },
                   SEARCH_CATEGORY_CHANGED: {
                     target: "LOAD_CATEGORIES",
@@ -154,6 +158,7 @@ export class ScreenProcess {
                   },
                   CANCEL: "#screenProcess.FINISHED",
                   OK: "CREATE_HASHTAGS",
+                  SCROLLED_NEAR_TABLE_END: "LOAD_OBJECTS",
                 },
               },
               CREATE_HASHTAGS: {
@@ -182,6 +187,9 @@ export class ScreenProcess {
         actions: {
           actClearAllData: (ctx, event) => {
             this.clearCategoriesData();
+            this.clearObjectsData();
+          },
+          actClearObjectsData: (ctx, event) => {
             this.clearObjectsData();
           },
           actFixCategorySelection: (ctx, event) => {
@@ -264,19 +272,24 @@ export class ScreenProcess {
           },
           svcLoadObjects: (ctx, event) => (callback, onReceive) => {
             const chCancel = new PubSub();
+            const PAGE_SIZE = 1000;
             this.apiService
               .getObjects(
                 this.selectedCategoryId || "",
                 this.objectSearchTerm,
-                0,
-                1000,
+                this.lastPageLoaded + 1,
+                PAGE_SIZE,
                 chCancel
               )
               .then(
                 action((items) => {
+                  this.lastPageLoaded++;
+                  if (items.length < PAGE_SIZE) {
+                    this.isLastPageLoaded = true;
+                  }
                   this.root.dataTableStore
                     .getDataTable("objects")
-                    ?.setRows(items);
+                    ?.appendRows(items);
                   callback("DONE");
                 })
               )
@@ -355,14 +368,25 @@ export class ScreenProcess {
   clearObjectsData() {
     this.dataTableObjects?.clearData();
     this.dataTableObjects?.clearSelectedRows();
+    this.isLastPageLoaded = false;
+    this.lastPageLoaded = 0;
   }
 
+  @action.bound
   handleUIInitialized() {
     this.interpreter?.send("UI_INITIALIZED");
   }
 
+  @action.bound
   handleCategorySearchChangeImm(value: string) {
     this.interpreter?.send("SEARCH_CATEGORY_CHANGED");
+  }
+
+  @action.bound
+  handleScrolledNearTableEnd() {
+    if (!this.isLastPageLoaded) {
+      this.interpreter?.send("SCROLLED_NEAR_TABLE_END");
+    }
   }
 
   handleCategorySearchChange = _.debounce(
@@ -370,12 +394,14 @@ export class ScreenProcess {
     400
   );
 
+  @action.bound
   handleObjectSearchChangeImm(value: string) {
     this.interpreter?.send("SEARCH_OBJECT_CHANGED");
   }
 
   handleObjectSearchChange = _.debounce(this.handleObjectSearchChangeImm, 400);
 
+  @action.bound
   handleSelectedCategoryChangeImm(rowId: string) {
     this.interpreter?.send("SELECTED_CATEGORY_CHANGED");
   }

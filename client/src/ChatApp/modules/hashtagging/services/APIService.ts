@@ -125,14 +125,14 @@ export class APIService {
   async getObjects(
     categoryId: string,
     searchTerm: string,
-    offset: number,
-    limit: number,
+    pageNumber: number,
+    pageSize: number,
     chCancel?: PubSub
   ): Promise<any> {
     return await this.api.getHashtagAvailableObjects(
       categoryId,
-      1000,
-      1,
+      pageNumber,
+      pageSize,
       searchTerm || undefined,
       chCancel
     );

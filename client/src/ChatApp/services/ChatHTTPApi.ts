@@ -264,8 +264,8 @@ export class ChatHTTPApi {
 
   async getHashtagAvailableObjects(
     categoryId: string,
-    pageSize: number,
     pageNumber: number,
+    pageSize: number,
     searchPhrase: string | undefined,
     chCancel?: PubSub
   ) {

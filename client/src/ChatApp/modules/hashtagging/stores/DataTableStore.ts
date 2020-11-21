@@ -78,6 +78,7 @@ export interface IDataTable {
   getSelectionStateByRowId(rowId: string): boolean;
 
   setRows(rows: any[][]): void;
+  appendRows(rows: any[][]): void;
   clearSelectedRows(): void;
   clearData(): void;
 
@@ -187,6 +188,10 @@ export class DataTable implements IDataTable, IColumnOwner {
 
   @action.bound setRows(rows: any[][]) {
     this.rows = rows;
+  }
+
+  @action.bound appendRows(rows: any[][]) {
+    for (let row of rows) this.rows.push(row);
   }
 
   @action.bound clearData() {
