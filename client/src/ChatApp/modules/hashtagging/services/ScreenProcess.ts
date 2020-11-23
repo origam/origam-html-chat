@@ -24,11 +24,12 @@ import { ObjectTouchMover } from "../util/ObjectTouchMover";
 import { renderErrorDialog } from "../../../components/Dialogs/ErrorDialog";
 import { renderSimpleProgress } from "../../../components/Windows/Windows";
 
+/*
 inspect({
   // options
   // url: 'https://statecharts.io/inspect', // (default)
   iframe: false, // open in new window
-});
+});*/
 
 export class ScreenProcess {
   constructor(public root: HashtagRootStore, public windowsSvc: WindowsSvc) {}
@@ -75,7 +76,7 @@ export class ScreenProcess {
     ) => void
   ) {
     this.feedChoosenHashtags = feedChoosenHashtags;
-    this.interpreter = interpret(this.createMachine(), { devTools: true });
+    this.interpreter = interpret(this.createMachine()/*, { devTools: true }*/);
     this.interpreter.onTransition((state, event) => {
       this.state = state;
     });
@@ -275,7 +276,7 @@ export class ScreenProcess {
               )
               .then(
                 action((items) => {
-                  const value = items.Value;
+                  const value = items;
                   console.log(value);
                   /*.map((item: any, idx: number) => [
                     `id-${idx}`,

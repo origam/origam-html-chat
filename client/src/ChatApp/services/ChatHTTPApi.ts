@@ -188,7 +188,7 @@ export class ChatHTTPApi {
       `${this.urlPrefix}/chatrooms/create`,
       {
         topic,
-        references,
+        ...references,
         inviteUsers: inviteUsers.map((userId) => ({ id: userId })),
       },
       { headers: this.headers }
@@ -298,6 +298,6 @@ export class ChatHTTPApi {
           //cancelToken: source.token,
         }
       )
-    ).data.value;
+    ).data;
   }
 }
