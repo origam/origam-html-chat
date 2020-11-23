@@ -129,7 +129,9 @@ const DataCell = observer(function DataCell(props: {
   } = useDataCell(props.rowIndex, props.columnIndex);
   let rui = <></>;
   if (spObjects) {
-    rui = <Highlighter searchWords={[spObjects]} textToHighlight={`${value}`}/>;
+    rui = (
+      <Highlighter searchWords={[spObjects]} textToHighlight={`${value}`} />
+    );
   } else {
     rui = <>{value}</>;
   }
@@ -203,6 +205,7 @@ const HeaderCell = observer(function HeaderCell(props: {
 });
 
 export const ObjectTable = observer(function CategoryTable() {
+  const root = useRootStore();
   const dataTable = useDataTable();
   const refGrid = useRef<any>();
   const columnCount = (dataTable?.columnCount || 0) + 1;
@@ -210,6 +213,8 @@ export const ObjectTable = observer(function CategoryTable() {
     (args.index === 0
       ? 25
       : dataTable?.getColumnByDataCellIndex(args.index - 1)?.width) || 250;
+
+  const rowCount = (dataTable?.rowCount || 0) + 1;
 
   useEffect(() => {
     return reaction(
@@ -225,6 +230,15 @@ export const ObjectTable = observer(function CategoryTable() {
       { scheduler: requestAnimationFrame }
     );
   }, [getColumnWidth]);
+  const ROW_HEIGHT = 25;
+  function handleScroll(event: any) {
+    if (
+      event.scrollHeight - event.scrollTop - event.clientHeight <
+      ROW_HEIGHT * 100
+    ) {
+      root.screenProcess.handleScrolledNearTableEnd();
+    }
+  }
   return (
     <AutoSizer>
       {({ width, height }) => (
@@ -236,13 +250,14 @@ export const ObjectTable = observer(function CategoryTable() {
               <MultiGrid
                 ref={refGrid}
                 cellRenderer={renderObjectTableCell}
-                rowCount={(dataTable?.rowCount || 0) + 1}
+                rowCount={rowCount}
                 columnCount={columnCount}
-                rowHeight={25}
+                rowHeight={ROW_HEIGHT}
                 columnWidth={getColumnWidth}
                 fixedRowCount={1}
                 width={width}
                 height={height}
+                onScroll={handleScroll}
                 classNameTopRightGrid="dataTable__headerRow"
               />
             );

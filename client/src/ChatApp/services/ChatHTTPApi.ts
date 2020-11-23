@@ -188,7 +188,8 @@ export class ChatHTTPApi {
       `${this.urlPrefix}/chatrooms/create`,
       {
         topic,
-        ...references,
+        ReferenceCategory: references.referenceCategory,
+        ReferenceRecordId: references.referenceRecordId,
         inviteUsers: inviteUsers.map((userId) => ({ id: userId })),
       },
       { headers: this.headers }
@@ -263,8 +264,8 @@ export class ChatHTTPApi {
 
   async getHashtagAvailableObjects(
     categoryId: string,
-    pageSize: number,
     pageNumber: number,
+    pageSize: number,
     searchPhrase: string | undefined,
     chCancel?: PubSub
   ) {

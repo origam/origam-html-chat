@@ -67,14 +67,14 @@ export function SendMessageBar(props: {
       let currentContent = editorState.getCurrentContent();
       let currentSelection = editorState.getSelection();
       const newEntityKey = Entity.create("LINK", "IMMUTABLE", {
-        text: `#${tag.hashtagCategoryName}/${tag.hashtagLabel}`,
+        text: `#${tag.hashtagCategoryName} / ${tag.hashtagLabel}`,
         url: buildReferenceLink(tag.hashtagCategoryName, tag.hashtagObjectId),
         value: `${tag.hashtagObjectId}`,
       });
       const textWithEntity = Modifier.insertText(
         currentContent,
         currentSelection,
-        `#${tag.hashtagCategoryName}/${tag.hashtagLabel}`,
+        `#${tag.hashtagCategoryName} / ${tag.hashtagLabel}`,
         undefined,
         newEntityKey
       );
