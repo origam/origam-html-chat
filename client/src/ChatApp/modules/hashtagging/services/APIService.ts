@@ -115,11 +115,13 @@ export class APIService {
         return tableConfig;
       }
     }
-    return categories.map((item: any) => [
-      item.hashtagName,
-      item.hashtagLabel,
-      transformCombo(xmlJs.xml2js(item.objectComboboxMetada)),
-    ]);
+    return categories.map((item: any) => {
+      return [
+        item.hashtagName,
+        item.hashtagLabel,
+        transformCombo(xmlJs.xml2js(item.objectComboboxMetadata)),
+      ];
+    });
   }
 
   async getObjects(

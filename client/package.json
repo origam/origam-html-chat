@@ -80,5 +80,5 @@
     ]
   },
   "homepage": "/chatrooms",
-  "proxy": "http://localhost:44356"
+  "proxy": "https://localhost:5000"
 }

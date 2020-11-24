@@ -77,7 +77,7 @@ export class ScreenProcess {
     ) => void
   ) {
     this.feedChoosenHashtags = feedChoosenHashtags;
-    this.interpreter = interpret(this.createMachine()/*, { devTools: true }*/);
+    this.interpreter = interpret(this.createMachine() /*, { devTools: true }*/);
     this.interpreter.onTransition((state, event) => {
       this.state = state;
     });
@@ -265,9 +265,10 @@ export class ScreenProcess {
                   ?.setRows(items);
                 callback("DONE");
               })
-              .catch((exception) =>
-                callback({ type: "ERROR", payload: { exception } })
-              );
+              .catch((exception) => {
+                callback({ type: "ERROR", payload: { exception } });
+                console.error(exception);
+              });
             return () => chCancel.trig();
           },
           svcLoadObjects: (ctx, event) => (callback, onReceive) => {
@@ -297,9 +298,10 @@ export class ScreenProcess {
                 if (e.$isCancellation) return;
                 throw e;
               })
-              .catch((exception) =>
-                callback({ type: "ERROR", payload: { exception } })
-              );
+              .catch((exception) => {
+                callback({ type: "ERROR", payload: { exception } });
+                console.error(exception);
+              });
             return () => chCancel.trig();
           },
           svcHashtagDialog: (ctx, event) => (callback, onReceive) => {
@@ -349,9 +351,10 @@ export class ScreenProcess {
                   );
                   callback("DONE");
                 })
-                .catch((exception) =>
-                  callback({ type: "ERROR", payload: { exception } })
-                );
+                .catch((exception) => {
+                  callback({ type: "ERROR", payload: { exception } });
+                  console.error(exception);
+                });
             }
           },
         },
