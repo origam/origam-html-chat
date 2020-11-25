@@ -116,7 +116,7 @@ export function OutviteUserDialog(props: {
       <ModalCloseButton onClick={props.onCancel} />
       <div className="chooseUserToInviteModalContent">
         <div className="chooseUserToInviteModalContent__header">
-          <p>Cancel invitation to this chatroom</p>
+          <p>Select attendees to remove from this chatroom.</p>
           {/*<Observer>
             {() => (
               <input

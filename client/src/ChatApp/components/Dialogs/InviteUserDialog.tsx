@@ -127,7 +127,7 @@ export function InviteUserDialog(props: {
       <ModalCloseButton onClick={props.onCancel} />
       <div className="chooseUserToInviteModalContent">
         <div className="chooseUserToInviteModalContent__header">
-          <p>Invite users to this chatroom</p>
+          <p>Select attendees to invite to this chatroom.</p>
           <Observer>
             {() => (
               <input
