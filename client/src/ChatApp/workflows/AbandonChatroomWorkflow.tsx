@@ -34,49 +34,38 @@ export class AbandonChatroomWorkflow {
               await infoDialog.interact();
               infoDialog.close();
             } else {
-              const confirmationDialog = this.windowsSvc.push(
-                renderSimpleQuestion(
-                  `Are you sure to kick selected users out of the conversation? 
-                Selected users count: ${outviteUserDialogResult.choosenUsers.length}`
-                )
+              // TODO: call api to invite the user.
+              const progressDialog = this.windowsSvc.push(
+                renderSimpleProgress("Working...")
+              );
+              const userIds = outviteUserDialogResult.choosenUsers.map(
+                (user) => ({
+                  userId: user.id,
+                })
               );
               try {
-                const confirmationResult = await confirmationDialog.interact();
-                if (confirmationResult.isOk) {
-                  // TODO: call api to invite the user.
-                  const progressDialog = this.windowsSvc.push(
-                    renderSimpleProgress("Working...")
-                  );
-                  const userIds = outviteUserDialogResult.choosenUsers.map(
-                    (user) => ({
-                      userId: user.id,
-                    })
-                  );
-                  try {
-                    await this.api.outviteUsers({
-                      users: userIds,
-                    });
-                  } finally {
-                    progressDialog.close();
-                  }
-                  if (userIds.findIndex((user) => user.userId === this.localUser.id) > -1) {
-                    // Kicked off users contained local user. Terminate the app...
-                    this.transportSvc.terminateLoop();
-                    this.terminateChatroom();
-                    this.windowsSvc.push(
-                      renderSimpleInformation(
-                        "You have abandoned the chatroom.",
-                        true,
-                        true
-                      )
-                    );
-                  }
-                  return;
-                } else if (confirmationResult.isCancel) {
-                }
+                await this.api.outviteUsers({
+                  users: userIds,
+                });
               } finally {
-                confirmationDialog.close();
+                progressDialog.close();
               }
+              if (
+                userIds.findIndex((user) => user.userId === this.localUser.id) >
+                -1
+              ) {
+                // Kicked off users contained local user. Terminate the app...
+                this.transportSvc.terminateLoop();
+                this.terminateChatroom();
+                this.windowsSvc.push(
+                  renderSimpleInformation(
+                    "You have abandoned the chatroom.",
+                    true,
+                    true
+                  )
+                );
+              }
+              return;
             }
           } else if (outviteUserDialogResult.isCancel) return;
         } catch (e) {
