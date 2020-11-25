@@ -25,36 +25,20 @@ export class InviteUserWorkflow {
               await infoDialog.interact();
               infoDialog.close();
             } else {
-              const confirmationDialog = this.windowsSvc.push(
-                renderSimpleQuestion(
-                  `Are you sure to add selected users to the conversation? 
-                Selected users count: ${inviteUserDialogResult.choosenUsers.length}`
-                )
+              // TODO: call api to invite the user.
+              const progressDialog = this.windowsSvc.push(
+                renderSimpleProgress("Working...")
               );
               try {
-                const confirmationResult = await confirmationDialog.interact();
-                if (confirmationResult.isOk) {
-                  // TODO: call api to invite the user.
-                  const progressDialog = this.windowsSvc.push(
-                    renderSimpleProgress("Working...")
-                  );
-                  try {
-                    await this.api.inviteUsers({
-                      users: inviteUserDialogResult.choosenUsers.map(
-                        (user) => ({
-                          userId: user.id,
-                        })
-                      ),
-                    });
-                  } finally {
-                    progressDialog.close();
-                  }
-                  return;
-                } else if (confirmationResult.isCancel) {
-                }
+                await this.api.inviteUsers({
+                  users: inviteUserDialogResult.choosenUsers.map((user) => ({
+                    userId: user.id,
+                  })),
+                });
               } finally {
-                confirmationDialog.close();
+                progressDialog.close();
               }
+              return;
             }
           } else if (inviteUserDialogResult.isCancel) return;
         } catch (e) {
