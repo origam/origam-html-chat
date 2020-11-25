@@ -489,6 +489,11 @@ body,
     display: none;
   }
 
+  .rdw-link-modal {
+    bottom: 35px !important;
+    top: unset !important;
+  }
+
   .rdw-editor-main {
     border: 1px solid #cccccc;
     border-radius: 10px;
