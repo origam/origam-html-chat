@@ -1,4 +1,4 @@
-import { action, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 import { Observer } from "mobx-react";
 import React from "react";
 import { FullscreenCentered, Overlay } from "./Windows";
@@ -20,6 +20,10 @@ let keyGen = 0;
 
 export class WindowsSvc {
   @observable windowStack: IWindowStackItem[] = [];
+
+  @computed get displaysWindow() {
+    return this.windowStack.length > 0;
+  }
 
   renderStack() {
     return (

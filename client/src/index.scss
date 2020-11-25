@@ -26,6 +26,10 @@ body,
 .App {
   display: flex;
   flex-direction: row;
+
+  &.isBlur {
+    filter: blur(3px);
+  }
 }
 
 .sidebarArea {

@@ -30,6 +30,7 @@ import { RenameChatroomWorkflow } from "../workflows/RenameChatroomWorkflow";
 import { HashtagRootStore } from "../modules/hashtagging/stores/RootStore";
 import { CtxHashtagRootStore } from "../modules/hashtagging/components/Common";
 import { populateHashtaggingStore } from "../modules/hashtagging/HashtaggingApp";
+import { Observer } from "mobx-react";
 
 function ctxProvide<T>(node: React.ReactNode, Ctx: React.Context<T>, value: T) {
   return <Ctx.Provider value={value}>{node}</Ctx.Provider>;
@@ -122,10 +123,16 @@ export function ChatApp() {
   }, [!!chatroomId]);
 
   let uiTree = (
-    <>
-      {!isTerminated && chatroomId && <ChatroomScreenUI />}
-      {services.windowsSvc.renderStack()}
-    </>
+    <Observer>
+      {() => (
+        <>
+          {!isTerminated && chatroomId && (
+            <ChatroomScreenUI isBlur={services.windowsSvc.displaysWindow} />
+          )}
+          {services.windowsSvc.renderStack()}
+        </>
+      )}
+    </Observer>
   );
   uiTree = ctxProvide(uiTree, CtxWindowsSvc, services.windowsSvc);
   uiTree = ctxProvide(uiTree, CtxMessages, services.messages);

@@ -21,6 +21,7 @@ import {
   CtxRenameChatroomWorkflow,
 } from "./Contexts";
 import { SendMessageBarUI } from "./SendMessageBarUI";
+import cx from "classnames";
 
 export function ChatroomName(props: { value: string }) {
   const renameChatroomWorkflow = useContext(CtxRenameChatroomWorkflow);
@@ -61,7 +62,7 @@ export function ChatroomHashtag(props: {
   );
 }
 
-export function ChatroomScreenUI() {
+export function ChatroomScreenUI(props: { isBlur?: boolean }) {
   const refMessageBar = useRef<any>();
   const messages = useContext(CtxMessages);
 
@@ -125,7 +126,7 @@ export function ChatroomScreenUI() {
         const chatroomCategoryId = chatroom.categoryId;
 
         return (
-          <div className="App">
+          <div className={cx("App", { isBlur: props.isBlur })}>
             {/*<div className="sidebarArea">
               <Sidebar>
                 <SidebarRow>
