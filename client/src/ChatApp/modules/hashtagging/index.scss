@@ -30,8 +30,9 @@ a {
 }
 
 .hashtaggingDialogContainer {
-  height: 600px;
-  width: 800px;
+  height: 50vh;
+  min-height: 300px;
+  min-width: 640px;
 }
 
 .splitPaneH {
