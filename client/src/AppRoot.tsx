@@ -6,7 +6,6 @@ import axios from "axios";
 
 export function AppRoot() {
   const [appOverlayRender, setAppOverlayRender] = useState<(() => React.ReactNode) | undefined>(undefined);
-  console.log(appOverlayRender);
   return (
     <CtxAppOverlayRender.Provider value={{ render: appOverlayRender, setRender: setAppOverlayRender }}>
       <Router>

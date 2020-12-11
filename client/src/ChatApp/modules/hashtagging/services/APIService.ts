@@ -98,6 +98,7 @@ export class APIService {
           columns: controlColumns.map((ccol: any) => {
             return {
               type: ccol.attributes.Column,
+              formatterPattern: ccol.attributes.FormatterPattern,
               label: ccol.attributes.Name,
               name: ccol.attributes.Id,
             };

@@ -62,7 +62,7 @@ export function populateHashtaggingStore(rootStore: HashtagRootStore) {
 
   function makeCategoriesTable() {
     const dataTable = new DataTable(new TableCursor(), "categories", 0);
-    const columns = [new Column(dataTable, "hashtagLabel", "Name", "text")];
+    const columns = [new Column(dataTable, "hashtagLabel", "Name", "text", "")];
 
     columns[0].touchMover = new ObjectTouchMover(
       new Column2TouchMoveControlee(columns[0])

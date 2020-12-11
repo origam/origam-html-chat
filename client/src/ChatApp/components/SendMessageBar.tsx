@@ -21,7 +21,6 @@ export function SendMessageBar(props: {
   }, []);
 
   function mentionUsers(users: UserToMention[]) {
-    console.log("Mentioning...");
     let editorState = props.editorState;
     for (let user of users) {
       let currentContent = editorState.getCurrentContent();
@@ -61,7 +60,6 @@ export function SendMessageBar(props: {
       hashtagLabel: string;
     }>
   ) {
-    console.log("Inserting tags...");
     let editorState = props.editorState;
     for (let tag of tags) {
       let currentContent = editorState.getCurrentContent();
@@ -187,7 +185,6 @@ export function HashtagButton(props: {
       className="hashtagButton"
       onClick={() =>
         hashtagRootStore.screenProcess.start((ht) => {
-          console.log(ht);
           props.onTagsCreated?.(ht);
         })
       }

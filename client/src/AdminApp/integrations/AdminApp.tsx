@@ -34,7 +34,6 @@ export function UsersTable() {
     flow(function* () {
       const users = yield axios.get("http://localhost:9099/adminApi/users");
       setUsers(users.data);
-      console.log(users.data);
     })();
   }, []);
 

@@ -49,6 +49,7 @@ export interface IColumn {
   name: string;
   dataIndex: number | undefined;
   renderer: string;
+  formatterPattern: string;
   touchMover?: IObjectTouchMover;
 }
 
@@ -113,7 +114,8 @@ export class Column implements IColumn {
     public owner: IColumnOwner,
     public id: string,
     name: string,
-    public renderer: string
+    public renderer: string,
+    public formatterPattern: string
   ) {
     this.name = name;
   }

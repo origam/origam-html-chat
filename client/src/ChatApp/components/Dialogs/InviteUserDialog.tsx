@@ -30,7 +30,6 @@ class UserToInvite {
 
 class DialogState {
   constructor(public api: ChatHTTPApi) {
-    console.log('Creating new dialog state.')
   }
 
   @observable rawUsers: UserToInvite[] = [];

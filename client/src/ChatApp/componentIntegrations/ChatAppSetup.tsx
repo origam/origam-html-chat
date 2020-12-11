@@ -20,12 +20,10 @@ export function ChatAppSetup() {
       const users = yield axios.get(`${config.apiUrlPrefix}/users`, {
         headers,
       });
-      console.log(users.data);
       setUsers(users.data);
       const chatrooms = yield axios.get(`${config.apiUrlPrefix}/chatrooms`, {
         headers,
       });
-      console.log(chatrooms.data);
       setChatrooms(chatrooms.data);
     })();
   }, []);

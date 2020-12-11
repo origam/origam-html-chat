@@ -218,7 +218,7 @@ export const CategoryTable = observer(function CategoryTable() {
     return reaction(
       () => {
         for (let i = 0; i < columnCount; i++) {
-          console.log(getColumnWidth({ index: i }));
+          getColumnWidth({ index: i })
         }
         return [];
         //return [dataTable?.rows];

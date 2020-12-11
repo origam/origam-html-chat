@@ -71,7 +71,6 @@ export function ChatroomScreenUI(props: { isBlur?: boolean }) {
   useEffect(() => {
     let prevMsgCount: number | undefined;
     return autorun(() => {
-      console.log(prevMsgCount, messages.items.length, messages.items);
       if (
         refMessageBar.current &&
         (prevMsgCount === 0 || prevMsgCount === undefined) &&

@@ -209,14 +209,12 @@ export class ScreenProcess {
           actSelectedCategoryChanged: (ctx, event) => {
             runInAction(() => {
               const choosenCategoryRow = this.dataTableCategories?.selectedRow;
-              console.log(choosenCategoryRow);
               if (
                 choosenCategoryRow &&
                 this.dataTableObjects &&
                 this.dataTableCategories
               ) {
                 const tableConfig = choosenCategoryRow[2];
-                console.log(toJS(tableConfig));
                 this.clearObjectsData();
                 this.dataTableObjects.dataSource.clearFields();
                 this.dataTableObjects.dataSource.fields.push(
@@ -233,7 +231,8 @@ export class ScreenProcess {
                         this.dataTableObjects!,
                         item.name,
                         item.label,
-                        item.type
+                        item.type,
+                        item.formatterPattern
                       )
                   )
                 );

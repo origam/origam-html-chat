@@ -6,6 +6,9 @@ import { useDataTable, useEntityId } from "./DataTableCommon";
 import { observer, Observer } from "mobx-react";
 import { reaction } from "mobx";
 import Highlighter from "react-highlight-words";
+import moment from "moment";
+import { flf2mof } from "../../../../util/convert";
+
 
 function renderSelectionCheckbox(args: {
   key: any;
@@ -60,6 +63,7 @@ function useDataCell(rowIndex: number, columnIndex: number) {
   const row = dataTable?.getRowByDataCellIndex(rowIndex);
   return {
     renderer: column?.renderer,
+    formatterPattern: column?.formatterPattern,
     value:
       column?.dataIndex !== undefined ? row?.[column?.dataIndex] : undefined,
     isLastColumn:
@@ -122,18 +126,27 @@ const DataCell = observer(function DataCell(props: {
   const { spObjects } = rootStore.searchStore;
   const {
     renderer,
+    formatterPattern,
     value,
     isLastColumn,
     isSelectedRow,
     handleClick,
   } = useDataCell(props.rowIndex, props.columnIndex);
+  let txtValue = value;
+  switch (renderer) {
+    case "Date": {
+      const momentDate = moment(txtValue);
+      txtValue = momentDate.format(flf2mof(formatterPattern || ""));
+      break;
+    }
+  }
   let rui = <></>;
   if (spObjects) {
     rui = (
-      <Highlighter searchWords={[spObjects]} textToHighlight={`${value}`} />
+      <Highlighter searchWords={[spObjects]} textToHighlight={`${txtValue}`} />
     );
   } else {
-    rui = <>{value}</>;
+    rui = <>{txtValue}</>;
   }
   rui = (
     <div
