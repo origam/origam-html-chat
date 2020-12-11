@@ -10,6 +10,7 @@ import { observer } from "mobx-react";
 
 import Split from "react-split";
 import { BigSpinner } from "../../../components/BigSpinner";
+import { T } from "util/translation";
 
 export const HashtagDialogContent = observer(function HashtagDialogContent() {
   const rootStore = useRootStore();
@@ -27,7 +28,7 @@ export const HashtagDialogContent = observer(function HashtagDialogContent() {
         >
           <div className="splitPaneH">
             <div className="formSection">
-              <div className="label">Choose a category: </div>
+              <div className="label">{T("Choose a category:", "choose_category")}</div>
             </div>
             <CtxEntityId.Provider value="categories">
               <div className="dataTable">

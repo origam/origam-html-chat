@@ -1,4 +1,5 @@
 import { takeRight } from "lodash";
+import { TR } from "util/translation";
 import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { renderRenameChatroomDialog } from "../components/Dialogs/RenameChatroomDialog";
 import {
@@ -29,7 +30,9 @@ export class RenameChatroomWorkflow {
           }
           if (!renameChatroomDialogResult.chatroomTopic) {
             const infoDialog = this.windowsSvc.push(
-              renderSimpleInformation("You have not entered any name.")
+              renderSimpleInformation(
+                TR("You have not entered any name.", "no_name_given")
+              )
             );
             await infoDialog.interact();
             infoDialog.close();

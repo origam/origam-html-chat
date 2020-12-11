@@ -1,3 +1,4 @@
+import { TR } from "util/translation";
 import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { renderInviteUserDialog } from "../components/Dialogs/InviteUserDialog";
 import {
@@ -20,7 +21,9 @@ export class InviteUserWorkflow {
           if (inviteUserDialogResult.choosenUsers) {
             if (inviteUserDialogResult.choosenUsers.length === 0) {
               const infoDialog = this.windowsSvc.push(
-                renderSimpleInformation("You have not selected any user.")
+                renderSimpleInformation(
+                  TR("You have not selected any user.", "no_user_selected")
+                )
               );
               await infoDialog.interact();
               infoDialog.close();

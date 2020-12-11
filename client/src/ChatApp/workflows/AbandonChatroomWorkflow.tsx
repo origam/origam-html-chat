@@ -10,6 +10,7 @@ import { Messages } from "../model/Messages";
 import { TransportSvc } from "../services/TransportSvc";
 import { renderOutviteUserDialog } from "../components/Dialogs/OutviteUserDialog";
 import { LocalUser } from "../model/LocalUser";
+import { TR } from "util/translation";
 
 export class AbandonChatroomWorkflow {
   constructor(
@@ -29,7 +30,9 @@ export class AbandonChatroomWorkflow {
           if (outviteUserDialogResult.choosenUsers) {
             if (outviteUserDialogResult.choosenUsers.length === 0) {
               const infoDialog = this.windowsSvc.push(
-                renderSimpleInformation("You have not selected any user.")
+                renderSimpleInformation(
+                  TR("You have not selected any user.", "no_user_selected")
+                )
               );
               await infoDialog.interact();
               infoDialog.close();

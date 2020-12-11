@@ -13,6 +13,7 @@ import { ChatAppSetup } from "./ChatApp/componentIntegrations/ChatAppSetup";
 import "./index.scss";
 import "./spinner.scss";
 import * as serviceWorker from "./serviceWorker";
+import { translationsInit } from "util/translation";
 
 function Routed() {
   return (
@@ -32,13 +33,24 @@ function Routed() {
   );
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Routed />
-    {/*<App3 />*/}
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+async function main() {
+  try {
+    await translationsInit();
+  } catch (e) {
+    console.error("Could not initialize translations.");
+    console.error(e);
+  }
+
+  ReactDOM.render(
+    <React.StrictMode>
+      <Routed />
+      {/*<App3 />*/}
+    </React.StrictMode>,
+    document.getElementById("root")
+  );
+}
+
+main();
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
