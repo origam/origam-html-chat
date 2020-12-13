@@ -3,6 +3,7 @@ import { action, computed, flow, observable } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useContext, useEffect, useState } from "react";
 import { AutoSizer, List } from "react-virtualized";
+import { T, TR } from "util/translation";
 import { CtxAPI, CtxWindowsSvc } from "../../componentIntegrations/Contexts";
 import { getAvatarUrl } from "../../helpers/avatar";
 import { ChatHTTPApi } from "../../services/ChatHTTPApi";
@@ -22,8 +23,7 @@ export interface IInteractor {
 }
 
 class DialogState {
-  constructor(public api: ChatHTTPApi, public windowsSvc: WindowsSvc) {
-  }
+  constructor(public api: ChatHTTPApi, public windowsSvc: WindowsSvc) {}
 
   @observable chatroomTopic: string = "";
 
@@ -45,7 +45,10 @@ export function RenameChatroomDialog(props: {
       footer={
         <ModalFooter align="center">
           <Button onClick={() => props.onSubmit?.(state.chatroomTopic)}>
-            Ok
+            {T("Ok", "Ok")}
+          </Button>
+          <Button onClick={() => props.onCancel?.(state.chatroomTopic)}>
+            {T("Cancel", "Cancel")}
           </Button>
         </ModalFooter>
       }
@@ -53,14 +56,19 @@ export function RenameChatroomDialog(props: {
       <ModalCloseButton onClick={props.onCancel} />
       <div className="renameChatroomModalContent">
         <div className="chooseUserToInviteModalContent__header">
-          <p>Enter new topic for this chatroom:</p>
+          <p>
+            {T(
+              "Enter new topic for this chatroom:",
+              "enter_chatroom_new_topic"
+            )}
+          </p>
           <Observer>
             {() => (
               <input
                 value={state.chatroomTopic}
                 onChange={state.handleChatroomTopicChange}
                 className="chatroomTopicInput"
-                placeholder="Set chatroom topic"
+                placeholder={TR("New name", "new_name")}
               />
             )}
           </Observer>

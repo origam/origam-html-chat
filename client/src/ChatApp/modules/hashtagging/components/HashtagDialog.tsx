@@ -43,7 +43,7 @@ export const HashtagDialogContent = observer(function HashtagDialogContent() {
           </div>
           <div className="splitPaneH">
             <div className="formSection">
-              <div className="label">Search object: </div>
+              <div className="label">{T("Search object:", "search_object")}</div>
               <ObjectSearch />
             </div>
             <CtxEntityId.Provider value="objects">
@@ -96,7 +96,7 @@ export const ConfirmSelectionBtn = observer(function ConfirmSelectionBtn() {
   if (!selRowCount) return null;
   return (
     <button className="button__isPrimary">
-      Ok, create links ({selRowCount})
+      {T("Ok, create links", "ok_create_links")}&nbsp;<span>({selRowCount})</span>
     </button>
   );
 });
@@ -111,7 +111,7 @@ export const ClearSelectionBtn = observer(function ConfirmSelectionBtn() {
       className="button__isPrimary"
       onClick={() => dtObjects?.clearSelectedRows()}
     >
-      Clear selected items
+      {T("Clear selected items", "clear_selected_items")}
     </button>
   );
 });

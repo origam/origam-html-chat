@@ -9,6 +9,7 @@ import {
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
 import qs from "querystring";
+import { T } from "util/translation";
 
 export class CreateChatroomWorkflow {
   constructor(
@@ -28,7 +29,12 @@ export class CreateChatroomWorkflow {
           const createChatroomDialogResult = await createChatroomDialog.interact();
           if (!createChatroomDialogResult.chatroomTopic) {
             const infoDialog = this.windowsSvc.push(
-              renderSimpleInformation("You have not entered any topic.")
+              renderSimpleInformation(
+                T(
+                  "You have not entered any topic.",
+                  "you_have_not_entered_any_topic"
+                )
+              )
             );
             await infoDialog.interact();
             infoDialog.close();
@@ -36,7 +42,7 @@ export class CreateChatroomWorkflow {
           }
           if (createChatroomDialogResult.choosenUsers) {
             const progressDialog = this.windowsSvc.push(
-              renderSimpleProgress("Creating chatroom...")
+              renderSimpleProgress(T("Working...", "working..."))
             );
             try {
               const createChatroomResult = await this.api.createChatroom(

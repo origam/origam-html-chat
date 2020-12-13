@@ -6,6 +6,7 @@ import {
 } from "../Windows/Windows";
 import { Button } from "../Buttons";
 import { IModalHandle } from "../Windows/WindowsSvc";
+import { T } from "util/translation";
 
 export function renderErrorDialog(exception: any) {
   return (modal: IModalHandle<any>) => (
@@ -17,7 +18,7 @@ export function renderErrorDialog(exception: any) {
       }
     >
       <ModalCloseButton onClick={() => modal.resolveInteract()} />
-      <div>There has been an error:</div>
+      <div>{T("There has been an error", "error_occured")}:</div>
       <textarea
         className="errorDialog__textarea"
         value={exception?.message ?? "" + exception}

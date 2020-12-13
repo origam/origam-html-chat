@@ -3,6 +3,7 @@ import cx from "classnames";
 import { Button } from "../Buttons";
 import { IModalHandle } from "./WindowsSvc";
 import { BigSpinner } from "../BigSpinner";
+import { T } from "util/translation";
 
 export function Overlay(props: PropsWithChildren<{}>) {
   return <div className="appOverlay">{props.children}</div>;
@@ -59,9 +60,11 @@ export function SimpleMessage(props: {
   return (
     <DefaultModal
       footer={
-        !props.noOk ? <ModalFooter align="center">
-           <Button onClick={props.onClose}>Ok</Button>
-        </ModalFooter> : null
+        !props.noOk ? (
+          <ModalFooter align="center">
+            <Button onClick={props.onClose}>{T("Ok", "Ok")}</Button>
+          </ModalFooter>
+        ) : null
       }
     >
       {!props.noClose && <ModalCloseButton onClick={props.onClose} />}
@@ -80,7 +83,7 @@ export function SimpleProgress(props: {
       footer={
         props.onCancel ? (
           <ModalFooter align="center">
-            <Button onClick={props.onCancel}>Cancel</Button>
+            <Button onClick={props.onCancel}>{T("Cancel", "Cancel")}</Button>
           </ModalFooter>
         ) : null
       }
@@ -115,7 +118,7 @@ export function SimpleQuestion(props: {
               props.onClose?.();
             }}
           >
-            Cancel
+            {T("Cancel", "Cancel")}
           </Button>
         </ModalFooter>
       }

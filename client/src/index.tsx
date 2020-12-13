@@ -9,7 +9,6 @@ import {
 } from "react-router-dom";
 import "./admin.scss";
 import { ChatApp } from "./ChatApp/componentIntegrations/ChatApp";
-import { ChatAppSetup } from "./ChatApp/componentIntegrations/ChatAppSetup";
 import "./index.scss";
 import "./spinner.scss";
 import * as serviceWorker from "./serviceWorker";
@@ -24,9 +23,6 @@ function Routed() {
         </Route>
         <Route path="/chatroom">
           <ChatApp />
-        </Route>
-        <Route path="/setup">
-          <ChatAppSetup />
         </Route>
       </Switch>
     </Router>

@@ -3,6 +3,7 @@ import { action, computed, flow, observable } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useContext, useEffect, useState } from "react";
 import { AutoSizer, List } from "react-virtualized";
+import { T, TR } from "util/translation";
 import { CtxAPI } from "../../componentIntegrations/Contexts";
 import { getAvatarUrl } from "../../helpers/avatar";
 import { ChatHTTPApi } from "../../services/ChatHTTPApi";
@@ -10,8 +11,8 @@ import { Button } from "../Buttons";
 import { TagInput, TagInputItem, TagInputItemClose } from "../TagInput";
 import {
   DefaultModal,
-
-  ModalCloseButton, ModalFooter
+  ModalCloseButton,
+  ModalFooter,
 } from "../Windows/Windows";
 import { IModalHandle } from "../Windows/WindowsSvc";
 
@@ -29,8 +30,7 @@ class UserToInvite {
 }
 
 class DialogState {
-  constructor(public api: ChatHTTPApi) {
-  }
+  constructor(public api: ChatHTTPApi) {}
 
   @observable rawUsers: UserToInvite[] = [];
   @observable choosenUsers: UserToInvite[] = [];
@@ -117,23 +117,29 @@ export function InviteUserDialog(props: {
       footer={
         <ModalFooter align="center">
           <Button onClick={() => props.onSubmit?.(state.choosenUsers)}>
-            Ok
+            {T("Ok", "Ok")}
           </Button>
-          <Button onClick={props.onCancel}>Cancel</Button>
+          <Button onClick={props.onCancel}>{T("Cancel", "Cancel")}</Button>
         </ModalFooter>
       }
     >
       <ModalCloseButton onClick={props.onCancel} />
       <div className="chooseUserToInviteModalContent">
         <div className="chooseUserToInviteModalContent__header">
-          <p>Select attendees to invite to this chatroom.</p>
+          <p>
+            {T(
+              "Select attendees to invite to this chatroom.",
+              "select_users_to_invite"
+            )}
+            :
+          </p>
           <Observer>
             {() => (
               <input
                 value={state.searchPhrase}
                 onChange={state.handleSearchInputChange}
                 className="searchUserInput"
-                placeholder="Search a user to invite"
+                placeholder={TR("Name to search", "name_to_search")}
               />
             )}
           </Observer>

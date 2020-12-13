@@ -82,5 +82,5 @@ export function TR(defaultContent: any, translKey: string, ...p: any[]) {
       result = `T> ${result} <T`;
     }
   }
-  return <>{result}</>;
+  return result;
 }

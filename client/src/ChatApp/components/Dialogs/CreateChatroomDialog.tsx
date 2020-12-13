@@ -3,6 +3,7 @@ import { action, computed, flow, observable } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useContext, useEffect, useState } from "react";
 import { AutoSizer, List } from "react-virtualized";
+import { T, TR } from "util/translation";
 import { CtxAPI, CtxWindowsSvc } from "../../componentIntegrations/Contexts";
 import { getAvatarUrl } from "../../helpers/avatar";
 import { ChatHTTPApi } from "../../services/ChatHTTPApi";
@@ -31,8 +32,7 @@ class UserToInvite {
 }
 
 class DialogState {
-  constructor(public api: ChatHTTPApi, public windowsSvc: WindowsSvc) {
-  }
+  constructor(public api: ChatHTTPApi, public windowsSvc: WindowsSvc) {}
 
   @observable rawUsers: UserToInvite[] = [];
   @observable choosenUsers: UserToInvite[] = [];
@@ -134,34 +134,39 @@ export function CreateChatroomDialog(props: {
               props.onSubmit?.(state.choosenUsers, state.chatroomTopic)
             }
           >
-            Ok
+            {T("Ok", "Ok")}
           </Button>
         </ModalFooter>
       }
     >
       <div className="chooseUserToInviteModalContent">
         <div className="chooseUserToInviteModalContent__header">
-          <p>Enter a topic for the new chatroom:</p>
+          <p>
+            {T(
+              "Enter a topic for the new chatroom",
+              "enter_new_chatroom_topic"
+            )}:
+          </p>
           <Observer>
             {() => (
               <input
                 value={state.chatroomTopic}
                 onChange={state.handleChatroomTopicChange}
                 className="chatroomTopicInput"
-                placeholder="Set chatroom topic"
+                placeholder={TR("Chatroom topic", "chatroom_topic")}
               />
             )}
           </Observer>
         </div>
         <div className="chooseUserToInviteModalContent__header">
-          <p>Invite users to this chatroom</p>
+          <p>{T("Invite users to this chatroom", "invite_users_to_chatroom")}</p>
           <Observer>
             {() => (
               <input
                 value={state.searchPhrase}
                 onChange={state.handleSearchInputChange}
                 className="searchUserInput"
-                placeholder="Search a user to invite"
+                placeholder={TR("Name", "name")}
               />
             )}
           </Observer>

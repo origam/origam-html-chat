@@ -10,7 +10,7 @@ import { Messages } from "../model/Messages";
 import { TransportSvc } from "../services/TransportSvc";
 import { renderOutviteUserDialog } from "../components/Dialogs/OutviteUserDialog";
 import { LocalUser } from "../model/LocalUser";
-import { TR } from "util/translation";
+import { T, TR } from "util/translation";
 
 export class AbandonChatroomWorkflow {
   constructor(
@@ -39,7 +39,7 @@ export class AbandonChatroomWorkflow {
             } else {
               // TODO: call api to invite the user.
               const progressDialog = this.windowsSvc.push(
-                renderSimpleProgress("Working...")
+                renderSimpleProgress(TR("Working...", "working..."))
               );
               const userIds = outviteUserDialogResult.choosenUsers.map(
                 (user) => ({
@@ -62,7 +62,7 @@ export class AbandonChatroomWorkflow {
                 this.terminateChatroom();
                 this.windowsSvc.push(
                   renderSimpleInformation(
-                    "You have abandoned the chatroom.",
+                    T("You have abandoned the chatroom.", "you_have_abandoned_chatroom"),
                     true,
                     true
                   )

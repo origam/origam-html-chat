@@ -1,5 +1,5 @@
 import { takeRight } from "lodash";
-import { TR } from "util/translation";
+import { T, TR } from "util/translation";
 import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { renderRenameChatroomDialog } from "../components/Dialogs/RenameChatroomDialog";
 import {
@@ -39,7 +39,7 @@ export class RenameChatroomWorkflow {
             continue;
           }
           const progressDialog = this.windowsSvc.push(
-            renderSimpleProgress("Working...")
+            renderSimpleProgress(T("Working...", "working..."))
           );
           try {
             await this.api.patchChatroomInfo(

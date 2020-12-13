@@ -8,6 +8,7 @@ import { ChatHTTPApi } from "./ChatHTTPApi";
 import { Chatroom } from "../model/Chatroom";
 import { Participants, IParticipantStatus } from "../model/Participants";
 import { LocalUser } from "../model/LocalUser";
+import { TR } from "util/translation";
 
 export class TransportSvc {
   constructor(
@@ -74,8 +75,8 @@ export class TransportSvc {
 
     this.chatroom.topic = polledData.info.topic;
     document.title = polledData.info.topic
-      ? `Chat: ${polledData.info.topic}`
-      : "Chat (no topic)";
+      ? `${TR("Chat", "Chat")}: ${polledData.info.topic}`
+      : TR("Chat (no topic)", "Chat_no_topic");
       this.chatroom.categoryId = polledData.info.categoryName;
       this.chatroom.referenceId = polledData.info.referenceId;
 

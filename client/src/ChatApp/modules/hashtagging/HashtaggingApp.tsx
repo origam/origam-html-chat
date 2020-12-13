@@ -23,6 +23,7 @@ import {
 } from "../../components/Windows/Windows";
 import { Button } from "../../components/Buttons";
 import { observer, Observer } from "mobx-react";
+import { T, TR } from "util/translation";
 faker.seed(987);
 
 export function capitalize(sin: string) {
@@ -62,7 +63,9 @@ export function populateHashtaggingStore(rootStore: HashtagRootStore) {
 
   function makeCategoriesTable() {
     const dataTable = new DataTable(new TableCursor(), "categories", 0);
-    const columns = [new Column(dataTable, "hashtagLabel", "Name", "text", "")];
+    const columns = [
+      new Column(dataTable, "hashtagLabel", TR("Name", "name"), "text", ""),
+    ];
 
     columns[0].touchMover = new ObjectTouchMover(
       new Column2TouchMoveControlee(columns[0])
@@ -103,10 +106,12 @@ const Dialog = observer(function Dialog() {
         <ModalFooter align="center">
           {selectedCount > 0 && (
             <Button onClick={root.screenProcess.handleOkClick}>
-              Create tags ({selectedCount})
+              {T("Create tags", "create_tags")} ({selectedCount})
             </Button>
           )}
-          <Button onClick={root.screenProcess.handleCancelClick}>Cancel</Button>
+          <Button onClick={root.screenProcess.handleCancelClick}>
+            {T("Cancel", "Cancel")}
+          </Button>
         </ModalFooter>
       }
     >

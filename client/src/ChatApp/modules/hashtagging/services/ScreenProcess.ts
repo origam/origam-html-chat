@@ -23,6 +23,7 @@ import {
 import { ObjectTouchMover } from "../util/ObjectTouchMover";
 import { renderErrorDialog } from "../../../components/Dialogs/ErrorDialog";
 import { renderSimpleProgress } from "../../../components/Windows/Windows";
+import { T } from "util/translation";
 
 /*
 inspect({
@@ -318,7 +319,7 @@ export class ScreenProcess {
           },
           svcProgressDialog: (ctx, event) => (callback, onReceive) => {
             const hModal = this.windowsSvc.push(
-              renderSimpleProgress("Working...")
+              renderSimpleProgress(T("Working...", "working..."))
             );
             return () => hModal.close();
           },
