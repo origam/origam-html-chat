@@ -145,7 +145,7 @@ body,
         color: #cacaca;
       }
       &:hover {
-        background: #E9E8F0;
+        background: #e9e8f0;
         border-radius: 2px;
 
         &.messageThreadHeader__editIcon {
@@ -621,8 +621,9 @@ body,
 }
 
 .chooseUserToInviteModalContent {
-  height: 500px;
-  width: 600px;
+  height: 50vh;
+  min-height: 300px;
+  min-width: 640px;
   display: flex;
   flex-direction: column;
 
@@ -659,6 +660,7 @@ body,
 .renameChatroomModalContent {
   @extend .chooseUserToInviteModalContent;
   height: unset;
+  min-height: unset;
 }
 
 .userList {
