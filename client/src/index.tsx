@@ -13,6 +13,9 @@ import "./index.scss";
 import "./spinner.scss";
 import * as serviceWorker from "./serviceWorker";
 import { translationsInit } from "util/translation";
+import moment from "moment";
+import "moment/min/locales";
+import { getLocaleFromCookie } from "util/cookies";
 
 function Routed() {
   return (
@@ -30,6 +33,8 @@ function Routed() {
 }
 
 async function main() {
+  const locale = getLocaleFromCookie();
+  moment.locale(locale);
   try {
     await translationsInit();
   } catch (e) {
