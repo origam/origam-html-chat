@@ -74,8 +74,8 @@ export function populateHashtaggingStore(rootStore: HashtagRootStore) {
     dataTable.columns.push(...columns);
     const dataSource = new DataSource("categories");
     const dataSourceFields = [
-      new DataSourceField("hashtagName", 0),
-      new DataSourceField("hashtagLabel", 1),
+      new DataSourceField("deepLinkName", 0),
+      new DataSourceField("deepLinkLabel", 1),
       new DataSourceField("objectComboboxMetadata", 2),
     ];
     dataSource.fields.push(...dataSourceFields);

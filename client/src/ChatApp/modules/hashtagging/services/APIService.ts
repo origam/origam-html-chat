@@ -118,8 +118,8 @@ export class APIService {
     }
     return categories.map((item: any) => {
       return [
-        item.hashtagName,
-        item.hashtagLabel,
+        item.deepLinkName,
+        item.deepLinkLabel,
         transformCombo(xmlJs.xml2js(item.objectComboboxMetadata)),
       ];
     });

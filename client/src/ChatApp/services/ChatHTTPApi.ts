@@ -256,7 +256,7 @@ export class ChatHTTPApi {
 
   async getHashtagAvailableCategories() {
     return (
-      await axiosLib.get(`../internalApi/HashTag/categories`, {
+      await axiosLib.get(`../internalApi/DeepLink/categories`, {
         headers: this.headers,
       })
     ).data;
@@ -273,7 +273,7 @@ export class ChatHTTPApi {
     const _disposer = chCancel?.subs(() => source.cancel());
     try {
       return (
-        await axiosLib.get(`../internalApi/HashTag/${categoryId}/objects`, {
+        await axiosLib.get(`../internalApi/DeepLink/${categoryId}/objects`, {
           params: { searchPhrase, limit: pageSize, pageNumber: pageNumber },
           headers: this.headers,
           cancelToken: source.token,
@@ -292,7 +292,7 @@ export class ChatHTTPApi {
   async getHashtagLabels(categoryId: string, labelIds: string[]) {
     return (
       await axiosLib.post(
-        `../internalApi/HashTag/${categoryId}/labels`,
+        `../internalApi/DeepLink/${categoryId}/labels`,
         { LabelIds: labelIds },
         {
           headers: this.headers,
