@@ -64,7 +64,7 @@ export function populateHashtaggingStore(rootStore: HashtagRootStore) {
   function makeCategoriesTable() {
     const dataTable = new DataTable(new TableCursor(), "categories", 0);
     const columns = [
-      new Column(dataTable, "hashtagLabel", TR("Name", "name"), "text", ""),
+      new Column(dataTable, "deepLinkLabel", TR("Name", "name"), "text", ""),
     ];
 
     columns[0].touchMover = new ObjectTouchMover(
