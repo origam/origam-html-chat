@@ -55,6 +55,7 @@ export function ChatFeedUI() {
                   key={messageItem.id}
                   avatar={
                     <img
+                      alt="avatar"
                       className="avatar__picture"
                       src={getAvatarUrl(messageItem.authorAvatarUrl)}
                     />
@@ -90,11 +91,7 @@ export function ChatFeedUI() {
           return clusterNodes;
         }
 
-        return (
-          <>
-            {makeMessageClusters()}
-          </>
-        );
+        return <>{makeMessageClusters()}</>;
       }}
     </Observer>
   );

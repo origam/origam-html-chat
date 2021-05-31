@@ -19,11 +19,9 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 
 import { renderCreateChatroomDialog } from "../components/Dialogs/CreateChatroomDialog";
 import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
-import { renderInviteUserDialog } from "../components/Dialogs/InviteUserDialog";
 import {
   renderSimpleInformation,
   renderSimpleProgress,
-  renderSimpleQuestion,
 } from "../components/Windows/Windows";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";
@@ -45,7 +43,8 @@ export class CreateChatroomWorkflow {
     try {
       while (true) {
         try {
-          const createChatroomDialogResult = await createChatroomDialog.interact();
+          const createChatroomDialogResult =
+            await createChatroomDialog.interact();
           if (!createChatroomDialogResult.chatroomTopic) {
             const infoDialog = this.windowsSvc.push(
               renderSimpleInformation(
@@ -79,7 +78,6 @@ export class CreateChatroomWorkflow {
             } finally {
               progressDialog.close();
             }
-            return;
           }
         } catch (e) {
           console.error(e);

@@ -20,8 +20,6 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 import { delay } from "../../util/delay";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
-import React from "react";
-import axios from "axios";
 import { Messages } from "../model/Messages";
 import { ChatHTTPApi } from "./ChatHTTPApi";
 import { Chatroom } from "../model/Chatroom";

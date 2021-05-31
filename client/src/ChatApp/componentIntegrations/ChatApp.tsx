@@ -43,7 +43,6 @@ import {
 import { useLocation, useHistory } from "react-router";
 import { AbandonChatroomWorkflow } from "../workflows/AbandonChatroomWorkflow";
 import { MentionUserWorkflow } from "../workflows/MentionUserWorkflow";
-import { config } from "../config";
 import { CreateChatroomWorkflow } from "../workflows/CreateChatroomWorkflow";
 import { RenameChatroomWorkflow } from "../workflows/RenameChatroomWorkflow";
 import { HashtagRootStore } from "../modules/hashtagging/stores/RootStore";
@@ -139,7 +138,13 @@ export function ChatApp() {
     } else {
       services.createChatroomWorkflow.start(references);
     }
-  }, [!!chatroomId]);
+  }, [
+    chatroomId,
+    references,
+    services.api,
+    services.createChatroomWorkflow,
+    services.transportSvc,
+  ]);
 
   let uiTree = (
     <Observer>

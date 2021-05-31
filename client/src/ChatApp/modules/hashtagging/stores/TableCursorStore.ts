@@ -20,7 +20,6 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 import { action, observable } from "mobx";
 
 export class TableCursor {
-  constructor() {}
 
   @observable selectedRowId?: string = "";
 

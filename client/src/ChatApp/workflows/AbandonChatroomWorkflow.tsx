@@ -17,19 +17,17 @@ You should have received a copy of the GNU General Public License
 along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { WindowsSvc } from "../components/Windows/WindowsSvc";
-import { ChatHTTPApi } from "../services/ChatHTTPApi";
+import { T, TR } from "util/translation";
+import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
+import { renderOutviteUserDialog } from "../components/Dialogs/OutviteUserDialog";
 import {
-  renderSimpleQuestion,
   renderSimpleInformation,
   renderSimpleProgress,
 } from "../components/Windows/Windows";
-import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
-import { Messages } from "../model/Messages";
-import { TransportSvc } from "../services/TransportSvc";
-import { renderOutviteUserDialog } from "../components/Dialogs/OutviteUserDialog";
+import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { LocalUser } from "../model/LocalUser";
-import { T, TR } from "util/translation";
+import { ChatHTTPApi } from "../services/ChatHTTPApi";
+import { TransportSvc } from "../services/TransportSvc";
 
 export class AbandonChatroomWorkflow {
   constructor(
@@ -81,7 +79,10 @@ export class AbandonChatroomWorkflow {
                 this.terminateChatroom();
                 this.windowsSvc.push(
                   renderSimpleInformation(
-                    T("You have abandoned the chatroom.", "you_have_abandoned_chatroom"),
+                    T(
+                      "You have abandoned the chatroom.",
+                      "you_have_abandoned_chatroom"
+                    ),
                     true,
                     true
                   )

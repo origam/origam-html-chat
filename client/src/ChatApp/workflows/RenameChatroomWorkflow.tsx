@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { takeRight } from "lodash";
 import { T, TR } from "util/translation";
 import { renderErrorDialog } from "../components/Dialogs/ErrorDialog";
 import { renderRenameChatroomDialog } from "../components/Dialogs/RenameChatroomDialog";

@@ -93,26 +93,26 @@ function About() {
 class AdminApi {
   urlPrefix = "http://localhost:9099/adminApi";
 
-  *getUsers() {
+  *getUsers(): any {
     const response = yield axios.get(`${this.urlPrefix}/users`);
     return response.data;
   }
 
-  *getUser(id: string) {
+  *getUser(id: string): any {
     const response = yield axios.get(`${this.urlPrefix}/users/${id}`);
     return response.data;
   }
 
-  *addUser(user: IUser) {
+  *addUser(user: IUser): any {
     const response = yield axios.post(`${this.urlPrefix}/users`);
   }
 
-  *getChatrooms() {
+  *getChatrooms(): any {
     const response = yield axios.get(`${this.urlPrefix}/chatrooms`);
     return response.data;
   }
 
-  *getChatroomsForUserToInvite(userId: string) {
+  *getChatroomsForUserToInvite(userId: string): any  {
     const response = yield axios.get(`${this.urlPrefix}/chatroomsToInvite?userId=${userId}`);
     return response.data;
   }
@@ -231,7 +231,7 @@ function Chatrooms() {
 
 function UserDetail() {
   const adminApi = useContext(CtxAdminApi);
-  const { id } = useParams();
+  const { id } = useParams<any>();
 
   const [user, setUser] = useState<IUser | undefined>();
 

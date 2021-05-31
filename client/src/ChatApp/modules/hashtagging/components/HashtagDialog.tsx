@@ -18,9 +18,6 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { useEffect } from "react";
-import SplitPane, { Pane } from "react-split-pane";
-import { AutoSizer, MultiGrid } from "react-virtualized";
-import cx from "classnames";
 import { CategoryTable } from "./CategoryTable";
 import { ObjectTable } from "./ObjectTable";
 import { CtxEntityId } from "./DataTableCommon";
@@ -35,7 +32,7 @@ export const HashtagDialogContent = observer(function HashtagDialogContent() {
   const rootStore = useRootStore();
   useEffect(() => {
     rootStore.screenProcess.handleUIInitialized();
-  }, []);
+  }, [rootStore.screenProcess]);
   return (
     <div className="hashtagDialogContent">
       <div className="searchPanes">

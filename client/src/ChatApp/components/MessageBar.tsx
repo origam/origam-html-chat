@@ -46,8 +46,11 @@ export function MessageBarRaw(
         //console.log(refContentContainer.current!.scrollHeight, refContentContainer.current!.clientHeight);
         const elm = refContentContainer.current!;
         elm.scrollTop = elm.scrollHeight - elm.clientHeight;
+        // TODO: Examine following disabled rules whether they actually do not inform about a bug.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         isUserScroll = false;
         clearTimeout(hIsUserScrollTimeout);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         hIsUserScrollTimeout = setTimeout(() => (isUserScroll = true), 200);
       }
     },
@@ -71,7 +74,7 @@ export function MessageBarRaw(
       scrollToEnd();
       props.onUserScrolledToTail?.(true);
     },
-    [scrollToEnd, props.onUserScrolledToTail]
+    [scrollToEnd, props]
   );
 
   const checkScrollToEnd = useMemo(
@@ -91,7 +94,7 @@ export function MessageBarRaw(
         }
       }
     },
-    [props.isTrackingLatestMessages]
+    [props.isTrackingLatestMessages, isScrollToEnd, isUserScroll, scrollToEnd]
   );
 
   useEffect(() => {
@@ -99,7 +102,7 @@ export function MessageBarRaw(
       checkScrollToEnd();
     }, 100);
     return () => clearInterval(hTimer);
-  }, [props.isTrackingLatestMessages]);
+  }, [props.isTrackingLatestMessages, checkScrollToEnd]);
 
   const handleMessageBarScroll = useMemo(
     () => (event: any) => {
@@ -114,7 +117,7 @@ export function MessageBarRaw(
         }
       }
     },
-    []
+    [isUserScroll, props]
   );
 
   return (
