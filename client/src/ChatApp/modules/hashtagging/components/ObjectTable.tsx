@@ -17,17 +17,16 @@ You should have received a copy of the GNU General Public License
 along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import cx from "classnames";
 import { AutoSizer, MultiGrid } from "react-virtualized";
 import { useRootStore } from "./Common";
-import { useDataTable, useEntityId } from "./DataTableCommon";
+import { useDataTable } from "./DataTableCommon";
 import { observer, Observer } from "mobx-react";
 import { reaction } from "mobx";
 import Highlighter from "react-highlight-words";
 import moment from "moment";
 import { flf2mof } from "../../../../util/convert";
-
 
 function renderSelectionCheckbox(args: {
   key: any;
@@ -241,10 +240,13 @@ export const ObjectTable = observer(function CategoryTable() {
   const dataTable = useDataTable();
   const refGrid = useRef<any>();
   const columnCount = (dataTable?.columnCount || 0) + 1;
-  const getColumnWidth = (args: { index: number }) =>
-    (args.index === 0
-      ? 25
-      : dataTable?.getColumnByDataCellIndex(args.index - 1)?.width) || 250;
+  const getColumnWidth = useCallback(
+    (args: { index: number }) =>
+      (args.index === 0
+        ? 25
+        : dataTable?.getColumnByDataCellIndex(args.index - 1)?.width) || 250,
+    [dataTable]
+  );
 
   const rowCount = (dataTable?.rowCount || 0) + 1;
 
@@ -261,7 +263,7 @@ export const ObjectTable = observer(function CategoryTable() {
       },
       { scheduler: requestAnimationFrame }
     );
-  }, [getColumnWidth]);
+  }, [getColumnWidth, columnCount]);
   const ROW_HEIGHT = 25;
   function handleScroll(event: any) {
     if (

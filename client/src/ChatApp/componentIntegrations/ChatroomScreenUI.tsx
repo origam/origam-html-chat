@@ -20,7 +20,6 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 import { autorun } from "mobx";
 import { Observer } from "mobx-react";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { usePrev } from "../../util/hooks";
 import { buildReferenceLink } from "../../util/links";
 import {
   ChatParticipantMini,
@@ -70,7 +69,7 @@ export function ChatroomHashtag(props: {
           setLinkText(`${props.categoryId} / ${result[props.referenceId!]}`);
         });
     }
-  }, [props.categoryId, props.referenceId]);
+  }, [props.categoryId, props.referenceId, api]);
   if (!props.categoryId || !props.referenceId) return null;
   return (
     <div className="chatroomHashtag">
@@ -104,7 +103,7 @@ export function ChatroomScreenUI(props: { isBlur?: boolean }) {
       }
       prevMsgCount = messages.items.length;
     });
-  }, []);
+  }, [messages.items.length]);
 
   function handleScrolledToTail(isTailed: boolean) {
     setFollowingTail(isTailed);
@@ -115,9 +114,6 @@ export function ChatroomScreenUI(props: { isBlur?: boolean }) {
   const inviteUserWorkflow = useContext(CtxInviteUserWorkflow);
   const abandonChatroomWorkflow = useContext(CtxAbandonChatroomWorkflow);
 
-  function makeParticipantCountText(cnt: number) {
-    return <>Participants: {cnt}</>;
-  }
 
   function makeParticipantStatus(statusIn: IParticipantStatus) {
     switch (statusIn) {
@@ -135,9 +131,6 @@ export function ChatroomScreenUI(props: { isBlur?: boolean }) {
   return (
     <Observer>
       {() => {
-        const participantsCountText = makeParticipantCountText(
-          participants.itemCount
-        );
         const participantItems = participants.items;
         const chatroomName = chatroom.topic;
         const chatroomReferenceId = chatroom.referenceId;

@@ -19,7 +19,7 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 
 import React from "react";
 import "./index.scss";
-import { CtxHashtagRootStore, useRootStore } from "./components/Common";
+import { useRootStore } from "./components/Common";
 import { HashtagDialogContent } from "./components/HashtagDialog";
 import {
   Column,
@@ -41,7 +41,7 @@ import {
   ModalFooter,
 } from "../../components/Windows/Windows";
 import { Button } from "../../components/Buttons";
-import { observer, Observer } from "mobx-react";
+import { observer } from "mobx-react";
 import { T, TR } from "util/translation";
 faker.seed(987);
 

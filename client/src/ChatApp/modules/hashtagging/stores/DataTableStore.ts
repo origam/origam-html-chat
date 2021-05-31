@@ -21,7 +21,6 @@ import { action, computed, observable } from "mobx";
 import {
   IObjectTouchMover,
   ITouchMoveControlee,
-  ObjectTouchMover,
 } from "../util/ObjectTouchMover";
 import { HashtagRootStore } from "./RootStore";
 import { TableCursor } from "./TableCursorStore";

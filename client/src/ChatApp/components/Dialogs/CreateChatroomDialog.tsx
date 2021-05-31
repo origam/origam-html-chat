@@ -30,7 +30,6 @@ import { Button } from "../Buttons";
 import { TagInput, TagInputItem, TagInputItemClose } from "../TagInput";
 import {
   DefaultModal,
-  ModalCloseButton,
   ModalFooter,
 } from "../Windows/Windows";
 import { IModalHandle, WindowsSvc } from "../Windows/WindowsSvc";
@@ -140,7 +139,7 @@ export function CreateChatroomDialog(props: {
   const [state] = useState(() => new DialogState(api, windowsSvc));
   useEffect(() => {
     state.setReferences(props.references);
-  }, [props.references]);
+  }, [props.references, state]);
   useEffect(() => {
     state.loadUsersToChooseImm();
   }, [state]);

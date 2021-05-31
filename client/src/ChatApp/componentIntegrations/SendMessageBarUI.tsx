@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Draft, { convertToRaw, EditorState } from "draft-js";
-import { clearEditorContent } from "draftjs-utils";
+import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import { clearEditorContent } from "draftjs-utils";
 import { flow } from "mobx";
 import { Observer } from "mobx-react";
 import moment from "moment";
@@ -63,35 +63,14 @@ export function SendMessageBarUI(props: {
   const localUser = useContext(CtxLocalUser);
   const messages = useContext(CtxMessages);
 
-  const [isWorking, setIsWorking] = useState(false);
   const [editorState, setEditorStateRaw] = useState<any>(() =>
     EditorState.createEmpty()
   );
-  const [initialEditorState] = useState(() => editorState);
 
   const setEditorState = (state: any) => {
     // console.log(convertToRaw(state.getCurrentContent()));
     setEditorStateRaw(state);
   };
-  const handleEditorReturn = useMemo(
-    () => (event: any) => {
-      // console.log("return");
-      if (!event.ctrlKey && !event.shiftKey) {
-        sendMessage();
-        return "handled";
-      } else {
-        return "not-handled";
-      }
-    },
-    [editorState]
-  );
-
-  const handleSendMessageClick = useMemo(
-    () => (event: any) => {
-      sendMessage();
-    },
-    [editorState]
-  );
 
   const sendMessage = useMemo(
     () => () => {
@@ -116,16 +95,42 @@ export function SendMessageBarUI(props: {
         flow(function* () {
           try {
             setEditorState(clearEditorContent(editorState));
-            setIsWorking(true);
             yield api.sendMessage({ id, mentions, text: htmlState });
           } finally {
-            setIsWorking(false);
           }
           //yield* api.sendMessage(chatroomSettings.chatroomId ?? "", "", { id: id, text });
         })();
       }
     },
-    [editorState]
+    [
+      api,
+      editorState,
+      localUser.avatarUrl,
+      localUser.id,
+      localUser.name,
+      messages,
+      props,
+    ]
+  );
+
+  const handleEditorReturn = useMemo(
+    () => (event: any) => {
+      // console.log("return");
+      if (!event.ctrlKey && !event.shiftKey) {
+        sendMessage();
+        return "handled";
+      } else {
+        return "not-handled";
+      }
+    },
+    [sendMessage]
+  );
+
+  const handleSendMessageClick = useMemo(
+    () => (event: any) => {
+      sendMessage();
+    },
+    [sendMessage]
   );
 
   return (

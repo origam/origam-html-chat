@@ -18,7 +18,6 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import faker from "faker";
-import { ChatHTTPApi } from "../../../services/ChatHTTPApi";
 import { HashtagRootStore } from "../stores/RootStore";
 import xmlJs from "xml-js";
 
@@ -40,7 +39,7 @@ export class PubSub {
 }
 
 export function delay(ms: number, chCancel?: PubSub) {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     const hTimer = setTimeout(() => {
       hCancel?.();
       resolve();
@@ -55,33 +54,6 @@ export function delay(ms: number, chCancel?: PubSub) {
 export function capitalize(sin: string) {
   return sin.charAt(0).toUpperCase() + sin.slice(1);
 }
-
-function makeCategories() {
-  const result: any[][] = [];
-  for (let i = 0; i < 50; i++) {
-    result.push([`id-cat-${i}`, capitalize(faker.random.word())]);
-  }
-  return result;
-}
-
-function makeObjects() {
-  const result: any[][] = [];
-  for (let i = 0; i < 1000; i++) {
-    result.push([
-      `id-obj-${i}`,
-      faker.name.firstName(),
-      faker.name.lastName(),
-      faker.address.city(),
-      faker.date.past().toString(),
-      faker.random.number(500),
-      `id-cat-${(Math.random() * 50).toFixed(0)}`,
-    ]);
-  }
-  return result;
-}
-
-const categories = makeCategories();
-const objects = makeObjects();
 
 export class APIService {
   constructor(public rootStore: HashtagRootStore) {}

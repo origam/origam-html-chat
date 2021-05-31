@@ -19,20 +19,15 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 
 import _ from "lodash";
 import { createMachine, interpret, Interpreter } from "xstate";
-import { APIService, PubSub } from "./APIService";
-
-import { inspect } from "@xstate/inspect";
+import { PubSub } from "./APIService";
 import { HashtagRootStore } from "../stores/RootStore";
 import { WindowsSvc } from "../../../components/Windows/WindowsSvc";
 import { renderHashtaggingDialog } from "../HashtaggingApp";
 import {
   action,
-  autorun,
   computed,
   observable,
-  reaction,
   runInAction,
-  toJS,
 } from "mobx";
 import {
   Column,

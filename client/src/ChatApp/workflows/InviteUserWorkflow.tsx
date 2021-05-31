@@ -23,7 +23,6 @@ import { renderInviteUserDialog } from "../components/Dialogs/InviteUserDialog";
 import {
   renderSimpleInformation,
   renderSimpleProgress,
-  renderSimpleQuestion,
 } from "../components/Windows/Windows";
 import { WindowsSvc } from "../components/Windows/WindowsSvc";
 import { ChatHTTPApi } from "../services/ChatHTTPApi";

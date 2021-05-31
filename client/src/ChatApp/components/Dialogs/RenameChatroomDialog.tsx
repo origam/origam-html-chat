@@ -17,24 +17,19 @@ You should have received a copy of the GNU General Public License
 along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import _ from "lodash";
-import { action, computed, flow, observable } from "mobx";
+import { action, observable } from "mobx";
 import { Observer } from "mobx-react";
-import React, { useContext, useEffect, useState } from "react";
-import { AutoSizer, List } from "react-virtualized";
+import React, { useContext, useState } from "react";
 import { T, TR } from "util/translation";
 import { CtxAPI, CtxWindowsSvc } from "../../componentIntegrations/Contexts";
-import { getAvatarUrl } from "../../helpers/avatar";
 import { ChatHTTPApi } from "../../services/ChatHTTPApi";
 import { Button } from "../Buttons";
-import { TagInput, TagInputItem, TagInputItemClose } from "../TagInput";
 import {
   DefaultModal,
   ModalCloseButton,
   ModalFooter,
 } from "../Windows/Windows";
 import { IModalHandle, WindowsSvc } from "../Windows/WindowsSvc";
-import { renderErrorDialog } from "./ErrorDialog";
 
 export interface IInteractor {
   chatroomTopic?: string;

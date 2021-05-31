@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import cx from "classnames";
 import { AutoSizer, MultiGrid } from "react-virtualized";
 import { useRootStore } from "./Common";
-import { useDataTable, useEntityId } from "./DataTableCommon";
+import { useDataTable } from "./DataTableCommon";
 import { observer, Observer } from "mobx-react";
 import { reaction } from "mobx";
 import Highlighter from "react-highlight-words";
@@ -142,16 +142,15 @@ const DataCell = observer(function DataCell(props: {
 }) {
   const rootStore = useRootStore();
   const { spCategories } = rootStore.searchStore;
-  const {
-    renderer,
-    value,
-    isLastColumn,
-    isSelectedRow,
-    handleClick,
-  } = useDataCell(props.rowIndex, props.columnIndex);
+  const { value, isLastColumn, isSelectedRow, handleClick } = useDataCell(
+    props.rowIndex,
+    props.columnIndex
+  );
   let rui = <></>;
   if (spCategories) {
-    rui = <Highlighter searchWords={[spCategories]} textToHighlight={`${value}`} />;
+    rui = (
+      <Highlighter searchWords={[spCategories]} textToHighlight={`${value}`} />
+    );
   } else {
     rui = <>{value}</>;
   }
@@ -228,16 +227,19 @@ export const CategoryTable = observer(function CategoryTable() {
   const dataTable = useDataTable();
   const refGrid = useRef<any>();
   const columnCount = (dataTable?.columnCount || 0) + 1;
-  const getColumnWidth = (args: { index: number }) =>
-    (args.index === 0
-      ? 25
-      : dataTable?.getColumnByDataCellIndex(args.index - 1)?.width) || 250;
+  const getColumnWidth = useCallback(
+    (args: { index: number }) =>
+      (args.index === 0
+        ? 25
+        : dataTable?.getColumnByDataCellIndex(args.index - 1)?.width) || 250,
+    [dataTable]
+  );
 
   useEffect(() => {
     return reaction(
       () => {
         for (let i = 0; i < columnCount; i++) {
-          getColumnWidth({ index: i })
+          getColumnWidth({ index: i });
         }
         return [];
         //return [dataTable?.rows];
@@ -247,7 +249,7 @@ export const CategoryTable = observer(function CategoryTable() {
       },
       { scheduler: requestAnimationFrame }
     );
-  }, [getColumnWidth]);
+  }, [getColumnWidth, columnCount]);
   return (
     <AutoSizer>
       {({ width, height }) => (
