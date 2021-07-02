@@ -55,7 +55,7 @@
     "uuid": "^8.3.2",
     "web-vitals": "^2.0.1",
     "xml-js": "^1.6.11",
-    "xstate": "^4.20.1"
+    "xstate": "^4.20.2"
   },
   "scripts": {
     "start": "react-scripts start",
