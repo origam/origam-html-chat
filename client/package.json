@@ -10,9 +10,9 @@
     "@types/draft-js": "^0.11.3",
     "@types/draftjs-to-html": "^0.8.0",
     "@types/emoji-mart": "^3.0.4",
-    "@types/faker": "^5.5.6",
+    "@types/faker": "^5.5.7",
     "@types/jest": "^26.0.15",
-    "@types/lodash": "^4.14.170",
+    "@types/lodash": "^4.14.171",
     "@types/moment": "^2.13.0",
     "@types/node": "^15.12.5",
     "@types/react": "^17.0.13",
@@ -55,7 +55,7 @@
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.0",
     "xml-js": "^1.6.11",
-    "xstate": "^4.20.2"
+    "xstate": "^4.22.0"
   },
   "scripts": {
     "start": "react-scripts start",
