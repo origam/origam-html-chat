@@ -1696,10 +1696,10 @@
     "@types/react" "*"
     immutable "~3.7.4"
 
-"@types/draftjs-to-html@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@types/draftjs-to-html/-/draftjs-to-html-0.8.0.tgz#17b1c3f19847710e52367277578a6c50e311c87a"
-  integrity sha512-XiuzaCE088fhtlDi4GM6w2lzqAe2ZHjc7AqenU3LS6/j0Kmhgx7Gfw9NBVsp9KEG1beBqcFLaRbzjZsF15/rBA==
+"@types/draftjs-to-html@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@types/draftjs-to-html/-/draftjs-to-html-0.8.1.tgz#0800a4f6ff19ece49b6a337bfa8b39ed3d08a5fa"
+  integrity sha512-NBkphQs+qZ/sAz/j1pCUaxkPAOx00LTsE88aMSSfcvK+UfCpjHJDqIMCkm6wKotuJvY5w0BtdRazQ0sAaXzPdg==
   dependencies:
     "@types/draft-js" "*"
 
