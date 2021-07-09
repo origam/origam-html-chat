@@ -9,7 +9,7 @@
     "@types/classnames": "^2.3.1",
     "@types/draft-js": "^0.11.4",
     "@types/draftjs-to-html": "^0.8.1",
-    "@types/emoji-mart": "^3.0.4",
+    "@types/emoji-mart": "^3.0.5",
     "@types/faker": "^5.5.7",
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.171",
