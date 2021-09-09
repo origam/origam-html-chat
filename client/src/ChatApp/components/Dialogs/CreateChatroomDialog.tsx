@@ -30,6 +30,7 @@ import { Button } from "../Buttons";
 import { TagInput, TagInputItem, TagInputItemClose } from "../TagInput";
 import {
   DefaultModal,
+  ModalCloseButton,
   ModalFooter,
 } from "../Windows/Windows";
 import { IModalHandle, WindowsSvc } from "../Windows/WindowsSvc";
@@ -157,6 +158,7 @@ export function CreateChatroomDialog(props: {
         </ModalFooter>
       }
     >
+    <ModalCloseButton onClick={props.onCancel} />
       <div className="chooseUserToInviteModalContent">
         <div className="chooseUserToInviteModalContent__header">
           <p>
