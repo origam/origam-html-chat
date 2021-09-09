@@ -45,6 +45,11 @@ export class CreateChatroomWorkflow {
         try {
           const createChatroomDialogResult =
             await createChatroomDialog.interact();
+          if(createChatroomDialogResult.isCancel)
+          {
+            (window.document as any)?.closeOrigamTab?.();
+            return;
+          }
           if (!createChatroomDialogResult.chatroomTopic) {
             const infoDialog = this.windowsSvc.push(
               renderSimpleInformation(
