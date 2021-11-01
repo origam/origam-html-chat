@@ -1703,10 +1703,10 @@
   dependencies:
     "@types/draft-js" "*"
 
-"@types/emoji-mart@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@types/emoji-mart/-/emoji-mart-3.0.6.tgz#06dc3c883bc2a48e8fdc37f0a3ebb5e15a145365"
-  integrity sha512-TbFLFkWvhZUeYkII94fB8bplhtRTUxekBjZehcKu7leq9gvg8IG7F9NBh0YJdH3XRiu+uk0Drviy+GzfcMkMCw==
+"@types/emoji-mart@^3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@types/emoji-mart/-/emoji-mart-3.0.8.tgz#b0de7aabf39b5c4b6e378432bb3b99dbf903bc04"
+  integrity sha512-jmNew3D9XAVchIpyXHEZjR3Sa0uP8qD5TILk9U6Ev/Fcp43V6K1UFZ07KWtVVLjzyCMXaFB9UD3/3Y/2vVdGmQ==
   dependencies:
     "@types/react" "*"
 
@@ -1864,10 +1864,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-router-dom@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.3.0.tgz#8c4e0aa0ccaf638ba965829ad29a10ac3cbe2212"
-  integrity sha512-svUzpEpKDwK8nmfV2vpZNSsiijFNKY8+gUqGqvGGOVrXvX58k1JIJubZa5igkwacbq/0umphO5SsQn/BQsnKpw==
+"@types/react-router-dom@^5.3.2":
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.3.2.tgz#ebd8e145cf056db5c66eb1dac63c72f52e8542ee"
+  integrity sha512-ELEYRUie2czuJzaZ5+ziIp9Hhw+juEw8b7C11YNA4QdLCVbQ3qLi2l4aq8XnlqM7V31LZX8dxUuFUCrzHm6sqQ==
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
@@ -6066,10 +6066,10 @@ immer@8.0.1:
   resolved "https://registry.yarnpkg.com/immer/-/immer-8.0.1.tgz#9c73db683e2b3975c424fb0572af5889877ae656"
   integrity sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA==
 
-immutable@^4.0.0-rc.15:
-  version "4.0.0-rc.15"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0-rc.15.tgz#c30056f05eaaf5650fd15230586688fdd15c54bc"
-  integrity sha512-v8+A3sNyaieoP9dHegl3tEYnIZa7vqNiSv0U6D7YddiZi34VjKy4GsIxrRHj2d8+CS3MeiVja5QyNe4JO/aEXA==
+immutable@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0.tgz#b86f78de6adef3608395efb269a91462797e2c23"
+  integrity sha512-zIE9hX70qew5qTUjSS7wi1iwj/l7+m54KWU247nhM3v806UdGj1yDndXj+IOYxxtW9zyLI+xqFNZjTuDaLUqFw==
 
 immutable@~3.7.4:
   version "3.7.6"
