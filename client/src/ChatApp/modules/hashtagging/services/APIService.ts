@@ -21,7 +21,7 @@ export class PubSub {
 }
 
 export function delay(ms: number, chCancel?: PubSub) {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     const hTimer = setTimeout(() => {
       hCancel?.();
       resolve();
@@ -118,8 +118,8 @@ export class APIService {
     }
     return categories.map((item: any) => {
       return [
-        item.hashtagName,
-        item.hashtagLabel,
+        item.deepLinkName,
+        item.deepLinkLabel,
         transformCombo(xmlJs.xml2js(item.objectComboboxMetadata)),
       ];
     });
