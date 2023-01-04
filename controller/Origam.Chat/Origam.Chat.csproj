@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="log4net" Version="2.0.15" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+      <PackageReference Include="Origam.Service.Core" Version="2.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Origam, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Lib\Origam.dll</HintPath>
+      </Reference>
+      <Reference Include="Origam.DA, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Lib\Origam.DA.dll</HintPath>
+      </Reference>
+      <Reference Include="Origam.DA.Service, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Lib\Origam.DA.Service.dll</HintPath>
+      </Reference>
+      <Reference Include="Origam.Schema, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Lib\Origam.Schema.dll</HintPath>
+      </Reference>
+      <Reference Include="Origam.Schema.EntityModel, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Lib\Origam.Schema.EntityModel.dll</HintPath>
+      </Reference>
+      <Reference Include="Origam.Service.Core, Version=2.0.2.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\origam-service-core\Origam.Service.Core\bin\Debug\netstandard2.0\Origam.Service.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="Origam.Services, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Lib\Origam.Services.dll</HintPath>
+      </Reference>
+      <Reference Include="Origam.UI.Common, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Lib\Origam.UI.Common.dll</HintPath>
+      </Reference>
+      <Reference Include="Origam.Workbench.Services, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>Lib\Origam.Workbench.Services.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Lib" />
+    </ItemGroup>
+
+</Project>
