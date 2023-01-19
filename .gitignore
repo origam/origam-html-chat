@@ -3,3 +3,4 @@ controller/Origam.Chat/obj/
 controller/.idea
 client/.idea
 /.idea
+/client/dist/
