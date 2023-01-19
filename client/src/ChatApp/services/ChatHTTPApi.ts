@@ -298,7 +298,7 @@ export class ChatHTTPApi {
           cancelToken: source.token,
         })
       ).data;
-    } catch (e) {
+    } catch (e: any) {
       if (axiosLib.isCancel(e)) {
         e.$isCancellation = true;
       }

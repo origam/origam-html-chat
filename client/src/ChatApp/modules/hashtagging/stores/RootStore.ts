@@ -25,9 +25,11 @@ import { DataTableStore } from "./DataTableStore";
 import { SearchStore } from "./SearchStore";
 
 export class HashtagRootStore {
-  constructor(public windowsSvc: WindowsSvc, public httpApi: ChatHTTPApi) {}
+  constructor(public windowsSvc: WindowsSvc, public httpApi: ChatHTTPApi) {
+    this.screenProcess = new ScreenProcess(this, this.windowsSvc);
+  }
   apiService = new APIService(this);
-  screenProcess = new ScreenProcess(this, this.windowsSvc);
+  screenProcess: ScreenProcess;
   dataTableStore = new DataTableStore(this);
   searchStore = new SearchStore(this);
 }

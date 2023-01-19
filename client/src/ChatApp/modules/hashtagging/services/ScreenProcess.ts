@@ -92,11 +92,11 @@ export class ScreenProcess {
     ) => void
   ) {
     this.feedChoosenHashtags = feedChoosenHashtags;
-    this.interpreter = interpret(this.createMachine() /*, { devTools: true }*/);
-    this.interpreter.onTransition((state, event) => {
+    this.interpreter = interpret(this.createMachine() /*, { devTools: true }*/) as any;
+    this.interpreter!.onTransition((state, event) => {
       this.state = state;
     });
-    this.interpreter.start();
+    this.interpreter!.start();
   }
 
   createMachine() {
