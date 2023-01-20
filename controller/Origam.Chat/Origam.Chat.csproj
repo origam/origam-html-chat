@@ -10,7 +10,9 @@
       <PackageReference Include="log4net" Version="2.0.15" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-      <PackageReference Include="Origam.Service.Core" Version="2.0.2" />
+      <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
+      <PackageReference Include="Origam.Service.Core" Version="2.1.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,9 +30,6 @@
       </Reference>
       <Reference Include="Origam.Schema.EntityModel, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>Lib\Origam.Schema.EntityModel.dll</HintPath>
-      </Reference>
-      <Reference Include="Origam.Service.Core, Version=2.0.2.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\origam-service-core\Origam.Service.Core\bin\Debug\netstandard2.0\Origam.Service.Core.dll</HintPath>
       </Reference>
       <Reference Include="Origam.Services, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>Lib\Origam.Services.dll</HintPath>
