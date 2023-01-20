@@ -44,6 +44,15 @@ export default defineConfig({
   build: {
     commonjsOptions: {
       transformMixedEsModules: true
+    },
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          return `chatAssets/[name]-[hash][extname]`;
+        },
+        chunkFileNames: 'chatAssets/[name]-[hash].js',
+        entryFileNames: 'chatAssets/[name]-[hash].js'
+      }
     }
   },
   server: {
