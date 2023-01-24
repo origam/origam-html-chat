@@ -11,6 +11,10 @@ public class WebApplicationExtender: IWebApplicationExtender
     public void Extend(IApplicationBuilder app, IConfiguration configuration)
     {
         string pathToChatApp = PathToChatApp(configuration);
+        if (string.IsNullOrWhiteSpace(pathToChatApp))
+        {
+            return;
+        }
         app.UseStaticFiles(new StaticFileOptions
         {
             FileProvider = new PhysicalFileProvider(pathToChatApp),
