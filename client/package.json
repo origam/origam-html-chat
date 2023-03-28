@@ -35,7 +35,7 @@
     "draftjs-utils": "^0.10.2",
     "emoji-mart": "^5.5.2",
     "faker": "^5.5.3",
-    "immutable": "^4.2.4",
+    "immutable": "^4.3.0",
     "lodash": "^4.17.21",
     "mobx": "5",
     "mobx-react": "6",
