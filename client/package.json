@@ -40,7 +40,7 @@
     "mobx": "5",
     "mobx-react": "6",
     "moment": "^2.29.3",
-    "node-sass": "8",
+    "node-sass": "9",
     "patch-package": "^7.0.0",
     "postinstall-postinstall": "^2.1.0",
     "querystring": "^0.2.1",
