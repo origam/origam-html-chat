@@ -23,7 +23,7 @@
     "@types/react-router-dom": "^5.3.2",
     "@types/react-split-pane": "^0.1.67",
     "@types/react-virtualized": "^9.21.22",
-    "@types/uuid": "^9.0.1",
+    "@types/uuid": "^9.0.2",
     "@types/xml-js": "^1.0.0",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "@xstate/inspect": "^0.8.0",
