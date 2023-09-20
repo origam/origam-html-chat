@@ -17,11 +17,8 @@ You should have received a copy of the GNU General Public License
 along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import faker from "faker";
 import { HashtagRootStore } from "../stores/RootStore";
 import xmlJs from "xml-js";
-
-faker.seed(9876);
 
 export class PubSub {
   reg = new Map<number, any>();

@@ -32,8 +32,6 @@ import {
 } from "./stores/DataTableStore";
 import { HashtagRootStore } from "./stores/RootStore";
 import { ObjectTouchMover } from "./util/ObjectTouchMover";
-
-import faker from "faker";
 import { TableCursor } from "./stores/TableCursorStore";
 import {
   DefaultModal,
@@ -43,7 +41,6 @@ import {
 import { Button } from "../../components/Buttons";
 import { observer } from "mobx-react";
 import { T, TR } from "util/translation";
-faker.seed(987);
 
 export function capitalize(sin: string) {
   return sin.charAt(0).toUpperCase() + sin.slice(1);
