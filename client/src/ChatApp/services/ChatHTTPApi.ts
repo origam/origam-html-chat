@@ -300,7 +300,7 @@ export class ChatHTTPApi {
       ).data;
     } catch (e: any) {
       if (axiosLib.isCancel(e)) {
-        e.$isCancellation = true;
+        (e as any).$isCancellation = true;
       }
       throw e;
     } finally {
